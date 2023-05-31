@@ -18,7 +18,7 @@
 
 ## Project Contributors
 * Ryan Instrell 
-* Jarrad Morden
+* Jarrad Morden (Project Supervisor)
 
 ## Project Outline
 This project aims to investigate and develop effective measures to enhance virtual machine (VM) security by manipulating the IP address in a Remote Access Trojan (RAT) during scammer
