@@ -1,4 +1,4 @@
-<h1 align="center">Modelled Client-Server RAT for Scammer Takedowns</h1>
+<h1 align="center">DolosRAT: Client-Server RAT for Scammer Takedowns</h1>
 <div id="badges" align="center">
   <img src="https://img.shields.io/badge/version-v1.1-blue" alt="Version Badge"/>
   <img src="https://img.shields.io/github/license/rjs3c/cyban" alt="License Badge"/>
