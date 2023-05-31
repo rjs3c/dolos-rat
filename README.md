@@ -8,10 +8,11 @@
 
 ## Contents
 1. [Project Working Title](#project-working-title)
-2. [Project Outline](#project-outline)
-3. [Installation](#installation)
-4. [Requirements](#requirements)
-5. [Gallery](#gallery)
+2. [Project Contributors](#project-contributors)
+3. [Project Outline](#project-outline)
+4. [Installation](#installation)
+5. [Requirements](#requirements)
+6. [Gallery](#gallery)
 
 ## Project Working Title
 <i>Safeguarding Virtual Machines during Scammer Takedowns: Modelling an Authorized Remote Desktop Application RAT Malware with Wireshark-based IP Identification</i>
