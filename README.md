@@ -17,8 +17,8 @@
 <i>Safeguarding Virtual Machines during Scammer Takedowns: Modelling an Authorized Remote Desktop Application RAT Malware with Wireshark-based IP Identification</i>
 
 ## Project Contributors
-* Ryan Instrell 
-* Jarrad Morden (Project Supervisor)
+* Ryan I. 
+* Jarrad M. (Project Supervisor)
 
 ## Project Outline
 This project aims to investigate and develop effective measures to enhance virtual machine (VM) security by manipulating the IP address in a Remote Access Trojan (RAT) during scammer
