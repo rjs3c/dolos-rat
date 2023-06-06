@@ -13,6 +13,7 @@
 4. [Installation](#installation)
 5. [Requirements](#requirements)
 6. [Gallery](#gallery)
+7. [Disclaimer](#disclaimer)
 
 ## Project Working Title
 <i>Safeguarding Virtual Machines during Scammer Takedowns: Modelling an Authorized Remote Desktop Application RAT Malware with Wireshark-based IP Identification</i>
@@ -39,4 +40,7 @@ Browning’s techniques and gain a deeper understanding of how they can be appli
 ...
 
 ## Gallery
+...
+
+## Disclaimer
 ...
