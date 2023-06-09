@@ -13,6 +13,7 @@ module.
 
 # Built-in/Generic Imports.
 from dataclasses import dataclass
+from time import time
 from typing import Any, Dict
 
 # Modules.
@@ -24,8 +25,39 @@ class LoggerConfig(Config):
     """ Dict comprising dictConfig() configuration. """
     _conf: Dict[str, Any]
 
-    def __init__(self: object) -> None:
+    def __init__(self: object, logger_name: str) -> None:
         """Initialises LoggerConfig class
         and configures initial _conf value.
         """
-        self._conf = {} 
+        self._conf = {
+            'version': 1,
+            'formatters': {
+                'standard': {
+                    'format': '%(asctime)s (%(module)s) [%(levelname)s] %(name)s: %(message)s',
+                    'date_fmt': '%d-%m-%Y %I:%M:%S'
+                }
+            }, 
+            'loggers': {
+                f'{logger_name}': {
+                    'handlers': ['file'],
+                    'level': 'INFO', 
+                    'propagate': True
+                } 
+            },
+            'handlers': {
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'level': 'INFO',  
+                    'formatter': 'standard'
+                },
+                'file': {
+                    'class': 'logging.handlers.FileHandler',
+                    'level': 'INFO',
+                    'formatter': 'standard',
+                    'filename': f'log-{int(time())}.log',
+                    'mode': 'a',
+                    'encoding': 'utf-8',
+                    'backupCount': 5
+                }
+            }
+        }
