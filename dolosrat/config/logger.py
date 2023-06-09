@@ -13,9 +13,19 @@ module.
 
 # Built-in/Generic Imports.
 from dataclasses import dataclass
+from typing import Any, Dict
 
 # Modules.
 from config import Config
 
 @dataclass
-class LoggerConfig(Config): ...
+class LoggerConfig(Config): 
+
+    """ Dict comprising dictConfig() configuration. """
+    _conf: Dict[str, Any]
+
+    def __init__(self: object) -> None:
+        """Initialises LoggerConfig class
+        and configures initial _conf value.
+        """
+        self._conf = {} 
