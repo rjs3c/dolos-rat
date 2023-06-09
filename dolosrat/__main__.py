@@ -67,6 +67,39 @@ class DolosRAT(object):
         """
         ...
 
+    def _init_logger(self: object) -> None: 
+        """Creates handle to logging wrapper class.
+
+        Creates a handle to the class exposing methods
+        to write application logs, etc.
+        """
+        ...
+
+    def _init_tkinter(self: object) -> None:
+        """Creates handle to Tkinter wrapper class.
+        
+        Creates a handle to the class providing a 
+        wrapper to Tkinter and producing the UI.
+        """
+        ...
+
+    def _run(self: object) -> None: 
+        """Officially starts the internal modules.
+
+        With handles created for the classes pertinent
+        to the application, use these to commence DolosRAT.
+        """
+        ...
+
+    def start(self: object) -> None: 
+        """Exposed method for 'starting' DolosRAT.
+
+        This creates the neccessary handles, and 
+        evaluate the method for responsible for 
+        the primary logic (_run()).
+        """
+        ...
+
 if __name__ == '__main__':
     # Application entry-point.
     DolosRAT()
