@@ -61,3 +61,17 @@ class LoggerConfig(Config):
                 }
             }
         }
+
+# Instantiates 'LoggerConfig' and returns this.
+def get_logger_conf(logger_name: str = __name__) -> LoggerConfig:
+    """Exposes function to instantiate and 
+    return LoggerConfig.
+
+    Args:
+        logger_name (str): A unique name to denote the
+        specific logger in use.
+
+    Returns:
+        LoggerConfig: A new instance of LoggerConfig.
+    """
+    return LoggerConfig(logger_name).conf
