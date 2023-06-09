@@ -13,6 +13,7 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 import sys
+from typing import Any, Dict
 
 (__appname__,
  __author__,
@@ -52,12 +53,14 @@ class DolosRAT(object):
     and interfacing between each of these.
     """
 
-    def __init__(self: object) -> None: 
+    def __init__(
+        self: object, config: Dict[str, Any]
+    ) -> None: 
         """Initialises DolosRAT class.
 
         Configures other, internal modules of DolosRAT.
         """
-        ...
+        self._config: Dict[str, Any] = config
         
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
@@ -101,8 +104,12 @@ class DolosRAT(object):
         ...
 
 if __name__ == '__main__':
+
+    # Houses configuration for 'DolosRAT' class.
+    config: Dict[str, Any] = {}
+    
     # Application entry-point.
-    DolosRAT()
+    DolosRAT(config)
     
     # Gracefully exit.
     sys.exit(0)
