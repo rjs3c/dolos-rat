@@ -24,7 +24,7 @@ class LoggerConfig(Config):
     """Stores logging-specific configuration.
     """
 
-    """ Dict comprising dictConfig() configuration. """
+    # Dict comprising dictConfig() configuration.
     _conf: Dict[str, Any]
 
     def __init__(self: object, logger_name: str) -> None:
