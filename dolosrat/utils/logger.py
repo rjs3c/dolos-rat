@@ -24,12 +24,12 @@ class LoggerWrapper:
     _LOG_PATH: Union[str, PathLike] = Path("../logs")
 
     def __init__(self: object) -> None:
-        """Initialises LoggerWrapper class.
+        """Initialises LoggerWrapper.
         """
         ...
 
     def __del__(self: object) -> None:
-        """Destroy logging handles and
-        release resources.
+        """Destroys logging-specific handles and
+        releases resources.
         """
         ...
