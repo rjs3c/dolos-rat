@@ -17,10 +17,10 @@ from time import time
 from typing import Any, Dict
 
 # Modules.
-from config import Config
+from .config import Config
 
 @dataclass
-class LoggerConfig(Config): 
+class LoggerConfig(Config):
     """Stores logging-specific configuration.
     """
 
@@ -38,13 +38,13 @@ class LoggerConfig(Config):
                     'format': '%(asctime)s (%(module)s) [%(levelname)s] %(name)s: %(message)s',
                     'date_fmt': '%d-%m-%Y %I:%M:%S'
                 }
-            }, 
+            },
             'loggers': {
                 f'{logger_name}': {
                     'handlers': ['file'],
                     'level': 'INFO', 
                     'propagate': True
-                } 
+                }
             },
             'handlers': {
                 'console': {

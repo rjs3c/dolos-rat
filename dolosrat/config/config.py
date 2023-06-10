@@ -16,18 +16,18 @@ from dataclasses import dataclass
 from typing import Any, Generator
 
 @dataclass
-class Config: 
+class Config:
     """Stores application and functionality-specific
     config. Specific configurations shall inherit from this
     base class, overriding _conf, and other functions, as 
     neccessary.
     """
 
-    """ Stores functionality-specific config (any type). """
+    # Stores functionality-specific config (any type).
     _conf: Any
 
     @property
-    def conf(self: object) -> Any: 
+    def conf(self: object) -> Any:
         """Getter method for _conf.
 
         May be overridden by inheriting config
@@ -38,9 +38,21 @@ class Config:
         """
         return self._conf
 
-    # Permits the iteration of Configuration, or inherited, 
+    @classmethod
+    def _get_classname(cls: object):
+        """_summary_
+
+        Args:
+            cls (object): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        return cls.__name__
+
+    # Permits the iteration of Configuration, or inherited,
     # object.
-    def __iter__(self: object) -> Generator[Any, Any, Any]: 
+    def __iter__(self: object) -> Generator[Any, Any, Any]:
         """Enables iteration of a Config derivative.
 
         Yields:
@@ -48,11 +60,11 @@ class Config:
         """
         yield from self._conf
 
-    def __str__(self: object) -> str: 
+    def __str__(self: object) -> str:
         """Friendly string representation of class.
 
         Returns:
             str: Friendly string of class for 
             later, more trivial comparison.
         """
-        return f'{type(self.__name__)}'
+        return f'{self._get_classname()}'

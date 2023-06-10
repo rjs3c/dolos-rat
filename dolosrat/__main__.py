@@ -46,7 +46,7 @@ SOFTWARE.
 """
 
 # Initial class housing primary DolosRAT logic.
-class DolosRAT(object):
+class DolosRAT:
     """Houses the logic pertinent to the running
     application. This is responsible for initialising
     the neccessary, internal modules of the application
@@ -55,13 +55,13 @@ class DolosRAT(object):
 
     def __init__(
         self: object, config: Dict[str, Any]
-    ) -> None: 
+    ) -> None:
         """Initialises DolosRAT class.
 
         Configures other, internal modules of DolosRAT.
         """
         self._config: Dict[str, Any] = config
-        
+
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
 
@@ -70,7 +70,7 @@ class DolosRAT(object):
         """
         ...
 
-    def _init_logger(self: object) -> None: 
+    def _init_logger(self: object) -> None:
         """Creates handle to logging wrapper class.
 
         Creates a handle to the class exposing methods
@@ -86,7 +86,7 @@ class DolosRAT(object):
         """
         ...
 
-    def _run(self: object) -> None: 
+    def _run(self: object) -> None:
         """Officially starts the internal modules.
 
         With handles created for the classes pertinent
@@ -94,7 +94,7 @@ class DolosRAT(object):
         """
         ...
 
-    def start(self: object) -> None: 
+    def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
 
         This creates the neccessary handles, and 
@@ -106,10 +106,10 @@ class DolosRAT(object):
 if __name__ == '__main__':
 
     # Houses configuration for 'DolosRAT' class.
-    config: Dict[str, Any] = {}
-    
+    dolos_config: Dict[str, Any] = {}
+
     # Application entry-point.
-    DolosRAT(config)
-    
+    DolosRAT(dolos_config)
+
     # Gracefully exit.
     sys.exit(0)
