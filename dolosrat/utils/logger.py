@@ -15,6 +15,9 @@ from typing import Union
 from os import PathLike
 from pathlib import Path
 
+# Modules.
+from config.logger import LoggerConfig
+
 class LoggerWrapper:
     """Provides wrapper for easily
     interfacing with 'logger' library.
@@ -33,3 +36,13 @@ class LoggerWrapper:
         releases resources.
         """
         ...
+
+def get_logger(logger_conf: LoggerConfig) -> LoggerWrapper: 
+    """Returns an instantiated LoggerWrapper.
+
+    Returns:
+        _type_: Instantiated form of LoggerWrapper.
+    """
+
+    # ...
+    return LoggerWrapper()

