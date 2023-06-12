@@ -43,6 +43,4 @@ def get_logger(logger_conf: LoggerConfig) -> LoggerWrapper:
     Returns:
         _type_: Instantiated form of LoggerWrapper.
     """
-
-    # ...
     return LoggerWrapper()

