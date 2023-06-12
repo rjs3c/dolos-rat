@@ -11,5 +11,5 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from .config import config, logger
-from .utils import logger
+from config import config, logger
+from utils import logger

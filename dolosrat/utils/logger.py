@@ -26,10 +26,12 @@ class LoggerWrapper:
     # Comprises path for 'logs' directory.
     _LOG_PATH: Union[str, PathLike] = Path("../logs")
 
-    def __init__(self: object) -> None:
+    def __init__(
+        self: object,
+        logger_conf: LoggerConfig) -> None:
         """Initialises LoggerWrapper.
         """
-        ...
+        self._logger_conf = logger_conf
 
     def __del__(self: object) -> None:
         """Destroys logging-specific handles and
@@ -43,4 +45,4 @@ def get_logger(logger_conf: LoggerConfig) -> LoggerWrapper:
     Returns:
         _type_: Instantiated form of LoggerWrapper.
     """
-    return LoggerWrapper()
+    return LoggerWrapper(logger_conf)

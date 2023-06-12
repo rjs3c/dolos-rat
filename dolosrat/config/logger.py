@@ -17,7 +17,7 @@ from time import time
 from typing import Any, Dict
 
 # Modules.
-from .config import Config
+from config import Config
 
 @dataclass
 class LoggerConfig(Config):
