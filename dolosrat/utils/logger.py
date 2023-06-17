@@ -22,6 +22,16 @@ from pathlib import Path
 # Modules.
 from config.logger import LoggerConfig
 
+class LoggerLevel(Enum):
+    """An enum comprising available logging levels
+    from 'logging'."""
+    DEBUG = 0
+    INFO = auto()
+    WARNING = auto()
+    ERROR = auto()
+    CRITICAL = auto()
+    NOTSET = auto()
+
 class LoggerWrapper:
     """Provides wrapper for easily
     interfacing with 'logger' library.
@@ -67,23 +77,13 @@ class LoggerWrapper:
         except ValueError as get_logger_err:
             raise get_logger_err
 
-    def _write_log(self: object) -> None:
+    def write_log(self: object, log_msg: str, log_level: LoggerLevel) -> None:
         """Generates a log of a supplied level.
 
         Args:
             self (object): _description_
         """
-        
-
-class LoggerLevel(Enum):
-    """An enum comprising available logging levels
-    from 'logging'."""
-    DEBUG = 0
-    INFO = auto()
-    WARNING = auto()
-    ERROR = auto()
-    CRITICAL = auto()
-    NOTSET = auto()
+        ...
 
 def get_logger(logger_name: str, logger_conf: LoggerConfig) -> LoggerWrapper:
     """Returns an instantiated LoggerWrapper.
