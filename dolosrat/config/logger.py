@@ -47,19 +47,13 @@ class LoggerConfig(Config):
                 }
             },
             'handlers': {
-                'console': {
-                    'class': 'logging.StreamHandler',
-                    'level': 'INFO',  
-                    'formatter': 'standard'
-                },
                 'file': {
-                    'class': 'logging.handlers.FileHandler',
+                    'class': 'logging.FileHandler',
                     'level': 'INFO',
                     'formatter': 'standard',
-                    'filename': f'log-{int(time())}.log',
+                    'filename': f'dolosrat/logs/log-{int(time())}.log',
                     'mode': 'a',
-                    'encoding': 'utf-8',
-                    'backupCount': 5
+                    'encoding': 'utf-8'
                 }
             }
         }
@@ -76,4 +70,4 @@ def get_logger_conf(logger_name: str = __name__) -> LoggerConfig:
     Returns:
         LoggerConfig: A new instance of LoggerConfig.
     """
-    return LoggerConfig(logger_name).conf
+    return LoggerConfig(logger_name)

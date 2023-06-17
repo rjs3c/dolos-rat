@@ -13,7 +13,7 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 import sys
-from typing import Any, Dict
+from typing import Any, Dict, Union
 
 # Modules. 
 from config.config import Config
@@ -66,6 +66,13 @@ class DolosRAT:
         Configures other, internal modules of DolosRAT.
         """
         self._config: Dict[str, Any] = config
+        self._logger: Union[Any, LoggerWrapper] = None
+
+        # Set-up application logging.
+        self._init_logger()
+
+        # Run DolosRAT.
+        self._run()
 
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
@@ -81,7 +88,9 @@ class DolosRAT:
         Creates a handle to the class exposing methods
         to write application logs, etc.
         """
-        ...
+        self._logger = get_logger(
+            __name__, self._config['logger_conf']
+        )
 
     def _init_tkinter(self: object) -> None:
         """Creates handle to Tkinter wrapper class.
@@ -97,7 +106,7 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        ...
+        self._init_logger()
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
@@ -111,14 +120,12 @@ class DolosRAT:
 if __name__ == '__main__':
 
     # Houses configuration for 'DolosRAT' class.
-    dolos_config: Dict[str, Any] = {}
+    dolos_config: Dict[str, Config] = {}
 
     # Populate 'dolos_config' with configurations.
     dolos_config = {
        'logger_conf': get_logger_conf(__name__)
     }
-
-    print(dolos_config)
 
     # Application entry-point.
     DolosRAT(dolos_config)
