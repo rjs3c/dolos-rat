@@ -13,6 +13,8 @@ logging and auditing.
 # Built-in/Generic Imports.
 import logging.config
 import logging.handlers
+
+from enum import Enum, auto
 from typing import Any, Union
 from os import PathLike
 from pathlib import Path
@@ -71,7 +73,19 @@ class LoggerWrapper:
         Args:
             self (object): _description_
         """
-        
+
+class LogLevel(Enum):
+    """_summary_
+
+    Args:
+        Enum (_type_): _description_
+    """
+    DEBUG = auto()
+    INFO = auto()
+    WARNING = auto()
+    ERROR = auto()
+    CRITICAL = auto()
+    NOTSET = auto()
 
 def get_logger(logger_name: str, logger_conf: LoggerConfig) -> LoggerWrapper:
     """Returns an instantiated LoggerWrapper.
