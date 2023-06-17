@@ -61,12 +61,17 @@ class LoggerWrapper:
             # Creates new logger, and assings to handle
             # _logger.
             self._logger = logging.getLogger(self._logger_name)
-            self._logger.info("Test")
         # Exceptions raised from using dictConfig.
         except ValueError as get_logger_err:
             raise get_logger_err
 
-    def _write_log(self: object) -> None: ...
+    def _write_log(self: object) -> None: 
+        """Generates a log of a supplied level.
+
+        Args:
+            self (object): _description_
+        """
+        
 
 def get_logger(logger_name: str, logger_conf: LoggerConfig) -> LoggerWrapper:
     """Returns an instantiated LoggerWrapper.

