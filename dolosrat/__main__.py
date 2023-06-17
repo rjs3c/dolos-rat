@@ -108,7 +108,7 @@ class DolosRAT:
         to the application, use these to commence DolosRAT.
         """
         ...
-            
+
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
 
