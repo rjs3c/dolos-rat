@@ -15,7 +15,7 @@ import logging
 import logging.config
 import logging.handlers
 
-from enum import Enum, auto
+from enum import Enum
 from typing import Any, Union
 from os import PathLike
 from pathlib import Path

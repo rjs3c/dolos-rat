@@ -12,4 +12,4 @@ the use of this tool is for educational purposes only.
 """
 
 from config import config, logger
-from utils import logger
+from utils import logger, network
