@@ -67,20 +67,18 @@ class LoggerWrapper:
         except ValueError as get_logger_err:
             raise get_logger_err
 
-    def _write_log(self: object) -> None: 
+    def _write_log(self: object) -> None:
         """Generates a log of a supplied level.
 
         Args:
             self (object): _description_
         """
+        
 
-class LogLevel(Enum):
-    """_summary_
-
-    Args:
-        Enum (_type_): _description_
-    """
-    DEBUG = auto()
+class LoggerLevel(Enum):
+    """An enum comprising available logging levels
+    from 'logging'."""
+    DEBUG = 0
     INFO = auto()
     WARNING = auto()
     ERROR = auto()

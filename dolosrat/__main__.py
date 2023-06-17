@@ -16,7 +16,7 @@ import sys
 
 from typing import Any, Dict, Union
 
-# Modules. 
+# Modules.
 from config.config import Config
 from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, get_logger
