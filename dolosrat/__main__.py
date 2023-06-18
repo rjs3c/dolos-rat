@@ -21,6 +21,7 @@ from typing import Any, Dict, Union
 from config.config import Config
 from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, LoggerLevel, get_logger
+from commands.network import LiveCapture
 
 (__appname__,
  __author__,
