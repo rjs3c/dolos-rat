@@ -57,7 +57,7 @@ class IPv4Capture:
 
         # List comprising the extracted, and parsed,
         # IPv4 addresses.
-        self._ipv4_addrs: Set[Union[str, IPv4Address]] = set()
+        self._ipv4_addrs: Set[Union[None, IPv4Address]] = set()
 
         # Create LiveCapture handler.
         self._init_handler()
@@ -116,6 +116,16 @@ class IPv4Capture:
         # caught and ignored.
         except TimeoutError:
             pass
+
+    def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Address]]:
+        """Returns the collected IPv4 addresses for processing, 
+        displaying, etc.
+
+        Returns:
+            Set[Union[None, IPv4Address]]: A set comprising all
+            collected IPv4 addresses of type IPv4Address.
+        """
+        return self._ipv4_addrs
 
     def capture(self: object) -> None:
         """Provides a public means to initiate
