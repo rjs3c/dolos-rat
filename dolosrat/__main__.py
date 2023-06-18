@@ -14,6 +14,7 @@ the use of this tool is for educational purposes only.
 # Built-in/Generic Imports.
 import sys
 # import os # LATER: Check privileges.
+import time
 from typing import Any, Dict, Union
 
 # Modules.
@@ -68,6 +69,7 @@ class DolosRAT:
         """
         self._config: Dict[str, Any] = config
         self._logger: Union[Any, LoggerWrapper] = None
+        self._strt_time: float = time.time()
 
         # Set-up application logging.
         self._init_logger()
@@ -108,7 +110,12 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
-        self._logger.write_log("DolosRAT Initialised and Started.", LoggerLevel.INFO)
+        # self._logger.write_log("DolosRAT initialisation started.", LoggerLevel.INFO)
+
+        # IfaWrapper initialisation.
+        # self._logger.write_log("Enumerated network configuration and interfaces.", LoggerLevel.INFO)
+
+        # self._logger.write_log(f"DolosRAT initialised in {time.time() - self._strt_time}", LoggerLevel.INFO)
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
@@ -130,7 +137,7 @@ if __name__ == '__main__':
     }
 
     # Application entry-point.
-    DolosRAT(dolos_config)
+    DolosRAT(dolos_config).start()
 
     # Gracefully exit.
     sys.exit(0)

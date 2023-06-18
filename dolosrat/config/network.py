@@ -26,4 +26,10 @@ class NetworkConfig(Config):
     # Dict comprising network configuration.
     _conf: Dict[str, Any]
 
-    def __init__(self: object) -> None: ...
+    def __init__(self: object) -> None:
+        """Initialises NetworkConfig, and sets 
+        _config.
+        """
+        self._conf = {
+           '': '' 
+        }

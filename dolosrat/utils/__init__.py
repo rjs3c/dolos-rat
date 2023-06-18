@@ -12,4 +12,4 @@ the use of this tool is for educational purposes only.
 """
 
 from .logger import LoggerWrapper, LoggerLevel, get_logger
-from .network import NetworkWrapper
+from .network import IfaWrapper
