@@ -13,8 +13,6 @@
 from typing import Set, Optional, Union
 from ipaddress import IPv4Address
 
-import logging
-
 # Modules.
 from utils.network import Ifa
 from utils.validator import validate_ipv4_addr
@@ -143,5 +141,3 @@ def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
     return IPv4Capture(ifa.ifa_name)
-
-test = logging.getLogger('__main__')
