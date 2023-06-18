@@ -90,8 +90,12 @@ class IfaWrapper:
         ]
 
     def _set_default_ifa(self: object) -> None:
-        """_summary_
+        """Implicitly sets the default interface,
+        should this not be explicitly performed.
+        Defaults to first entry.
         """
+        # Check to see if any interfaces were
+        # first enumerated. 
         if self._interfaces:
             self.set_ifa(
                 # Defaults to first interface.
@@ -99,10 +103,11 @@ class IfaWrapper:
             )
 
     def set_ifa(self: object, ifa_name: str) -> None:
-        """_summary_
+        """Changes the interface in use.
 
         Args:
-            ifa_name (str): _description_
+            ifa_name (str): Represents the interface
+            name in which to change to.
         """
         # Stores filtered interface information.
         ifa_filtered: List[Any] = []
@@ -130,10 +135,13 @@ class IfaWrapper:
             )
 
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
-        """_summary_
+        """Returns an 'Ifa' object comprising an
+        interface's name and configuration.
 
         Returns:
-            Union[None, Ifa]: _description_
+            Union[None, Ifa]: Either nothing, or the 
+            'Ifa' class comprising the interface information,
+            shall be returned.
         """
         return self._sel_interface
 

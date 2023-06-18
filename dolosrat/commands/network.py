@@ -31,10 +31,15 @@ class IPv4Capture:
         timeout: Optional[int] = 15,
         capture_filter: Optional[str] = 'ip and tcp'
     ) -> None:
-        """_summary_
+        """Initialises IPv4Capture.
 
         Args:
-            self (object): _description_
+            ifa (Ifa): Represents a single interface 
+            (Ifa dataclass).
+            timeout (Optional[int], optional): Timeout for the frame capture. 
+            Defaults to 15.
+            capture_filter (Optional[str], optional): Represents the Tshark filter
+            by which to filter captured frames. Defaults to 'ip and tcp'.
         """
         # Input network interface.
         # Comprises ifa_name and ifa_addrs fields.
@@ -58,21 +63,14 @@ class IPv4Capture:
         self._init_handler()
 
     def __del__(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
-        # Releases handle to LiveCapture.
+        """Destroys the LiveCapture handle
+        and releases resources."""
         self._capture = None
         del self
 
     def _init_handler(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Creates a LiveCapture instance and assigns
+        to _capture for simple access."""
         # Checks if 'Ifa' is set; otherwise
         # ifa_name cannot be read.
         if self._ifa:
@@ -86,31 +84,29 @@ class IPv4Capture:
                 bpf_filter=self._filter
             )
 
-        self._sniff_packets() # Remove after.
-
     def _extract_ipv4_addr(self: object, packet: Packet) -> None:
-        """_summary_
+        """In each packet captured by PyShark,
+        the callback _extract_ipv4_addr is applied. This
+        extracts each IPv4 address, and adds this to a set.
 
         Args:
-            self (object): _description_
+            packet (Packet): Comprises the Packet object
+            created by the PyShark LiveCapture.
         """
-        # As IPv4Address is hashable, this 
+        # As IPv4Address is hashable, this
         # can be added to a set to ensure that
         # no hashes match.
         self._ipv4_addrs.add(
-            # Converts src IPv4 address (str) 
+            # Converts src IPv4 address (str)
             # to hashable IPv4Address.
             validate_ipv4_addr(packet.ip.src)
         )
 
     def _sniff_packets(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Captures all packets in the LiveCapture
+        and applies a callbacl to each incoming packet."""
         try:
-            # Sniff, and apply callback to 
+            # Sniff, and apply callback to
             # extract IPv4 addresses from packets.
             self._capture.apply_on_packets(
                 self._extract_ipv4_addr,
@@ -122,13 +118,16 @@ class IPv4Capture:
             pass
 
     def capture(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Provides a public means to initiate
+        the LiveCapture and extract IPv4 addresses."""
         # Initialises capturing of packets
         # on selected interface.
         self._sniff_packets()
-        
-IPv4Capture(Ifa('Wi-Fi', '192.168.1.1'))._init_handler()
+
+def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
+    """Returns an instantiated IPv4Capture.
+
+    Returns:
+        IPv4Capture: Instantiated form of IPv4Capture.
+    """
+    return IPv4Capture(ifa.ifa_name)
