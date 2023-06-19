@@ -144,7 +144,3 @@ def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
     return IPv4Capture(ifa.ifa_name)
-
-_ = IPv4Capture(Ifa('Wi-Fi', '192.168.1.1'))
-_.capture()
-print(_.get_ipv4_addrs())
