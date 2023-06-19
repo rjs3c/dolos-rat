@@ -11,7 +11,6 @@
 
 # Built-in/Generic Imports.
 from typing import Set, Optional, Union
-from ipaddress import IPv4Address
 
 # Modules.
 from utils.network import Ifa, IPv4Host
