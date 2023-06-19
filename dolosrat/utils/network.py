@@ -26,6 +26,13 @@ else:
     # Otherwise, NT-specific GUIDs are only shown.
     from scapy.all import get_if_list
 
+@dataclass(unsafe_hash=True, frozen=True)
+class IPv4Host:
+    """_summary_
+    """
+    ipv4_addr: IPv4Address
+    port: int
+
 @dataclass
 class Ifa:
     """Houses the information neccessary

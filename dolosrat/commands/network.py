@@ -14,7 +14,7 @@ from typing import Set, Optional, Union
 from ipaddress import IPv4Address
 
 # Modules.
-from utils.network import Ifa
+from utils.network import Ifa, IPv4Host
 from utils.validator import validate_ipv4_addr
 
 # External Imports.
@@ -57,7 +57,7 @@ class IPv4Capture:
 
         # List comprising the extracted, and parsed,
         # IPv4 addresses.
-        self._ipv4_addrs: Set[Union[None, IPv4Address]] = set()
+        self._ipv4_addrs: Set[Union[None, IPv4Host]] = set()
 
         # Create LiveCapture handler.
         self._init_handler()
@@ -99,7 +99,10 @@ class IPv4Capture:
         self._ipv4_addrs.add(
             # Converts src IPv4 address (str)
             # to hashable IPv4Address.
-            validate_ipv4_addr(packet.ip.src)
+            IPv4Host(
+                validate_ipv4_addr(packet.ip.src),
+                packet.tcp.dstport
+            )
         )
 
     def _sniff_packets(self: object) -> None:
@@ -117,7 +120,7 @@ class IPv4Capture:
         except TimeoutError:
             pass
 
-    def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Address]]:
+    def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Host]]:
         """Returns the collected IPv4 addresses for processing, 
         displaying, etc.
 
@@ -141,3 +144,7 @@ def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
     return IPv4Capture(ifa.ifa_name)
+
+_ = IPv4Capture(Ifa('Wi-Fi', '192.168.1.1'))
+_.capture()
+print(_.get_ipv4_addrs())
