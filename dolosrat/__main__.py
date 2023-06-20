@@ -22,7 +22,7 @@ from config.network import get_network_conf
 from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, LoggerLevel, get_logger
 from utils.network import IfaWrapper, get_ifa_wrapper
-from commands.network import IPv4CaptureWrapper
+from utils.server import TCPServerWrapper
 
 (__appname__,
  __author__,

@@ -10,19 +10,53 @@
 """
 
 # Built-in/Generic Imports.
-from socketserver import BaseRequestHandler, TCPServer
+from socketserver import BaseRequestHandler, TCPServer, BaseServer
+from typing import Any
+from ipaddress import IPv4Address
 
 # Modules.
 from .wrapper import BaseWrapper
-from .network import Ifa, IPv4Host
+from config.network import NetworkConfig, get_network_conf
+from utils.network import Ifa, IPv4Host
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
     """_summary_
-
-    Args:
-        socketserver (_type_): _description_
     """
-    ...
+
+    def __init__(
+        self: object,
+        request: Any,
+        client_address: Any,
+        server: BaseServer
+    ) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            request (Any): _description_
+            client_address (Any): _description_
+            server (BaseServer): _description_
+        """
+
+        BaseRequestHandler.__init__(self, BaseRequestHandler, client_address, server)
+
+    def setup(self: BaseRequestHandler) -> None:
+        """_summary_
+        """
+
+        return BaseRequestHandler.setup(self)
+
+    def handle(self: BaseRequestHandler) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        print(self.__dict__)
 
 class SingleThreadedTCPServer(TCPServer):
     """_summary_
@@ -30,6 +64,7 @@ class SingleThreadedTCPServer(TCPServer):
     Args:
         socketserver (_type_): _description_
     """
+
     pass
 
 class TCPServerWrapper(BaseWrapper):
@@ -37,44 +72,31 @@ class TCPServerWrapper(BaseWrapper):
     """
     def __init__(
         self: object,
-        listen_ifa: Ifa,
-        listen_host: IPv4Host,
-        tcp_handler: SingleThreadedTCPHandler,
-        tcp_server: SingleThreadedTCPServer
+        network_config: NetworkConfig,
     ) -> None:
         """_summary_"""
 
         super().__init__()
 
-        # Comprises the interface and IPv4
-        # address in which to listen to.
-        self._listen_ifa: listen_ifa
+        # Comprises the configuration neccessary
+        # to bind to a specific interface and accept
+        # connections from specific hosts.
+        self.config = network_config
 
-        # Comprises the specific host (IPv4, port)
-        # in which to specifically listen to.
-        self._listen_host = listen_host
-
-        # Handler to handler object.
-        self._tcp_handler = tcp_handler
-
-        # Handler to server object.
-        self._tcp_server = tcp_server
+        self._init_server()
 
     def _init_server(self: object) -> None:
         """_summary_
-
-        Args:
-            self (object): _description_
         """
+
         # Extract Ifa IPv4 address and host
         # ports in which to bind to.
         (host, port) = (
-            self._listen_ifa.ifa_addrs,
-            self._listen_host.port
+            str(self.config._conf['selected_ifa'].ifa_addrs),
+            self.config.conf['selected_host'].port
         )
 
-        # Register handle to instantiated
-        # SingleThreadedTCPServer.
+        # Register handle for SingleThreadedTCPServer.
         self._register_handle(
             SingleThreadedTCPServer(
                 (host, port),
@@ -88,9 +110,28 @@ class TCPServerWrapper(BaseWrapper):
         Args:
             self (object): _description_
         """
-        ...
 
-def get_tcp_server_wrapper() -> TCPServerWrapper:
+        self._get_handle('SingleThreadedTCPServer').serve_forever()
+
+def _get_tcp_server() -> SingleThreadedTCPServer:
+    """_summary_
+
+    Returns:
+        SingleThreadedTCPServer: _description_
+    """
+
+    return SingleThreadedTCPServer
+
+def _get_tcp_handler() -> SingleThreadedTCPHandler:
+    """_summary_
+
+    Returns:
+        SingleThreadedTCPHandler: _description_
+    """
+
+    return SingleThreadedTCPHandler
+
+def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
     """_summary_
 
     Returns:
@@ -98,4 +139,11 @@ def get_tcp_server_wrapper() -> TCPServerWrapper:
     """
     ...
 
-    # return TCPServerWrapper()
+    return TCPServerWrapper(network_config)
+
+# _ = get_network_conf(
+#     Ifa('Wi-Fi', IPv4Address('192.168.1.231')),
+#     IPv4Host(IPv4Address('192.168.1.231'), 8080)
+# )
+
+# TCPServerWrapper(_).listen()
