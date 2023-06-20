@@ -16,7 +16,7 @@ import logging.config
 import logging.handlers
 
 from enum import Enum
-from typing import Any, Union
+from typing import Any
 # from os import PathLike
 # from pathlib import Path
 
@@ -27,6 +27,8 @@ from .wrapper import BaseWrapper
 class LoggerLevel(str, Enum):
     """An enum comprising available logging levels
     from 'logging'."""
+
+    # Logging levels, accordant with Syslog.
     DEBUG = "debug"
     INFO = "info"
     WARNING = "warning"
