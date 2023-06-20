@@ -16,10 +16,10 @@ from typing import Any, List, Union
 
 # Modules.
 from config.network import NetworkConfig
+from config.logger import get_logger_conf
 from .validator import validate_ipv4_addr
 from .wrapper import BaseWrapper
-# from .logger import LoggerWrapper, LoggerLevel
-# from .os import get_loc
+from .logger import LoggerWrapper, LoggerLevel, get_logger
 
 # External Imports.
 if os.name == 'nt':
@@ -52,7 +52,11 @@ class IfaWrapper(BaseWrapper):
     functionalities. 
     """
 
-    def __init__(self: object, network_conf: NetworkConfig) -> None:
+    def __init__(
+        self: object,
+        network_conf: NetworkConfig,
+        logger: LoggerWrapper
+    ) -> None:
         """Initialises IfaWrapper."""
 
         super().__init__()
@@ -62,6 +66,9 @@ class IfaWrapper(BaseWrapper):
 
         # Comprises all available interfaces/adapters.
         self._interfaces: List[Union[None, Ifa]] = []
+
+        # Registers handle for logger.
+        self._register_handle(logger)
 
         # Enumerates all interfaces on system.
         self._collect_ifaces()
@@ -109,10 +116,10 @@ class IfaWrapper(BaseWrapper):
         # Count of interfaces for future reference.
         self.conf._conf['ifas_count'] = len(self._interfaces)
 
-        # self._logger.write_log(
-        #     f'({__name__}:{get_loc()}) Enumerated {self.get_ifas_count()} (v)NICs.',
-        #     LoggerLevel.INFO
-        # )
+        self._get_handle('LoggerWrapper').write_log(
+            f'Enumerated {self.conf._conf["ifas_count"]} (v)NICs.',
+            LoggerLevel.INFO
+        )
 
     def _set_default_ifa(self: object) -> None:
         """Implicitly sets the default interface,
@@ -128,11 +135,11 @@ class IfaWrapper(BaseWrapper):
                 self._interfaces[0].ifa_name
             )
 
-            # self._logger.write_log(
-            #     f'({__name__}:{get_loc()}) Interface defaulted to ' \
-            #         f'\'{self.get_selected_ifa().ifa_name}\'.',
-            #     LoggerLevel.INFO
-            # )
+            self._get_handle('LoggerWrapper').write_log(
+                f'Interface defaulted to ' \
+                    f'\'{self.get_selected_ifa().ifa_name}\'.',
+                LoggerLevel.INFO
+            )
 
     def set_ifa(self: object, ifa_name: str) -> None:
         """Changes the interface in use.
@@ -197,4 +204,7 @@ def get_ifa_wrapper(network_conf: NetworkConfig) -> IfaWrapper:
         NetworkWrapper: Instance of IfaWrapper.
     """
 
-    return IfaWrapper(network_conf)
+    return IfaWrapper(
+        network_conf,
+        get_logger(get_logger_conf(f'__main__.{__name__}'))
+    )

@@ -14,9 +14,9 @@ logging and auditing.
 import logging
 import logging.config
 import logging.handlers
-
+from pprint import pformat
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 # from os import PathLike
 # from pathlib import Path
 
@@ -60,7 +60,7 @@ class LoggerWrapper(BaseWrapper):
     # Comprises path for 'logs' directory.
     # _LOG_PATH: Union[str, PathLike] = Path("../logs")
 
-    def __init__(self: object, logger_conf: LoggerConfig) -> None:
+    def __init__(self: object, logger_conf: Optional[LoggerConfig] = None) -> None:
         """Initialises LoggerWrapper.
         """
 
@@ -82,9 +82,10 @@ class LoggerWrapper(BaseWrapper):
         try:
             # Configure 'logging' library via dictConfig(),
             # using the LoggerConf _conf field.
-            logging.config.dictConfig(
-                self.conf._conf['logging_dictconf']
-            )
+            if self.conf._conf['logger_name'] == '__main__':
+                logging.config.dictConfig(
+                    self.conf._conf['logging_dictconf']
+                )
 
             # Creates new logger, and assigns to handle
             # _logger.
@@ -107,7 +108,7 @@ class LoggerWrapper(BaseWrapper):
         if LoggerLevel.value_in(log_level):
             # Evaluate corresponding logging
             # method (i.e., .info(), etc.)
-            getattr(self._get_handle('Logger'), log_level)(log_msg)
+            getattr(self._get_handle('Logger'), log_level)(pformat(log_msg))
         else: pass
 
 def get_logger(logger_conf: LoggerConfig) -> LoggerWrapper:

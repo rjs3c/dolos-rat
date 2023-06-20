@@ -143,7 +143,7 @@ class DolosRAT:
         """
 
         self._logger.write_log(
-            f"DolosRAT initialised in { time.time() - self._strt_time }", 
+            f"DolosRAT initialised in { time.time() - self._strt_time }.", 
             LoggerLevel.INFO
         )
 

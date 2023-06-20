@@ -44,19 +44,17 @@ class LoggerConfig(Config):
                 },
                 'loggers': {
                     f'{logger_name}': {
-                        'handlers': ['file'],
+                        'handlers': ['console'],
                         'level': 'INFO', 
                         'propagate': True
                     }
                 },
                 'handlers': {
-                    'file': {
-                        'class': 'logging.FileHandler',
+                    'console': {
+                        'class': 'logging.StreamHandler',
                         'level': 'INFO',
                         'formatter': 'standard',
-                        'filename': f'dolosrat/logs/log-{int(time())}.log',
-                        'mode': 'a',
-                        'encoding': 'utf-8'
+                        'stream': 'ext://sys.stdout'
                     }
                 }
             }
