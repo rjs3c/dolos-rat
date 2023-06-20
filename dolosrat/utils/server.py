@@ -14,7 +14,7 @@ import socketserver
 
 # Modules.
 from .wrapper import BaseWrapper
-from .network import IPv4Host
+from .network import Ifa, IPv4Host
 
 class SingleThreadedTCPHandler(socketserver.BaseRequestHandler):
     """_summary_
@@ -37,11 +37,16 @@ class TCPServerWrapper(BaseWrapper):
     """
     def __init__(
         self: object,
+        listen_ifa: Ifa,
         listen_host: IPv4Host,
         tcp_handler: SingleThreadedTCPHandler,
         tcp_server: SingleThreadedTCPServer
     ) -> None:
         """_summary_"""
+
+        # Comprises the interface and IPv4
+        # address in which to listen to.
+        self._listen_ifa = listen_ifa
 
         # Comprises the specific host (IPv4, port)
         # in which to specifically listen to.
@@ -53,7 +58,7 @@ class TCPServerWrapper(BaseWrapper):
         # Handler to server object.
         self._tcp_server = tcp_server
 
-    def listen(self: object):
+    def listen(self: object) -> None:
         """_summary_
 
         Args:
