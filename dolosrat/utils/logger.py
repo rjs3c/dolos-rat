@@ -55,7 +55,7 @@ class LoggerWrapper(BaseWrapper):
     """
 
     # Comprises path for 'logs' directory.
-    _LOG_PATH: Union[str, PathLike] = Path("../logs")
+    # _LOG_PATH: Union[str, PathLike] = Path("../logs")
 
     def __init__(
         self: object,
