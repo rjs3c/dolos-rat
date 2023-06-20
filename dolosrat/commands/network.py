@@ -49,6 +49,11 @@ class IPv4Capture:
         # selected.
         self._host = host
 
+        # Amends filter to focus upon specific
+        # IPv4Host.
+        if self._host:
+            self._sel_ipv4_addr_filter()
+
         # Timeout parameter passed into .sniff()
         # PyShark method.
         self._timeout = timeout
@@ -123,6 +128,15 @@ class IPv4Capture:
         # caught and ignored.
         except TimeoutError:
             pass
+
+    def _sel_ipv4_addr_filter(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        self._filter = 'tcp and ip.src eq' \
+            f'{self._host.ipv4_addr}'
 
     def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Host]]:
         """Returns the collected IPv4 addresses for processing, 
