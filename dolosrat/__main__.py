@@ -124,7 +124,7 @@ class DolosRAT:
         Args:
             self (object): _description_
         """
-        self._net_wrapper = get_ifa_wrapper()
+        self._net_wrapper = get_ifa_wrapper(self._logger)
 
         # count = self._network_wrapper.get_ifas_count()
         # default = self._network_wrapper.get_selected_ifa().ifa_name

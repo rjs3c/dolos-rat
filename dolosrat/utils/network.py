@@ -17,6 +17,7 @@ from typing import Any, List, Union
 # Modules.
 from .validator import validate_ipv4_addr
 from .wrapper import BaseWrapper
+from .logger import LoggerWrapper, LoggerLevel
 
 # External Imports.
 if os.name == 'nt':
@@ -47,8 +48,11 @@ class IfaWrapper(BaseWrapper):
     functionalities. 
     """
 
-    def __init__(self: object) -> None:
+    def __init__(self: object, logger: LoggerWrapper) -> None:
         """Initialises IfaWrapper."""
+
+        # Comprises handle to logger.
+        self._logger = logger
 
         # Comprises all available interfaces/adapters.
         self._interfaces: List[Union[None, Ifa]] = []
@@ -62,6 +66,15 @@ class IfaWrapper(BaseWrapper):
         # Defaults to first enumerated interface
         # if not manually selected.
         self._set_default_ifa()
+
+    def __del__(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        self._logger = None
+        del self
 
     def __str__(self: object) -> str:
         """Returns human-friendly string of the 
@@ -97,6 +110,11 @@ class IfaWrapper(BaseWrapper):
                 if ifa['ips']
         ]
 
+        self._logger.write_log(
+            f'Enumerated {self.get_ifas_count()} (v)NICs.',
+            LoggerLevel.INFO
+        )
+
     def _set_default_ifa(self: object) -> None:
         """Implicitly sets the default interface,
         should this not be explicitly performed.
@@ -109,6 +127,12 @@ class IfaWrapper(BaseWrapper):
                 # Defaults to first interface.
                 self._interfaces[0].ifa_name
             )
+
+        self._logger.write_log(
+            'Interface defaulted to ' \
+                f'\'{self.get_selected_ifa().ifa_name}\'.',
+            LoggerLevel.INFO
+        )
 
     def set_ifa(self: object, ifa_name: str) -> None:
         """Changes the interface in use.
@@ -164,10 +188,10 @@ class IfaWrapper(BaseWrapper):
         """
         return self._sel_interface
 
-def get_ifa_wrapper() -> IfaWrapper:
+def get_ifa_wrapper(logger_handle: LoggerWrapper) -> IfaWrapper:
     """Returns an instantiated IfaWrapper.
 
     Returns:
         NetworkWrapper: Instance of IfaWrapper.
     """
-    return IfaWrapper()
+    return IfaWrapper(logger_handle)
