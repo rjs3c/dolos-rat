@@ -16,6 +16,7 @@ from typing import Any, List, Union
 
 # Modules.
 from .validator import validate_ipv4_addr
+from .wrapper import BaseWrapper
 
 # External Imports.
 if os.name == 'nt':
@@ -41,7 +42,7 @@ class Ifa:
     ifa_name: str
     ifa_addrs: Union[IPv4Address, List[str]]
 
-class IfaWrapper:
+class IfaWrapper(BaseWrapper):
     """Provides a wrapper for interface-specific
     functionalities. 
     """

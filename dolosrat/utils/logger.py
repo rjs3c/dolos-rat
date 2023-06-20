@@ -22,6 +22,7 @@ from pathlib import Path
 
 # Modules.
 from config.logger import LoggerConfig
+from .wrapper import BaseWrapper
 
 class LoggerLevel(str, Enum):
     """An enum comprising available logging levels
@@ -48,7 +49,7 @@ class LoggerLevel(str, Enum):
         """
         return val in cls._value2member_map_
 
-class LoggerWrapper:
+class LoggerWrapper(BaseWrapper):
     """Provides wrapper for easily
     interfacing with 'logger' library.
     """
