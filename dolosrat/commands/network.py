@@ -49,9 +49,6 @@ class IPv4CaptureWrapper(BaseWrapper):
         if self.conf._conf['selected_host']:
             self._sel_ipv4_addr_filter()
 
-        # Handle to LiveCapture.
-        self._capture: Union[None, LiveCapture] = None
-
         # List comprising the extracted, and parsed,
         # IPv4 addresses.
         self._ipv4_addrs: Set[Union[None, IPv4Host]] = set()
