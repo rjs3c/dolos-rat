@@ -67,6 +67,7 @@ class DolosRAT:
 
         Configures other, internal modules of DolosRAT.
         """
+
         self._config: Dict[str, Any] = config
 
         # Logger handle.
@@ -90,6 +91,7 @@ class DolosRAT:
         The purpose of this is to destroy existing handles
         to modules and release other resources.
         """
+
         # Releases handles to module objects.
         self._net_wrapper = self._logger = None
         del self
@@ -100,9 +102,10 @@ class DolosRAT:
         Creates a handle to the class exposing methods
         to write application logs, etc.
         """
+
         # Create handle to LoggerWrapper.
         self._logger = get_logger(
-            __name__, self._config['logger_conf']
+            self._config['logger_conf']
         )
 
         self._logger.write_log(
@@ -116,6 +119,7 @@ class DolosRAT:
         Creates a handle to the class providing a 
         wrapper to Tkinter and producing the UI.
         """
+
         ...
 
     def _init_net(self: object) -> None:
@@ -124,6 +128,7 @@ class DolosRAT:
         Args:
             self (object): _description_
         """
+
         self._net_wrapper = get_ifa_wrapper(self._logger)
 
     def _run(self: object) -> None:
@@ -132,6 +137,7 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
+
         self._logger.write_log(
             f"DolosRAT initialised in { time.time() - self._strt_time }", 
             LoggerLevel.INFO
@@ -144,6 +150,7 @@ class DolosRAT:
         evaluate the method for responsible for 
         the primary logic (_run()).
         """
+
         self._run()
 
 if __name__ == '__main__':

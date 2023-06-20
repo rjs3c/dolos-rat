@@ -33,6 +33,7 @@ else:
 class IPv4Host:
     """_summary_
     """
+
     ipv4_addr: IPv4Address
     port: int
 
@@ -41,6 +42,7 @@ class Ifa:
     """Houses the information neccessary
     for a single interface.
     """
+
     ifa_name: str
     ifa_addrs: Union[IPv4Address, List[str]]
 
@@ -51,6 +53,8 @@ class IfaWrapper(BaseWrapper):
 
     def __init__(self: object, logger: LoggerWrapper) -> None:
         """Initialises IfaWrapper."""
+
+        super().__init__()
 
         # Comprises handle to logger.
         self._logger = logger
@@ -68,15 +72,6 @@ class IfaWrapper(BaseWrapper):
         # if not manually selected.
         self._set_default_ifa()
 
-    def __del__(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
-        self._logger = None
-        del self
-
     def __str__(self: object) -> str:
         """Returns human-friendly string of the 
         selected interface, for being displayed on the
@@ -86,6 +81,7 @@ class IfaWrapper(BaseWrapper):
             str: Human-friendly representation
             the interface in use. 
         """
+
         if self._sel_interface:
             # Readable string to denote interface for
             # being displayed within UI.
@@ -97,6 +93,7 @@ class IfaWrapper(BaseWrapper):
     def _collect_ifaces(self: object) -> None:
         """_summary_
         """
+
         # Creates a list of dictionaries, comprising
         # information for each adapter/interface.
         self._interfaces = [
@@ -121,6 +118,7 @@ class IfaWrapper(BaseWrapper):
         should this not be explicitly performed.
         Defaults to first entry.
         """
+
         # Check to see if any interfaces were
         # first enumerated.
         if self._interfaces:
@@ -142,6 +140,7 @@ class IfaWrapper(BaseWrapper):
             ifa_name (str): Represents the interface
             name in which to change to.
         """
+
         # Stores filtered interface information.
         ifa_filtered: List[Any] = []
 
@@ -176,6 +175,7 @@ class IfaWrapper(BaseWrapper):
         Returns:
             int: _description_
         """
+
         return len(self._interfaces)
 
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
@@ -187,6 +187,7 @@ class IfaWrapper(BaseWrapper):
             'Ifa' class comprising the interface information,
             shall be returned.
         """
+
         return self._sel_interface
 
 def get_ifa_wrapper(logger_handle: LoggerWrapper) -> IfaWrapper:
@@ -195,4 +196,5 @@ def get_ifa_wrapper(logger_handle: LoggerWrapper) -> IfaWrapper:
     Returns:
         NetworkWrapper: Instance of IfaWrapper.
     """
+
     return IfaWrapper(logger_handle)
