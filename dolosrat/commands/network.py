@@ -125,9 +125,9 @@ class IPv4Capture:
                 timeout=self._timeout
             )
         # Raised by PyShark - therefore
-        # caught and ignored.
+        # caught and returned.
         except TimeoutError:
-            pass
+            return
 
     def _sel_ipv4_addr_filter(self: object) -> None:
         """_summary_
@@ -136,7 +136,7 @@ class IPv4Capture:
             self (object): _description_
         """
         self._filter = 'tcp and ip.src eq' \
-            f'{self._host.ipv4_addr}'
+            f' {self._host.ipv4_addr}'
 
     def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Host]]:
         """Returns the collected IPv4 addresses for processing, 
@@ -147,6 +147,14 @@ class IPv4Capture:
             collected IPv4 addresses of type IPv4Address.
         """
         return self._ipv4_addrs
+
+    def capture_cont(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        ...
 
     def capture(self: object) -> None:
         """Provides a public means to initiate
