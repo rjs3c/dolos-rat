@@ -10,6 +10,7 @@
 """
 
 # Built-in/Generic Imports.
+import time
 from typing import Set, Union
 
 # Modules.
@@ -17,6 +18,8 @@ from config.network import NetworkConfig
 from utils.network import IPv4Host
 from utils.wrapper import BaseWrapper
 from utils.validator import validate_ipv4_addr
+from utils.logger import get_logger, LoggerWrapper, LoggerLevel
+from config.logger import get_logger_conf
 
 # External Imports.
 from pyshark import LiveCapture
@@ -26,7 +29,10 @@ class IPv4CaptureWrapper(BaseWrapper):
     """_summary_
     """
 
-    def __init__(self: object, config: NetworkConfig,
+    def __init__(
+        self: object, 
+        config: NetworkConfig,
+        logger: LoggerWrapper
     ) -> None:
         """Initialises IPv4Capture.
 
@@ -52,6 +58,12 @@ class IPv4CaptureWrapper(BaseWrapper):
         # List comprising the extracted, and parsed,
         # IPv4 addresses.
         self._ipv4_addrs: Set[Union[None, IPv4Host]] = set()
+
+        # Used to calculate time taken to initialise.
+        self._strt_time: Union[None, float] = None
+
+        # Registers handle for logger.
+        self._register_handle(logger)
 
         # Create LiveCapture handler.
         self._init_handler()
@@ -107,6 +119,15 @@ class IPv4CaptureWrapper(BaseWrapper):
         and applies a callback to each incoming packet."""
 
         try:
+            self._get_handle('LoggerWrapper').write_log(
+                f'Commenced host collection from ingress using BPF filter ' \
+                    f'\'{self.conf._conf["capture_filter"]}\'.',
+                LoggerLevel.INFO
+            )
+
+            # Set start time.
+            self._strt_time = time.time()
+                    
             # Sniff, and apply callback to
             # extract IPv4 addresses from packets.
             self._get_handle('LiveCapture').apply_on_packets(
@@ -115,8 +136,13 @@ class IPv4CaptureWrapper(BaseWrapper):
             )
         # Raised by PyShark - therefore
         # caught and returned.
-        except TimeoutError:
-            return
+        except TimeoutError: pass
+        finally:
+            self._get_handle('LoggerWrapper').write_log(
+                f'Collection completed in { time.time() - self._strt_time }. ' \
+                    f'Collected { len(self._ipv4_addrs) }.',
+                LoggerLevel.INFO
+            )
 
     def _sel_ipv4_addr_filter(self: object) -> None:
         """_summary_
@@ -155,4 +181,7 @@ def get_ipv4_capture(network_config: NetworkConfig) -> IPv4CaptureWrapper:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
 
-    return IPv4CaptureWrapper(network_config)
+    return IPv4CaptureWrapper(
+        network_config,
+        get_logger(get_logger_conf(f'__main__.{__name__}'))
+    )

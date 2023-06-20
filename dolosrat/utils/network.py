@@ -130,6 +130,7 @@ class IfaWrapper(BaseWrapper):
         # Check to see if any interfaces were
         # first enumerated.
         if self._interfaces:
+            # Sets interface.
             self.set_ifa(
                 # Defaults to first interface.
                 self._interfaces[0].ifa_name
@@ -140,6 +141,16 @@ class IfaWrapper(BaseWrapper):
                     f'\'{self.get_selected_ifa().ifa_name}\'.',
                 LoggerLevel.INFO
             )
+
+        else:
+            # If no usable interfaces were enumerated.
+            self._get_handle('LoggerWrapper').write_log(
+                'Cannot find a (v)NIC to use. Exiting.',
+                LoggerLevel.ERROR
+            )
+
+            # Cannot continue; therefore, abruptly exit.
+            raise SystemExit()
 
     def set_ifa(self: object, ifa_name: str) -> None:
         """Changes the interface in use.

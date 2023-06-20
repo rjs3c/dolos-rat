@@ -43,14 +43,14 @@ class LoggerConfig(Config):
                     }
                 },
                 'loggers': {
-                    f'{logger_name}': {
-                        'handlers': ['console'],
+                    f'__main__': {
+                        'handlers': ['console.info'],
                         'level': 'INFO', 
                         'propagate': True
                     }
                 },
                 'handlers': {
-                    'console': {
+                    'console.info': {
                         'class': 'logging.StreamHandler',
                         'level': 'INFO',
                         'formatter': 'standard',

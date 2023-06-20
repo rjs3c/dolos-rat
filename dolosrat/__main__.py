@@ -23,6 +23,7 @@ from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, LoggerLevel, get_logger
 from utils.network import IfaWrapper, get_ifa_wrapper
 from utils.server import TCPServerWrapper
+from utils.os import check_admin_privs
 
 (__appname__,
  __author__,
@@ -146,6 +147,12 @@ class DolosRAT:
             f"DolosRAT initialised in { time.time() - self._strt_time }.", 
             LoggerLevel.INFO
         )
+
+        if check_admin_privs() is False:
+            self._logger.write_log(
+                "DolosRAT running in unprivileged mode. Continuing.", 
+                LoggerLevel.WARNING
+            )
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
