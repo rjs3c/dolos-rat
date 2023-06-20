@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
 # Creator : Ryan I.
-# Created Date: 17/06/2023
+# Created Date: 20/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
@@ -13,7 +13,8 @@
 import socketserver
 
 # Modules.
-# [...]
+from .wrapper import BaseWrapper
+from .network import IPv4Host
 
 class SingleThreadedTCPHandler(socketserver.BaseRequestHandler):
     """_summary_
@@ -31,7 +32,33 @@ class SingleThreadedTCPServer(socketserver.TCPServer):
     """
     pass
 
-class TCPServerWrapper():
+class TCPServerWrapper(BaseWrapper):
     """_summary_
     """
-    ...
+    def __init__(
+        self: object,
+        listen_host: IPv4Host,
+        tcp_handler: SingleThreadedTCPHandler,
+        tcp_server: SingleThreadedTCPServer
+    ) -> None:
+        """_summary_"""
+
+        # Comprises the specific host (IPv4, port)
+        # in which to specifically listen to.
+        self._listen_host = listen_host
+
+        # Handler to handler object.
+        self._tcp_handler = tcp_handler
+
+        # Handler to server object.
+        self._tcp_server = tcp_server
+
+    def listen(self: object):
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        ...
+
+def get_tcp_server_wrapper(): ...
