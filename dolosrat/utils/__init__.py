@@ -12,5 +12,5 @@ the use of this tool is for educational purposes only.
 """
 
 from .logger import LoggerWrapper, LoggerLevel, get_logger
-from .network import IfaWrapper, Ifa
+from .network import IfaWrapper, Ifa, get_ifa_wrapper
 from .os import check_admin_privs

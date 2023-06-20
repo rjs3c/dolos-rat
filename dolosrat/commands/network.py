@@ -27,6 +27,7 @@ class IPv4Capture:
     def __init__(
         self: object,
         ifa: Ifa,
+        host: Optional[IPv4Host] = None,
         timeout: Optional[int] = 15,
         capture_filter: Optional[str] = 'ip and tcp'
     ) -> None:

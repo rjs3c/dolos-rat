@@ -20,6 +20,7 @@ from typing import Any, Dict, Union
 from config.config import Config
 from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, LoggerLevel, get_logger
+from utils.network import IfaWrapper, get_ifa_wrapper
 
 (__appname__,
  __author__,
@@ -67,14 +68,21 @@ class DolosRAT:
         Configures other, internal modules of DolosRAT.
         """
         self._config: Dict[str, Any] = config
+
+        # Logger handle.
         self._logger: Union[Any, LoggerWrapper] = None
+
+        # IfaWrapper handle.
+        self._net_wrapper: Union[Any, IfaWrapper]
+
+        # Used to calculate time taken to initialise.
         self._strt_time: float = time.time()
 
         # Set-up application logging.
         self._init_logger()
 
-        # Run DolosRAT.
-        self._run()
+        # Perform networking set-up.
+        self._init_net()
 
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
@@ -82,7 +90,9 @@ class DolosRAT:
         The purpose of this is to destroy existing handles
         to modules and release other resources.
         """
-        ...
+        # Releases handles to module objects.
+        self._net_wrapper = self._logger = None
+        del self
 
     def _init_logger(self: object) -> None:
         """Creates handle to logging wrapper class.
@@ -95,6 +105,11 @@ class DolosRAT:
             __name__, self._config['logger_conf']
         )
 
+        self._logger.write_log(
+            "DolosRAT initialisation started.", 
+            LoggerLevel.INFO
+        )
+
     def _init_tkinter(self: object) -> None:
         """Creates handle to Tkinter wrapper class.
         
@@ -103,6 +118,22 @@ class DolosRAT:
         """
         ...
 
+    def _init_net(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        self._net_wrapper = get_ifa_wrapper()
+
+        # count = self._network_wrapper.get_ifas_count()
+        # default = self._network_wrapper.get_selected_ifa().ifa_name
+
+        # self._logger.write_log(
+        #     f"Enumerated { count } interfaces. Default: \'{ default }\'.", 
+        #     LoggerLevel.INFO
+        # )
+
     def _run(self: object) -> None:
         """Officially starts the internal modules.
 
@@ -110,12 +141,7 @@ class DolosRAT:
         to the application, use these to commence DolosRAT.
         """
         self._logger.write_log(
-            "DolosRAT initialisation started.", 
-            LoggerLevel.INFO
-        )
-
-        self._logger.write_log(
-            f"DolosRAT initialised in {time.time() - self._strt_time}", 
+            f"DolosRAT initialised in { time.time() - self._strt_time }", 
             LoggerLevel.INFO
         )
 
@@ -126,7 +152,7 @@ class DolosRAT:
         evaluate the method for responsible for 
         the primary logic (_run()).
         """
-        ...
+        self._run()
 
 if __name__ == '__main__':
 

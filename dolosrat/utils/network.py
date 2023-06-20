@@ -102,7 +102,7 @@ class IfaWrapper:
         Defaults to first entry.
         """
         # Check to see if any interfaces were
-        # first enumerated. 
+        # first enumerated.
         if self._interfaces:
             self.set_ifa(
                 # Defaults to first interface.
@@ -141,6 +141,17 @@ class IfaWrapper:
                 ][0])
             )
 
+    def get_ifas_count(self: object) -> int:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            int: _description_
+        """
+        return len(self._interfaces)
+
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
         """Returns an 'Ifa' object comprising an
         interface's name and configuration.
@@ -158,4 +169,4 @@ def get_ifa_wrapper() -> IfaWrapper:
     Returns:
         NetworkWrapper: Instance of IfaWrapper.
     """
-    return IfaWrapper
+    return IfaWrapper()
