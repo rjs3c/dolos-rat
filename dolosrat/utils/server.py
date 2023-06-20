@@ -10,13 +10,13 @@
 """
 
 # Built-in/Generic Imports.
-import socketserver
+from socketserver import BaseRequestHandler, TCPServer
 
 # Modules.
 from .wrapper import BaseWrapper
 from .network import Ifa, IPv4Host
 
-class SingleThreadedTCPHandler(socketserver.BaseRequestHandler):
+class SingleThreadedTCPHandler(BaseRequestHandler):
     """_summary_
 
     Args:
@@ -24,7 +24,7 @@ class SingleThreadedTCPHandler(socketserver.BaseRequestHandler):
     """
     ...
 
-class SingleThreadedTCPServer(socketserver.TCPServer):
+class SingleThreadedTCPServer(TCPServer):
     """_summary_
 
     Args:
@@ -44,9 +44,11 @@ class TCPServerWrapper(BaseWrapper):
     ) -> None:
         """_summary_"""
 
+        super().__init__()
+
         # Comprises the interface and IPv4
         # address in which to listen to.
-        self._listen_ifa = listen_ifa
+        self._listen_ifa: listen_ifa
 
         # Comprises the specific host (IPv4, port)
         # in which to specifically listen to.
@@ -58,6 +60,28 @@ class TCPServerWrapper(BaseWrapper):
         # Handler to server object.
         self._tcp_server = tcp_server
 
+    def _init_server(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        # Extract Ifa IPv4 address and host
+        # ports in which to bind to.
+        (host, port) = (
+            self._listen_ifa.ifa_addrs,
+            self._listen_host.port
+        )
+
+        # Register handle to instantiated
+        # SingleThreadedTCPServer.
+        self._register_handle(
+            SingleThreadedTCPServer(
+                (host, port),
+                SingleThreadedTCPHandler
+            )
+        )
+
     def listen(self: object) -> None:
         """_summary_
 
@@ -66,4 +90,12 @@ class TCPServerWrapper(BaseWrapper):
         """
         ...
 
-def get_tcp_server_wrapper(): ...
+def get_tcp_server_wrapper() -> TCPServerWrapper:
+    """_summary_
+
+    Returns:
+        TCPServerWrapper: _description_
+    """
+    ...
+
+    # return TCPServerWrapper()

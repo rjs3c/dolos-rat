@@ -15,10 +15,11 @@ from ipaddress import IPv4Address
 from typing import Any, List, Union
 
 # Modules.
+from config.network import NetworkConfig
 from .validator import validate_ipv4_addr
 from .wrapper import BaseWrapper
-from .logger import LoggerWrapper, LoggerLevel
-from .os import get_loc
+# from .logger import LoggerWrapper, LoggerLevel
+# from .os import get_loc
 
 # External Imports.
 if os.name == 'nt':
@@ -51,19 +52,16 @@ class IfaWrapper(BaseWrapper):
     functionalities. 
     """
 
-    def __init__(self: object, logger: LoggerWrapper) -> None:
+    def __init__(self: object, network_conf: NetworkConfig) -> None:
         """Initialises IfaWrapper."""
 
         super().__init__()
 
-        # Comprises handle to logger.
-        self._logger = logger
+        # Houses NetworkConfig.
+        self.conf = network_conf
 
         # Comprises all available interfaces/adapters.
         self._interfaces: List[Union[None, Ifa]] = []
-
-        # Comprises the filtered interface for selection.
-        self._sel_interface: Union[None, Ifa] = None
 
         # Enumerates all interfaces on system.
         self._collect_ifaces()
@@ -82,17 +80,17 @@ class IfaWrapper(BaseWrapper):
             the interface in use. 
         """
 
-        if self._sel_interface:
+        if self._conf._conf['selected_ifa']:
             # Readable string to denote interface for
             # being displayed within UI.
-            return f"{self._sel_interface.ifa_name}" \
-                f"({self._sel_interface.ifa_addrs})"
+            return f"{self.conf._conf['selected_ifa'].ifa_name}" \
+                f"({self.conf._conf['selected_ifa'].ifa_addrs})"
 
         return ""
 
     def _collect_ifaces(self: object) -> None:
-        """_summary_
-        """
+        """Collects all interfaces on system and
+        outputs a list."""
 
         # Creates a list of dictionaries, comprising
         # information for each adapter/interface.
@@ -108,10 +106,13 @@ class IfaWrapper(BaseWrapper):
                 if ifa['ips']
         ]
 
-        self._logger.write_log(
-            f'({__name__}:{get_loc()}) Enumerated {self.get_ifas_count()} (v)NICs.',
-            LoggerLevel.INFO
-        )
+        # Count of interfaces for future reference.
+        self.conf._conf['ifas_count'] = len(self._interfaces)
+
+        # self._logger.write_log(
+        #     f'({__name__}:{get_loc()}) Enumerated {self.get_ifas_count()} (v)NICs.',
+        #     LoggerLevel.INFO
+        # )
 
     def _set_default_ifa(self: object) -> None:
         """Implicitly sets the default interface,
@@ -127,11 +128,11 @@ class IfaWrapper(BaseWrapper):
                 self._interfaces[0].ifa_name
             )
 
-            self._logger.write_log(
-                f'({__name__}:{get_loc()}) Interface defaulted to ' \
-                    f'\'{self.get_selected_ifa().ifa_name}\'.',
-                LoggerLevel.INFO
-            )
+            # self._logger.write_log(
+            #     f'({__name__}:{get_loc()}) Interface defaulted to ' \
+            #         f'\'{self.get_selected_ifa().ifa_name}\'.',
+            #     LoggerLevel.INFO
+            # )
 
     def set_ifa(self: object, ifa_name: str) -> None:
         """Changes the interface in use.
@@ -159,24 +160,23 @@ class IfaWrapper(BaseWrapper):
             # Validate IPv4 address within interface
             # information and place within 'Ifa'
             # dataclass accordingly.
-            self._sel_interface = Ifa(
+            self.conf._conf['selected_ifa'] = Ifa(
                ifa_filtered[0].ifa_name,
                validate_ipv4_addr([
                    ifa.ifa_addrs[1] for ifa in ifa_filtered
                 ][0])
             )
 
-    def get_ifas_count(self: object) -> int:
-        """_summary_
-
-        Args:
-            self (object): _description_
+    def _get_ifas_count(self: object) -> int:
+        """Returns a count of all collected
+        interfaces.
 
         Returns:
-            int: _description_
+            int: An integer denoting the number
+            of collected interfaces.
         """
 
-        return len(self._interfaces)
+        return self.conf._conf['ifas_count']
 
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
         """Returns an 'Ifa' object comprising an
@@ -188,13 +188,13 @@ class IfaWrapper(BaseWrapper):
             shall be returned.
         """
 
-        return self._sel_interface
+        return self.conf._conf['selected_ifa']
 
-def get_ifa_wrapper(logger_handle: LoggerWrapper) -> IfaWrapper:
+def get_ifa_wrapper(network_conf: NetworkConfig) -> IfaWrapper:
     """Returns an instantiated IfaWrapper.
 
     Returns:
         NetworkWrapper: Instance of IfaWrapper.
     """
 
-    return IfaWrapper(logger_handle)
+    return IfaWrapper(network_conf)

