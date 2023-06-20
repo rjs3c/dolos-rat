@@ -45,6 +45,10 @@ class IPv4Capture:
         # Comprises ifa_name and ifa_addrs fields.
         self._ifa = ifa
 
+        # IPv4Host, should one be specifically
+        # selected.
+        self._host = host
+
         # Timeout parameter passed into .sniff()
         # PyShark method.
         self._timeout = timeout
@@ -107,7 +111,7 @@ class IPv4Capture:
 
     def _sniff_packets(self: object) -> None:
         """Captures all packets in the LiveCapture
-        and applies a callbacl to each incoming packet."""
+        and applies a callback to each incoming packet."""
         try:
             # Sniff, and apply callback to
             # extract IPv4 addresses from packets.
@@ -143,4 +147,4 @@ def get_ipv4_capture(ifa: Ifa) -> IPv4Capture:
     Returns:
         IPv4Capture: Instantiated form of IPv4Capture.
     """
-    return IPv4Capture(ifa.ifa_name)
+    return IPv4Capture(ifa)
