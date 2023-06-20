@@ -10,11 +10,11 @@
 """
 
 # Built-in/Generic Imports.
-from typing import Set, Optional, Union
+from typing import Set, Union
 
 # Modules.
-from config.network import NetworkConfig, get_network_conf
-from utils.network import Ifa, IPv4Host, IPv4Address
+from config.network import NetworkConfig
+from utils.network import IPv4Host
 from utils.wrapper import BaseWrapper
 from utils.validator import validate_ipv4_addr
 
@@ -159,10 +159,3 @@ def get_ipv4_capture(network_config: NetworkConfig) -> IPv4CaptureWrapper:
     """
 
     return IPv4CaptureWrapper(network_config)
-
-t = get_network_conf(Ifa(ifa_name='Wi-Fi', ifa_addrs=IPv4Address('192.168.1.1')), IPv4Host(ipv4_addr=IPv4Address('192.168.1.1'), port=9999))
-print(t._conf)
-
-_ = IPv4CaptureWrapper(t)
-_.capture()
-print(_.get_ipv4_addrs())
