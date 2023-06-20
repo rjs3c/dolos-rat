@@ -77,7 +77,7 @@ class BaseWrapper:
 
         # Handle + list index from _handles.
         for idx, handle in enumerate(self._handles):
-            # Object name and queried name match. 
+            # Object name and queried name match.
             if handle.__class__.__name__ == handle_name:
                 return self._handles[idx]
 

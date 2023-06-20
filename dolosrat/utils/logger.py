@@ -21,8 +21,8 @@ from typing import Any
 # from pathlib import Path
 
 # Modules.
-from config.logger import LoggerConfig
 from .wrapper import BaseWrapper
+from config.logger import LoggerConfig
 
 class LoggerLevel(str, Enum):
     """An enum comprising available logging levels
