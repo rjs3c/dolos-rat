@@ -11,6 +11,7 @@
 # Built-in/Generic Imports.
 import ctypes
 import os
+import sys
 
 def check_admin_privs() -> bool:
     """Checks if the privilege context in which 
@@ -49,3 +50,11 @@ def check_admin_privs() -> bool:
 
     # Defaults to False.
     return False
+
+def get_loc() -> int:
+    """_summary_
+
+    Returns:
+        int: _description_
+    """
+    return sys._getframe().f_back.f_lineno

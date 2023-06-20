@@ -12,7 +12,16 @@
 class BaseWrapper:
     """_summary_
     """
+    
     def __init__(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+        pass
+    
+    def __del__(self: object) -> None:
         """_summary_
 
         Args:

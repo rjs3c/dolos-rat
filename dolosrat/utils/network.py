@@ -18,6 +18,7 @@ from typing import Any, List, Union
 from .validator import validate_ipv4_addr
 from .wrapper import BaseWrapper
 from .logger import LoggerWrapper, LoggerLevel
+from .os import get_loc
 
 # External Imports.
 if os.name == 'nt':
@@ -111,7 +112,7 @@ class IfaWrapper(BaseWrapper):
         ]
 
         self._logger.write_log(
-            f'Enumerated {self.get_ifas_count()} (v)NICs.',
+            f'({__name__}:{get_loc()}) Enumerated {self.get_ifas_count()} (v)NICs.',
             LoggerLevel.INFO
         )
 
@@ -128,11 +129,11 @@ class IfaWrapper(BaseWrapper):
                 self._interfaces[0].ifa_name
             )
 
-        self._logger.write_log(
-            'Interface defaulted to ' \
-                f'\'{self.get_selected_ifa().ifa_name}\'.',
-            LoggerLevel.INFO
-        )
+            self._logger.write_log(
+                f'({__name__}:{get_loc()}) Interface defaulted to ' \
+                    f'\'{self.get_selected_ifa().ifa_name}\'.',
+                LoggerLevel.INFO
+            )
 
     def set_ifa(self: object, ifa_name: str) -> None:
         """Changes the interface in use.
