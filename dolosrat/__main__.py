@@ -86,8 +86,6 @@ class DolosRAT:
         # Set-up application logging.
         self._init_logger()
 
-        print("hello")
-
         # Perform networking set-up.
         self._init_net()
 
@@ -156,6 +154,8 @@ class DolosRAT:
                 "DolosRAT running in unprivileged mode. Continuing.", 
                 LoggerLevel.WARNING
             )
+
+        from utils.net.server import TCPServerWrapper
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.

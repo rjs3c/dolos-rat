@@ -12,4 +12,3 @@ the use of this tool is for educational purposes only.
 """
 
 from utils import *
-from utils import *
