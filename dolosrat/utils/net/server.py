@@ -12,16 +12,17 @@
 # Built-in/Generic Imports.
 from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from ipaddress import IPv4Address
-from typing import Any
+from typing import Any, Union
 from socket import gaierror
 
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
-from utils.misc.encoder import Pickle # pylint: disable=import-error
+# from utils.misc.encoder import Pickle # pylint: disable=import-error
 from config.network import NetworkConfig, get_network_conf # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
 from .interface import Ifa, IPv4Host
+from .socket import get_socket_wrapper, SocketWrapper
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
     """_summary_
@@ -43,6 +44,12 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
 
         BaseRequestHandler.__init__(self, request, client_address, server)
 
+        # Comprises handle to SocketWrapper.
+        self._socket_wrapper: Union[None, SocketWrapper] = None
+
+        # Houses data received from the client.
+        self._rx_data: Union[None, bytes] = None
+
     def setup(self: BaseRequestHandler) -> None:
         """_summary_
         """
@@ -60,8 +67,7 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
             # for timeout threshold.
             self.server.inc_req()
 
-            # print(self.__dict__)
-            # print(self.request)
+            self._rx_data = get_socket_wrapper(self.request).recv()
 
 class SingleThreadedTCPServer(TCPServer):
     """_summary_
@@ -160,7 +166,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         # IPv4 address of the client to specifically
         # accept connections from.
         self._client = str(
-           self.config._conf['selected_host'].ipv4_addr 
+           self.config._conf['selected_host'].ipv4_addr
         )
 
         # The port to listen on to receive correspondance
@@ -190,8 +196,13 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
                     self._client
                 )
             )
-        except gaierror as init_serv_err:
-            print(init_serv_err)
+        except gaierror:
+            # Write log to inform of binding error.
+            self._get_handle('LoggerWrapper').write_log(
+                'Failed to create server on ' \
+                    f'\'{self._host}:{self._port}\'.',
+                LoggerLevel.ERROR
+        )
 
     def close(self: object) -> None:
         """_summary_
@@ -224,7 +235,6 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
         # Processing one request at a time
         # within a controlled loop.
-        # Poll interval: 0.5s.
         # Timeout: 30s.
         while self._get_handle('SingleThreadedTCPServer').timeout_check():
             # Increment threshold counter for timeout.
