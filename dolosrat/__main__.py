@@ -17,13 +17,14 @@ import time
 from typing import Any, Dict, Union
 
 # Modules.
+# Configuration classes.
 from config.config import Config
 from config.network import get_network_conf
 from config.logger import get_logger_conf
-from utils.logger import LoggerWrapper, LoggerLevel, get_logger
-from utils.network import IfaWrapper, get_ifa_wrapper
-from utils.server import TCPServerWrapper
-from utils.os import check_admin_privs
+# Other utilities.
+from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger
+from utils.misc.os import check_admin_privs
+from utils.net.interface import IfaWrapper, get_ifa_wrapper
 
 (__appname__,
  __author__,
@@ -153,6 +154,8 @@ class DolosRAT:
                 "DolosRAT running in unprivileged mode. Continuing.", 
                 LoggerLevel.WARNING
             )
+
+        from utils.net.server import TCPServerWrapper
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.

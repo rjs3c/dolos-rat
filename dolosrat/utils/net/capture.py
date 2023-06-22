@@ -14,11 +14,11 @@ import time
 from typing import Set, Union
 
 # Modules.
+from utils.misc.wrapper import BaseWrapper
+from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel
+from utils.net.interface import IPv4Host
+from utils.misc.validator import validate_ipv4_addr
 from config.network import NetworkConfig
-from utils.network import IPv4Host
-from utils.wrapper import BaseWrapper
-from utils.validator import validate_ipv4_addr
-from utils.logger import get_logger, LoggerWrapper, LoggerLevel
 from config.logger import get_logger_conf
 
 # External Imports.
@@ -30,7 +30,7 @@ class IPv4CaptureWrapper(BaseWrapper):
     """
 
     def __init__(
-        self: object, 
+        self: object,
         config: NetworkConfig,
         logger: LoggerWrapper
     ) -> None:
@@ -127,7 +127,7 @@ class IPv4CaptureWrapper(BaseWrapper):
 
             # Set start time.
             self._strt_time = time.time()
-                    
+
             # Sniff, and apply callback to
             # extract IPv4 addresses from packets.
             self._get_handle('LiveCapture').apply_on_packets(

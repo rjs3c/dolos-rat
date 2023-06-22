@@ -11,4 +11,4 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from .network import LiveCapture
+from ..utils.net.capture import LiveCapture
