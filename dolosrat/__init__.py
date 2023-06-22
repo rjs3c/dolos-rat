@@ -11,5 +11,5 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from .misc import *
-from .net import *
+from utils import *
+from utils import *
