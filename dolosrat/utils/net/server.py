@@ -13,10 +13,12 @@
 from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from ipaddress import IPv4Address
 from typing import Any
+from socket import gaierror
 
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
+from utils.misc.encoder import Pickle # pylint: disable=import-error
 from config.network import NetworkConfig, get_network_conf # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
 from .interface import Ifa, IPv4Host
@@ -51,9 +53,15 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
         """_summary_
         """
 
-        # Increment request counter
-        # for timeout threshold.
-        self.server.inc_req()
+        # Only process if client address is that we
+        # desire.
+        if self.client_address[0] == self.server.client_addr:
+            # Increment request counter
+            # for timeout threshold.
+            self.server.inc_req()
+
+            # print(self.__dict__)
+            # print(self.request)
 
 class SingleThreadedTCPServer(TCPServer):
     """_summary_
@@ -61,7 +69,12 @@ class SingleThreadedTCPServer(TCPServer):
 
     timeout: int = 30
 
-    def __init__(self: object, server_address, RequestHandlerClass) -> None:
+    def __init__(
+        self: object,
+        server_address,
+        RequestHandlerClass,
+        client_address: str
+    ) -> None:
         """_summary_
 
         Args:
@@ -74,6 +87,11 @@ class SingleThreadedTCPServer(TCPServer):
         """
 
         TCPServer.__init__(self, server_address, RequestHandlerClass)
+
+        # Stores the client IPv4 address for the handler to filter
+        # requests by. Only want to accept ingress from one,
+        # specific host.
+        self.client_addr = client_address
 
         # Allow binding to same address after closing.
         self.allow_reuse_address = True
@@ -116,7 +134,7 @@ class SingleThreadedTCPServer(TCPServer):
 
         self._req_ctr += 1
 
-class TCPServerWrapper(BaseWrapper):
+class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
     """_summary_
     """
 
@@ -139,6 +157,12 @@ class TCPServerWrapper(BaseWrapper):
             self.config._conf['selected_ifa'].ifa_addrs
         )
 
+        # IPv4 address of the client to specifically
+        # accept connections from.
+        self._client = str(
+           self.config._conf['selected_host'].ipv4_addr 
+        )
+
         # The port to listen on to receive correspondance
         # from selected host.
         self._port = self.config.conf['selected_host'].port
@@ -156,16 +180,20 @@ class TCPServerWrapper(BaseWrapper):
 
         # Register handle for SingleThreadedTCPServer.
         # Supplied host and port on which to listen to.
-        self._register_handle(
-            SingleThreadedTCPServer(
-                (self._host, self._port),
-                # Handler to which requests
-                # are dispatched.
-                SingleThreadedTCPHandler
+        try:
+            self._register_handle(
+                SingleThreadedTCPServer(
+                    (self._host, self._port),
+                    # Handler to which requests
+                    # are dispatched.
+                    SingleThreadedTCPHandler,
+                    self._client
+                )
             )
-        )
+        except gaierror as init_serv_err:
+            print(init_serv_err)
 
-    def _close(self: object) -> None:
+    def close(self: object) -> None:
         """_summary_
 
         Args:
@@ -215,7 +243,7 @@ class TCPServerWrapper(BaseWrapper):
         )
 
         # Shutdown server, NOT connection.
-        self._close()
+        self.close()
 
 def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
     """_summary_

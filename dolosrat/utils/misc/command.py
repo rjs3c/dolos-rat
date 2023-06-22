@@ -20,3 +20,6 @@ class Command(ABC):
     """
 
     ...
+
+class CommandSerialise:
+    ...
