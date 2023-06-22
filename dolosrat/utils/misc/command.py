@@ -7,3 +7,16 @@
 # ---------------------------------------------------------------------------
 """
 """
+
+# Built-in/Generic Imports.
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
+class Command(ABC):
+    """_summary_
+
+    Args:
+        ABC (_type_): _description_
+    """
+
+    ...
