@@ -64,7 +64,8 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
             self.server.inc_req()
 
             # Extract message from 'socket' object.
-            self._rx_data = Socket.recv(self.request)
+            with Socket(self.request) as test:
+                print(test.recv())
 
 class SingleThreadedTCPServer(TCPServer):
     """_summary_

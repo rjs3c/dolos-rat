@@ -13,15 +13,22 @@ https://stackoverflow.com/questions/53755390/python-socketserver-stuck-at-receiv
 """
 
 # Built-in/Generic Imports.
-# import struct
-from socket import socket, error
-from typing import Any, Union
+from socket import socket, error, SHUT_RDWR
+from typing import Any, List, Union, Optional
 from contextlib import contextmanager
+from inspect import isclass
+
+# Modules.
+from ..misc.command import Command
 
 class Socket:
-    """
-    
-    Credit: https://johndanielraines.medium.com/
+    """_summary_
+
+    Returns:
+        _type_: _description_
+
+    Yields:
+        _type_: _description_
     """
 
     # The bytes of the data that
@@ -30,38 +37,90 @@ class Socket:
     # of the payload - 32 bit.
     head_bytes: int = 4
 
-    @staticmethod
-    def send(sock: socket, data: Any) -> None:
+    def __init__(
+        self: object,
+        sock: socket,
+        data: Optional[Any] = None
+    ) -> None:
+        """_summary_
+
+        Returns:
+            _type_: _description_
+
+        Yields:
+            _type_: _description_
+        """
+
+        # Comprises handle to socket/request
+        # object.
+        self._sock = sock
+
+        # Comprises data in which to transmit.
+        self._data = data
+
+    def __enter__(self: object) -> object:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Socket: _description_
+
+        Yields:
+            Iterator[Socket]: _description_
+        """
+
+        return self
+
+    def __exit__(self: object, *args: List[Any]) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            _type_: _description_
+
+        Yields:
+            _type_: _description_
+        """
+
+        self._sock.shutdown(SHUT_RDWR)
+
+        del self
+
+    def send(self: object) -> None:
         """_summary_
 
         Args:
             self (object): _description_
         """
 
-        if data:
+        if self._data:
             # Get length of data.
-            data_len = len(data).to_bytes(
-                Socket.head_bytes,
+            data_len = len(self._data).to_bytes(
+                self.head_bytes,
                 byteorder='big'
             )
 
             try:
-            # Transmit data, with length of
-            # data prepended as header.
-                sock.sendall(
-                    data_len + data
+                # Transmit data, with length of
+                # data prepended as header.
+                self._sock.sendall(
+                    data_len + self._data
                 )
             except error:
                 pass
 
-    @staticmethod
-    def recv_raw(sock: socket, raw_len: int) -> bytearray:
+    def recv_raw(self: object, raw_len: int) -> bytearray:
         """_summary_
 
         Args:
             self (object): _description_
         """
 
+        # Raw data receieved from socket.
         raw_rx = bytearray()
 
         while len(raw_rx) < raw_len:
@@ -72,7 +131,7 @@ class Socket:
             try:
                 # Traverses received data from offset
                 # of payload onwards.
-                recv_data = sock.recv(
+                recv_data = self._sock.recv(
                     raw_len - len(raw_rx)
                 )
 
@@ -87,15 +146,18 @@ class Socket:
         # Return received data in bytearray() form.
         return raw_rx
 
-    @staticmethod
-    def recv(sock: socket) -> bytearray:
+    def recv(self: object) -> bytearray:
         """_summary_
 
         Returns:
             bytearray: _description_
         """
 
+        # Raw length of payload; extracted
+        # from header.
         raw_len: Union[None, int] = None
+
+        # Extracted payload.
         raw_data: bytearray = bytearray()
 
         # Extracts the length specified
@@ -103,10 +165,9 @@ class Socket:
         # Converts from bytes to integer.
         try:
             raw_len = int.from_bytes(
-                Socket.recv_raw(
-                    sock,
+                self.recv_raw(
                     # 4 byte / 32 bit int.
-                    Socket.head_bytes
+                    self.head_bytes
                 ),
                 byteorder='big'
             )
@@ -116,19 +177,6 @@ class Socket:
         # Identify if header is present, or if
         # conversion from bytes to int failed.
         if raw_len:
-            raw_data = Socket.recv_raw(sock, raw_len)
+            raw_data = self.recv_raw(raw_len)
 
         return raw_data
-
-# https://stackoverflow.com/questions/3693771/understanding-the-python-with-statement-and-context-managers
-@contextmanager
-def send_data_handler(send_data: Any) -> Any:
-    """_summary_
-    """
-
-    send_output: Union[None, Any] = None
-
-    try:
-        yield send_output
-    finally:
-        ...

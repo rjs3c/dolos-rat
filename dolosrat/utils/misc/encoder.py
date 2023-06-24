@@ -59,7 +59,7 @@ class Pickle(Encode):
         return dumps(data)
 
     @staticmethod
-    def dec(data: Any) -> Any:
+    def dec(data: bytes) -> Any:
         """_summary_
 
         Args:

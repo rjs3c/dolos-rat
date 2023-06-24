@@ -96,6 +96,12 @@ class DolosRAT:
         to modules and release other resources.
         """
 
+        # Write log to inform of shutting down.
+        self._logger.write_log(
+            "DolosRAT shutting down.", 
+            LoggerLevel.WARNING
+        )
+
         # Releases handles to module objects.
         self._net_wrapper = self._logger = None
         del self
