@@ -16,24 +16,7 @@ https://stackoverflow.com/questions/53755390/python-socketserver-stuck-at-receiv
 # import struct
 from socket import socket, error
 from typing import Any, Union
-
-class SendDataHandler:
-    """_summary_
-
-    Returns:
-        _type_: _description_
-    """
-
-    ...
-
-class RecvDataHander:
-    """_summary_
-
-    Returns:
-        _type_: _description_
-    """
-
-    ...
+from contextlib import contextmanager
 
 class Socket:
     """
@@ -136,3 +119,16 @@ class Socket:
             raw_data = Socket.recv_raw(sock, raw_len)
 
         return raw_data
+
+# https://stackoverflow.com/questions/3693771/understanding-the-python-with-statement-and-context-managers
+@contextmanager
+def send_data_handler(send_data: Any) -> Any:
+    """_summary_
+    """
+
+    send_output: Union[None, Any] = None
+
+    try:
+        yield send_output
+    finally:
+        ...
