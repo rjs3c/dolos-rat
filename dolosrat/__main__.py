@@ -89,6 +89,10 @@ class DolosRAT:
         # Perform networking set-up.
         self._init_net()
 
+        # Generate and render UI using
+        # CustomTkinter.
+        self._init_tkinter()
+
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
 
@@ -130,7 +134,10 @@ class DolosRAT:
         wrapper to Tkinter and producing the UI.
         """
 
-        ...
+        self._logger.write_log(
+            f"Generating and rendering DolosRAT UI.", 
+            LoggerLevel.INFO
+        )
 
     def _init_net(self: object) -> None:
         """_summary_
@@ -150,11 +157,15 @@ class DolosRAT:
         to the application, use these to commence DolosRAT.
         """
 
+        # Time-based statistics.
         self._logger.write_log(
             f"DolosRAT initialised in { time.time() - self._strt_time }.", 
             LoggerLevel.INFO
         )
 
+        # Checks if running as administrator/root, as
+        # capturing on interface (privileged) is
+        # neccessary.
         if check_admin_privs() is False:
             self._logger.write_log(
                 "DolosRAT running in unprivileged mode. Continuing.", 
