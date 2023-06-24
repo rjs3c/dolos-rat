@@ -11,4 +11,5 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from utils import *
+from config import * # pylint: disable=import-error
+from utils import * # pylint: disable=import-error

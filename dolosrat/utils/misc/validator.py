@@ -21,6 +21,7 @@ def validate_ipv4_addr(ipv4_addr: str) -> Union[None, IPv4Address]:
     Returns:
         Union[None, IPv4Address]: _description_
     """
+
     try:
         return ip_address(ipv4_addr)
     except ValueError:

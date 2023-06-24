@@ -6,7 +6,8 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+Provides the functionalities neccessary for creating 
+and managing a TCP server.
 """
 
 # Built-in/Generic Imports.
@@ -14,7 +15,6 @@ from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from ipaddress import IPv4Address
 from typing import Any, Union
 from socket import gaierror
-from threading import Thread
 
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
@@ -25,8 +25,7 @@ from .interface import Ifa, IPv4Host
 from .connection import Socket
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
-    """_summary_
-    """
+    """Handler for incoming requests."""
 
     def __init__(
         self: object,
@@ -34,13 +33,8 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
         client_address: Any,
         server: BaseServer
     ) -> None:
-        """_summary_
-
-        Args:
-            request (Any): _description_
-            client_address (Any): _description_
-            server (BaseServer): _description_
-        """
+        """Initialises handler for
+        incoming requests."""
 
         BaseRequestHandler.__init__(self, request, client_address, server)
 
@@ -48,14 +42,14 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
         self._rx_data: Union[None, bytes] = None
 
     def setup(self: BaseRequestHandler) -> None:
-        """_summary_
-        """
+        """Required to implement as part of
+        BaseRequestHandler."""
 
         return BaseRequestHandler.setup(self)
 
     def handle(self: BaseRequestHandler) -> None:
-        """_summary_
-        """
+        """The method that is evaluated for
+        each request. This is where the processing occurs."""
 
         # Only process if client address is that we
         # desire.
@@ -69,9 +63,10 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
                 print(test.recv())
 
 class SingleThreadedTCPServer(TCPServer):
-    """_summary_
-    """
+    """Provides the functionality for listening
+    over TCP, and passing requests to TCP handler."""
 
+    # Time-out threshold by which a request is anticipated.
     timeout: int = 30
 
     def __init__(
@@ -80,16 +75,7 @@ class SingleThreadedTCPServer(TCPServer):
         RequestHandlerClass,
         client_address: str
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-            server_address (_type_): _description_
-            RequestHandlerClass (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
+        """Initialises SingleThreadedTCPServer."""
 
         TCPServer.__init__(self, server_address, RequestHandlerClass)
 
@@ -107,48 +93,46 @@ class SingleThreadedTCPServer(TCPServer):
         self._req_thres: int = 0
 
     def timeout_check(self: object) -> bool:
-        """_summary_
-
-        Args:
-            self (obejct): _description_
+        """Compares counters to identify whether a request is
+        received within a given time.
 
         Returns:
-            bool: _description_
+            bool: Indicates the result of the
+            comparison.
         """
 
         return self._req_thres == self._req_ctr
 
     def inc_thres(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Increments threshold counter
+        after 30s."""
 
         self._req_thres += 1
 
     def inc_req(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            _type_: _description_
-        """
+        """Increments request counter when
+        request is passed to handler."""
 
         self._req_ctr += 1
 
 class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
-    """_summary_
-    """
+    """Wraps around functionality for socketserver
+    TCPServer."""
 
     def __init__(
         self: object,
         network_config: NetworkConfig,
         logger: LoggerWrapper
     ) -> None:
-        """_summary_"""
+        """Initialises TCPServerWrapper.
+
+        Args:
+            network_config (NetworkConfig): Comprises
+            networking configuration. Important configurations
+            include the interface to listen on, and the host/port
+            to specifically accept.
+            logger (LoggerWrapper): A handle to the logger.
+        """
 
         super().__init__()
 
@@ -180,7 +164,8 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         self._init_server()
 
     def _init_server(self: object) -> None:
-        """_summary_
+        """Create SingleThreadedTCPServer
+        and add handler.
         """
 
         # Register handle for SingleThreadedTCPServer.
@@ -204,11 +189,9 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         )
 
     def close(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Stops TCPServer from listening
+        by forcing shutdown. Prevents resources
+        from being unneccessarily consumed."""
 
         # Write log to inform of shutdown.
         self._get_handle('LoggerWrapper').write_log(
@@ -223,8 +206,8 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         )._BaseServer__shutdown_request = True # pylint: disable=protected-access
 
     def listen(self: object) -> None:
-        """_summary_
-        """
+        """Listens for incoming connections, and times out
+        if no request is received within 30s."""
 
         # Generate status log that listening has started.
         self._get_handle('LoggerWrapper').write_log(
@@ -260,18 +243,16 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
     def run(self: object) -> None:
         """_summary_
-
-        Args:
-            self (object): _description_
         """
 
         self.listen()
 
 def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
-    """_summary_
+    """Returns an instance of TCPServerWrapper.
 
     Returns:
-        TCPServerWrapper: _description_
+        TCPServerWrapper: An instance of 
+        TCPServerWrapper.
     """
 
     return TCPServerWrapper(

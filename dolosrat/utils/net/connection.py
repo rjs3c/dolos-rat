@@ -15,21 +15,16 @@ https://stackoverflow.com/questions/53755390/python-socketserver-stuck-at-receiv
 # Built-in/Generic Imports.
 from socket import socket, error, SHUT_RDWR
 from typing import Any, List, Union, Optional
-from contextlib import contextmanager
-from inspect import isclass
+# from contextlib import contextmanager
+# from inspect import isclass
 
 # Modules.
 from ..misc.command import Command
 
 class Socket:
-    """_summary_
-
-    Returns:
-        _type_: _description_
-
-    Yields:
-        _type_: _description_
-    """
+    """Provides a context manager for
+    sending and receiving data over a supplied
+    socket."""
 
     # The bytes of the data that
     # are occupied by the payload header.
@@ -42,13 +37,13 @@ class Socket:
         sock: socket,
         data: Optional[Any] = None
     ) -> None:
-        """_summary_
+        """Initialises Socket.
 
-        Returns:
-            _type_: _description_
-
-        Yields:
-            _type_: _description_
+        Args:
+            sock (socket): Comprises the instance of socket.socket
+            to transmit/receieve over. 
+            data (Optional[Any], optional): _description_. Comprises the data 
+            in which to transmit over the socket. 
         """
 
         # Comprises handle to socket/request
@@ -59,43 +54,27 @@ class Socket:
         self._data = data
 
     def __enter__(self: object) -> object:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Defines the value returned when
+        first entering the context.
 
         Returns:
-            Socket: _description_
-
-        Yields:
-            Iterator[Socket]: _description_
+            Socket: Comprises an instance to
+            self, thereby exposing the methods
+            recv(), send(), etc.
         """
 
         return self
 
     def __exit__(self: object, *args: List[Any]) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            _type_: _description_
-
-        Yields:
-            _type_: _description_
-        """
+        """Releases resources, etc. when outside
+        of context."""
 
         self._sock.shutdown(SHUT_RDWR)
 
         del self
 
     def send(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Sends data over socket.socket."""
 
         if self._data:
             # Get length of data.

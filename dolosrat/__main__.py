@@ -18,13 +18,13 @@ from typing import Any, Dict, Union
 
 # Modules.
 # Configuration classes.
-from config.config import Config
-from config.network import get_network_conf
-from config.logger import get_logger_conf
+from config.config import Config # pylint: disable=import-error
+from config.logger import get_logger_conf # pylint: disable=import-error
+from config.network import get_network_conf # pylint: disable=import-error
 # Other utilities.
-from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger
-from utils.misc.os import check_admin_privs
-from utils.net.interface import IfaWrapper, get_ifa_wrapper
+from utils.net.interface import IfaWrapper, get_ifa_wrapper # pylint: disable=import-error
+from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger # pylint: disable=import-error
+from utils.misc.os import check_admin_privs # pylint: disable=import-error
 
 (__appname__,
  __author__,
@@ -140,10 +140,8 @@ class DolosRAT:
         )
 
     def _init_net(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Initialises functionality for enumerating
+        network interfaces.
         """
 
         self._net_wrapper = get_ifa_wrapper(

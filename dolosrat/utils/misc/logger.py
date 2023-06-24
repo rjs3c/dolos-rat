@@ -21,7 +21,7 @@ from typing import Any, Optional
 # from pathlib import Path
 
 # Modules.
-from config.logger import LoggerConfig
+from config.logger import LoggerConfig # pylint: disable=import-error
 from .wrapper import BaseWrapper
 
 class LoggerLevel(str, Enum):

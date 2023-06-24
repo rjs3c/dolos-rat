@@ -14,12 +14,12 @@ import time
 from typing import Set, Union
 
 # Modules.
-from utils.misc.wrapper import BaseWrapper
-from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel
-from utils.net.interface import IPv4Host
-from utils.misc.validator import validate_ipv4_addr
-from config.network import NetworkConfig
-from config.logger import get_logger_conf
+from config.network import NetworkConfig # pylint: disable=import-error
+from config.logger import get_logger_conf # pylint: disable=import-error
+from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
+from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
+from utils.net.interface import IPv4Host # pylint: disable=import-error
+from utils.misc.validator import validate_ipv4_addr # pylint: disable=import-error
 
 # External Imports.
 from pyshark import LiveCapture
@@ -145,11 +145,10 @@ class IPv4CaptureWrapper(BaseWrapper):
             )
 
     def _sel_ipv4_addr_filter(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Amends filter to listen for specific host
+        if selected. More efficient for identifying
+        changes in port no. compared to listening
+        on the interface generally again."""
 
         # Apply BPF filter for specific src IPv4 address.
         self.conf._conf['capture_filter'] = 'ip and tcp and src host ' \

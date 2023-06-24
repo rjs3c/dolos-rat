@@ -13,7 +13,7 @@
 from typing import Any, Dict, List, Optional, Union
 
 # Modules.
-from config import Config
+from config import Config # pylint: disable=import-error
 
 class BaseWrapper:
     """_summary_

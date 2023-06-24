@@ -15,8 +15,8 @@ from ipaddress import IPv4Address
 from typing import Any, List, Union
 
 # Modules.
-from config.network import NetworkConfig
-from config.logger import get_logger_conf
+from config.network import NetworkConfig # pylint: disable=import-error
+from config.logger import get_logger_conf # pylint: disable=import-error
 from ..misc.validator import validate_ipv4_addr
 from ..misc.wrapper import BaseWrapper
 from ..misc.logger import LoggerWrapper, LoggerLevel, get_logger

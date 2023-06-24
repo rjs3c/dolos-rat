@@ -28,7 +28,7 @@ class CTkinterConfig(Config):
     # configuration.
     _conf: Dict[str, Any]
 
-    def __init__(self: object) -> None:
+    def __init__(self: object, version: str) -> None:
         """_summary_
 
         Args:
@@ -37,14 +37,14 @@ class CTkinterConfig(Config):
 
         self._conf = {
             'app_geometry': '600x500',
-            'app_title': 'DolosRAT'
+            'app_title': f'DolosRAT { version }'
         }
 
-def get_ctkinter_conf() -> CTkinterConfig:
+def get_ctkinter_conf(version: str) -> CTkinterConfig:
     """_summary_
 
     Returns:
         CTkinterConfig: _description_
     """
-    
-    return CTkinterConfig()
+
+    return CTkinterConfig(version)
