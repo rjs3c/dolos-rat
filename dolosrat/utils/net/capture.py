@@ -136,7 +136,8 @@ class IPv4CaptureWrapper(BaseWrapper):
             )
         # Raised by PyShark - therefore
         # caught and returned.
-        except TimeoutError: pass
+        except TimeoutError:
+            pass
         finally:
             self._get_handle('LoggerWrapper').write_log(
                 f'Collection completed in { time.time() - self._strt_time }. ' \
