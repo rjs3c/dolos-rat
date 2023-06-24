@@ -14,6 +14,7 @@ from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from ipaddress import IPv4Address
 from typing import Any, Union
 from socket import gaierror
+from threading import Thread
 
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
@@ -256,6 +257,15 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
         # Shutdown server, NOT connection.
         self.close()
+
+    def run(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.listen()
 
 def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
     """_summary_

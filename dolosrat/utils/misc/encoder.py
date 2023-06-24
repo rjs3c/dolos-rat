@@ -12,7 +12,7 @@
 from pickle import dumps, loads
 from typing import Any
 
-class Encode:
+class Encoder:
     """_summary_
 
     Returns:
@@ -45,7 +45,7 @@ class Encode:
 
         pass
 
-class Pickle(Encode):
+class Pickle(Encoder):
     """_summary_
     """
     @staticmethod
