@@ -37,7 +37,8 @@ class CTkinterConfig(Config):
 
         self._conf = {
             'app_geometry': '600x500',
-            'app_title': f'DolosRAT { version }'
+            'app_title': f'DolosRAT { version }',
+            'app_icon': ''
         }
 
 def get_ctkinter_conf(version: str) -> CTkinterConfig:
