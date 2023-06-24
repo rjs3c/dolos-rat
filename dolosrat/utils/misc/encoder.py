@@ -32,6 +32,7 @@ class Encode:
 
         pass
 
+    @staticmethod
     def dec(data: Any) -> Any:
         """_summary_
 
