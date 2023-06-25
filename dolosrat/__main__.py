@@ -15,16 +15,19 @@ the use of this tool is for educational purposes only.
 import sys
 import time
 from typing import Any, Dict, Union
+from pathlib import Path
 
 # Modules.
 # Configuration classes.
 from config.config import Config # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
 from config.network import get_network_conf # pylint: disable=import-error
+from config.ctkinter import get_ctkinter_conf # pylint: disable=import-error
 # Other utilities.
 from utils.net.interface import IfaWrapper, get_ifa_wrapper # pylint: disable=import-error
 from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger # pylint: disable=import-error
 from utils.misc.os import check_admin_privs # pylint: disable=import-error
+from ui.ctk import get_ctkinter_app # pylint: disable=import-error
 
 (__appname__,
  __author__,
@@ -89,10 +92,6 @@ class DolosRAT:
         # Perform networking set-up.
         self._init_net()
 
-        # Generate and render UI using
-        # CustomTkinter.
-        self._init_tkinter()
-
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
 
@@ -134,10 +133,18 @@ class DolosRAT:
         wrapper to Tkinter and producing the UI.
         """
 
+        # Create log to inform that the UI in
+        # CTkinter is being set-up.
         self._logger.write_log(
             f"Generating and rendering DolosRAT UI.", 
             LoggerLevel.INFO
         )
+
+        # Create handle for and initialise
+        # App class for CTK.
+        get_ctkinter_app(
+            self._config['ctk_conf']
+        ).mainloop()
 
     def _init_net(self: object) -> None:
         """Initialises functionality for enumerating
@@ -170,7 +177,11 @@ class DolosRAT:
                 LoggerLevel.WARNING
             )
 
-        from utils.net.server import TCPServerWrapper
+        # Generate and render UI using
+        # CustomTkinter.
+        self._init_tkinter()
+
+        # from utils.net.server import TCPServerWrapper
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
@@ -190,7 +201,14 @@ if __name__ == '__main__':
     # Populate 'dolos_config' with configurations.
     dolos_config = {
        'logger_conf': get_logger_conf(__name__),
-       'network_conf': get_network_conf()
+       'network_conf': get_network_conf(),
+       'ctk_conf': get_ctkinter_conf(
+           __version__,
+           Path.joinpath(
+               Path(__file__).parent.parent, 'assets'
+            ),
+           check_admin_privs()
+        )
     }
 
     # Application entry-point.
