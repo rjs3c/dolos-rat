@@ -8,3 +8,15 @@
 """
 ...
 """
+
+# Modules.
+from utils.net.interface import Ifa # pylint: disable=import-error
+
+def collect_ipv4(ifa: Ifa) -> None:
+    """_summary_
+
+    Args:
+        ifa (Ifa): _description_
+    """
+
+    ...

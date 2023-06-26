@@ -13,9 +13,6 @@
 from typing import Any, Dict, List, Union
 from pathlib import Path
 
-# Modules.
-from .buttons import DefaultButton
-
 # External Imports.
 from customtkinter import (
     CTkFrame,
@@ -25,7 +22,10 @@ from customtkinter import (
     CTkImage,
     CTkScrollableFrame,
     StringVar)
-from PIL import Image
+from PIL import Image # pylint: disable=import-error
+
+# Modules.
+from .buttons import DefaultButton # pylint: disable=relative-beyond-top-level
 
 class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
     """_summary_
