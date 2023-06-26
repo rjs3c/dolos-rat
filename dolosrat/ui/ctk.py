@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
 # Creator : Ryan I.
-# Created Date: 24/06/2023
+# Created Date: 25/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
@@ -14,7 +14,9 @@ from typing import Union
 
 # Modules.
 from config.ctkinter import CTkinterConfig # pylint: disable=import-error
-from .components.frames import TopLeftFrame, TopRightFrame, LeftMiddleFrame, BottomFrame
+from .widgets.frames import (
+    TopLeftFrame, TopRightFrame, LeftMiddleFrame, BottomFrame, BottomInterfaceFrame
+)
 
 # External Imports.
 import customtkinter # pylint: disable=wrong-import-order
@@ -54,7 +56,9 @@ class App(customtkinter.CTk):
 
         # Grid layout.
         self.grid_columnconfigure((0, 1), weight=1)
-        self.grid_rowconfigure((0, 1, 2), weight=1)
+        self.grid_rowconfigure((0, 1), weight=0)
+        self.grid_rowconfigure(2, weight=0)
+        self.grid_rowconfigure(3, weight=0)
 
         # Tabbing.
         # self.tab_view = TabView(master=self)
@@ -76,22 +80,40 @@ class App(customtkinter.CTk):
         self.bottom_col_frame: Union[None, TopRightFrame] = None
         self._add_frame4_widget()
 
+        # Bottom interface frame
+        self.bottom_int_frame: Union[None, TopRightFrame] = None
+        self._add_frame5_widget()
+
     def _add_frame1_widget(self: object) -> None:
         """_summary_
         """
 
         # Top-left frame.
-        self.top_col_frame_1 = TopLeftFrame(master=self, corner_radius=10)
+        self.top_col_frame_1 = TopLeftFrame(
+            master=self,
+            height=20,
+            border_width=1,
+            border_color='black',
+            assets_dir=self.conf._conf['app_assets_dir'],
+            corner_radius=10,
+        )
         self.top_col_frame_1.grid(
             row=0, column=0, columnspan=1, padx=20, pady=(20, 0), sticky="nsew"
             )
-        self.top_col_frame_1.grid_rowconfigure(0, weight=1)
+        self.top_col_frame_1.grid_rowconfigure(0, weight=0)
 
     def _add_frame2_widget(self: object) -> None:
         """_summary_
         """
 
-        self.top_col_frame_2 = LeftMiddleFrame(master=self, corner_radius=10)
+        self.top_col_frame_2 = LeftMiddleFrame(
+            master=self,
+            height=20,
+            border_width=1,
+            border_color='black',
+            assets_dir=self.conf._conf['app_assets_dir'],
+            corner_radius=10
+        )
         self.top_col_frame_2.grid(
             row=1, column=0, columnspan=1, padx=20, pady=(20, 0), sticky="nsew"
         )
@@ -101,7 +123,12 @@ class App(customtkinter.CTk):
         """_summary_
         """
 
-        self.top_col_frame_3 = TopRightFrame(self, corner_radius=10)
+        self.top_col_frame_3 = TopRightFrame(
+            self,
+            border_width=1,
+            border_color='black',
+            corner_radius=10
+        )
         self.top_col_frame_3.grid(
             row=0, column=1, columnspan=1, rowspan=2, padx=20, pady=(20, 0), sticky="nsew"
         )
@@ -111,11 +138,36 @@ class App(customtkinter.CTk):
         """_summary_
         """
 
-        self.bottom_col_frame = BottomFrame(self, corner_radius=10)
+        self.bottom_col_frame = BottomFrame(
+            self,
+            height=200,
+            border_width=1,
+            border_color='black',
+            segmented_button_selected_color="#181A1B",
+            segmented_button_selected_hover_color="#181A1B",
+            corner_radius=10
+        )
         self.bottom_col_frame.grid(
-            row=2, column=0, columnspan=1, padx=0, pady=0, sticky="nsew"
+            row=2, column=0, columnspan=2, padx=20, pady=(0, 15), sticky="nsew"
         )
         self.bottom_col_frame.grid_rowconfigure(0, weight=1)
+
+    def _add_frame5_widget(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.bottom_int_frame = BottomInterfaceFrame(
+            self,
+            height=30,
+            corner_radius=10
+        )
+        self.bottom_int_frame.grid(
+            row=3, column=0, columnspan=2, padx=20, pady=(0, 20), sticky="nsew"
+        )
+        self.bottom_int_frame.grid_rowconfigure(0, weight=0)
 
 def get_ctkinter_app(ctkinter_conf: CTkinterConfig) -> None:
     """_summary_
