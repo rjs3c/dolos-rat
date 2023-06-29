@@ -16,7 +16,7 @@ from ipaddress import IPv4Address
 from typing import Any, List, Union
 
 # Modules.
-from config.network import NetworkConfig # pylint: disable=import-error
+from config.network import network_conf # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
 from ..misc.validator import validate_ipv4_addr
 from ..misc.wrapper import BaseWrapper
@@ -55,15 +55,11 @@ class IfaWrapper(BaseWrapper):
 
     def __init__(
         self: object,
-        network_conf: NetworkConfig,
         logger: LoggerWrapper
     ) -> None:
         """Initialises IfaWrapper."""
 
         super().__init__()
-
-        # Houses NetworkConfig.
-        self.conf = network_conf
 
         # Comprises all available interfaces/adapters.
         self._interfaces: List[Union[None, Ifa]] = []
@@ -88,11 +84,11 @@ class IfaWrapper(BaseWrapper):
             the interface in use. 
         """
 
-        if self._conf._conf['selected_ifa']:
+        if network_conf.conf['selected_ifa']:
             # Readable string to denote interface for
             # being displayed within UI.
-            return f"{self.conf._conf['selected_ifa'].ifa_name}" \
-                f"({self.conf._conf['selected_ifa'].ifa_addrs})"
+            return f"{network_conf.conf['selected_ifa'].ifa_name}" \
+                f"({network_conf.conf['selected_ifa'].ifa_addrs})"
 
         return ""
 
@@ -102,9 +98,13 @@ class IfaWrapper(BaseWrapper):
 
         # Creates a list of dictionaries, comprising
         # information for each adapter/interface.
-        self._interfaces = [
+
+        network_conf.conf['ifas_list'] = [
             # Build dataclass from dict fields.
-            Ifa(ifa['name'], ifa['ips'])
+            Ifa(
+                ifa['name'],
+                validate_ipv4_addr(ifa['ips'][1])
+            )
             # Apply filter for interfaces/adapters
             # that have assigned addresses.
             for ifa in get_if_list()
@@ -112,13 +112,16 @@ class IfaWrapper(BaseWrapper):
                 # interface/adapter.
                 if 'ips' in ifa.keys()
                 if ifa['ips']
+                if len(ifa['ips']) > 0
         ]
 
         # Count of interfaces for future reference.
-        self.conf._conf['ifas_count'] = len(self._interfaces)
+        network_conf.conf['ifas_count'] = len(
+            network_conf.conf['ifas_list']
+        )
 
         self._get_handle('LoggerWrapper').write_log(
-            f'Enumerated {self.conf._conf["ifas_count"]} (v)NICs.',
+            f'Enumerated {network_conf.conf["ifas_count"]} (v)NICs.',
             LoggerLevel.INFO
         )
 
@@ -130,11 +133,11 @@ class IfaWrapper(BaseWrapper):
 
         # Check to see if any interfaces were
         # first enumerated.
-        if self._interfaces:
+        if network_conf.conf['ifas_list']:
             # Sets interface.
-            self.set_ifa(
+            IfaWrapper.set_ifa(
                 # Defaults to first interface.
-                self._interfaces[0].ifa_name
+                network_conf.conf['ifas_list'][0].ifa_name
             )
 
             self._get_handle('LoggerWrapper').write_log(
@@ -153,39 +156,6 @@ class IfaWrapper(BaseWrapper):
             # Cannot continue; therefore, abruptly exit.
             raise SystemExit()
 
-    def set_ifa(self: object, ifa_name: str) -> None:
-        """Changes the interface in use.
-
-        Args:
-            ifa_name (str): Represents the interface
-            name in which to change to.
-        """
-
-        # Stores filtered interface information.
-        ifa_filtered: List[Any] = []
-
-        # Check if interfaces are available.
-        if self._interfaces:
-            # Filter interfaces by 'ifa_name'.
-            ifa_filtered = list(
-                filter(
-                    # Utilise lambda for terseness.
-                    lambda lfa: (lfa.ifa_name == ifa_name),
-                    self._interfaces
-                )
-            )
-
-        if ifa_filtered:
-            # Validate IPv4 address within interface
-            # information and place within 'Ifa'
-            # dataclass accordingly.
-            self.conf._conf['selected_ifa'] = Ifa(
-               ifa_filtered[0].ifa_name,
-               validate_ipv4_addr([
-                   ifa.ifa_addrs[1] for ifa in ifa_filtered
-                ][0])
-            )
-
     def _get_ifas_count(self: object) -> int:
         """Returns a count of all collected
         interfaces.
@@ -195,7 +165,7 @@ class IfaWrapper(BaseWrapper):
             of collected interfaces.
         """
 
-        return self.conf._conf['ifas_count']
+        return network_conf.conf['ifas_count']
 
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
         """Returns an 'Ifa' object comprising an
@@ -207,9 +177,41 @@ class IfaWrapper(BaseWrapper):
             shall be returned.
         """
 
-        return self.conf._conf['selected_ifa']
+        return network_conf.conf['selected_ifa']
 
-def get_ifa_wrapper(network_conf: NetworkConfig) -> IfaWrapper:
+    @staticmethod
+    def set_ifa(ifa_name: str) -> None:
+        """Changes the interface in use.
+
+        Args:
+            ifa_name (str): Represents the interface
+            name in which to change to.
+        """
+
+        # Stores filtered interface information.
+        ifa_filtered: List[Any] = []
+
+        # Check if interfaces are available.
+        if network_conf.conf['ifas_list']:
+            # Filter interfaces by 'ifa_name'.
+            ifa_filtered = list(
+                filter(
+                    # Utilise lambda for terseness.
+                    lambda lfa: (lfa.ifa_name == ifa_name),
+                    network_conf.conf['ifas_list']
+                )
+            )
+
+        if ifa_filtered:
+            # Validate IPv4 address within interface
+            # information and place within 'Ifa'
+            # dataclass accordingly.
+            network_conf.conf['selected_ifa'] = Ifa(
+               ifa_filtered[0].ifa_name,
+               ifa_filtered[0].ifa_addrs
+            )
+
+def get_ifa_wrapper() -> IfaWrapper:
     """Returns an instantiated IfaWrapper.
 
     Returns:
@@ -217,6 +219,5 @@ def get_ifa_wrapper(network_conf: NetworkConfig) -> IfaWrapper:
     """
 
     return IfaWrapper(
-        network_conf,
         get_logger(get_logger_conf(f'__main__.{__name__}'))
     )

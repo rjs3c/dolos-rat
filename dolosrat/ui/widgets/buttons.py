@@ -33,13 +33,42 @@ class DefaultButton(CTkButton): # pylint: disable=too-many-ancestors
         super().__init__(
             master,
             text='',
-            # state='disabled',
             corner_radius=10,
-            fg_color='#181A1B',
+            # fg_color='#181A1B',
             border_width=1,
             border_color='#3d3f40',
             width=60,
             height=60,
             anchor='center',
             **kwargs,
+        )
+
+        if self.cget('state') == 'disabled':
+            self.disable_btn()
+        else:
+            self.enable_btn()
+
+    def enable_btn(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.configure(
+            state='normal',
+            fg_color='#106A43',
+            hover_color='#17472E'
+        )
+
+    def disable_btn(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.configure(
+            state='disabled',
+            fg_color='#181A1B'
         )

@@ -12,16 +12,16 @@ and managing a TCP server.
 
 # Built-in/Generic Imports.
 from socketserver import BaseRequestHandler, TCPServer, BaseServer
-from ipaddress import IPv4Address
+# from ipaddress import IPv4Address
 from typing import Any, Union
 from socket import gaierror
 
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
-from config.network import NetworkConfig, get_network_conf # pylint: disable=import-error
+from config.network import network_conf # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
-from .interface import Ifa, IPv4Host
+# from .interface import Ifa, IPv4Host
 from .connection import Socket
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
@@ -121,7 +121,6 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
     def __init__(
         self: object,
-        network_config: NetworkConfig,
         logger: LoggerWrapper
     ) -> None:
         """Initialises TCPServerWrapper.
@@ -136,25 +135,20 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
         super().__init__()
 
-        # Comprises the configuration neccessary
-        # to bind to a specific interface and accept
-        # connections from specific hosts.
-        self.config = network_config
-
         # IPv4 address of the interface to bind to.
         self._host = str(
-            self.config._conf['selected_ifa'].ifa_addrs
+            network_conf.conf['selected_ifa'].ifa_addrs
         )
 
         # IPv4 address of the client to specifically
         # accept connections from.
         self._client = str(
-           self.config._conf['selected_host'].ipv4_addr
+           network_conf.conf['selected_host'].ipv4_addr
         )
 
         # The port to listen on to receive correspondance
         # from selected host.
-        self._port = self.config.conf['selected_host'].port
+        self._port = network_conf.conf['selected_host'].port
 
         # Registers handle for logger.
         self._register_handle(logger)
@@ -247,7 +241,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
         self.listen()
 
-def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
+def get_tcp_server_wrapper() -> TCPServerWrapper:
     """Returns an instance of TCPServerWrapper.
 
     Returns:
@@ -256,13 +250,12 @@ def get_tcp_server_wrapper(network_config: NetworkConfig) -> TCPServerWrapper:
     """
 
     return TCPServerWrapper(
-        network_config,
         get_logger(get_logger_conf(f'__main__.{__name__}'))
     )
 
-_ = get_network_conf(
-    Ifa('Wi-Fi', IPv4Address('192.168.1.231')),
-    IPv4Host(IPv4Address('192.168.1.231'), 8080)
-)
+# _ = get_network_conf(
+#     Ifa('Wi-Fi', IPv4Address('192.168.1.231')),
+#     IPv4Host(IPv4Address('192.168.1.231'), 8080)
+# )
 
-TCPServerWrapper(_, get_logger(get_logger_conf(f'__main__.{__name__}'))).listen()
+# TCPServerWrapper(_, get_logger(get_logger_conf(f'__main__.{__name__}'))).listen()

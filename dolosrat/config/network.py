@@ -11,10 +11,10 @@
 
 # Built-in/Generic Imports.
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 # Modules.
-from config import Config
+from config import Config # pylint: disable=import-error
 
 @dataclass
 class NetworkConfig(Config):
@@ -36,9 +36,12 @@ class NetworkConfig(Config):
             ifa (Optional[object], optional): _description_. Defaults to None.
             host (Optional[object], optional): _description_. Defaults to None.
         """
+
         self._conf = {
            'selected_ifa': ifa,
+           'ifas_list': List[object],
            'selected_host': host,
+           'hosts_list': set(),
            'ifas_count': 0,
            'timeout': 15,
            'capture_filter': 'ip and tcp'
@@ -61,3 +64,7 @@ def get_network_conf(
     """
 
     return NetworkConfig(chosen_ifa, chosen_host)
+
+# Makes use of Python's inherent singleton nature
+# of modules.
+network_conf = get_network_conf()

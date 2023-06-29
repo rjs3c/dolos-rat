@@ -12,6 +12,7 @@
 # Built-in/Generic Imports.
 from typing import Any, Dict, List, Union
 from pathlib import Path
+from functools import partial
 
 # External Imports.
 from customtkinter import (
@@ -26,6 +27,11 @@ from PIL import Image # pylint: disable=import-error
 
 # Modules.
 from .buttons import DefaultButton # pylint: disable=relative-beyond-top-level
+from ..commands.network import ( # pylint: disable=relative-beyond-top-level
+    get_ifas,
+    option_change_ifa,
+    btn_collect_ipv4s
+)
 
 class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
     """_summary_
@@ -221,8 +227,12 @@ class LeftMiddleFrame(CTkFrame): # pylint: disable=too-many-ancestors
         # '' button.
         self.btn_1 = DefaultButton(
             self,
-            # state='disabled',
+            state='normal',
             image=self._collect_img_path,
+            command=partial(
+                btn_collect_ipv4s,
+                self.winfo_toplevel()
+            )
         )
 
         # '' button.
@@ -337,12 +347,11 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
         return CTkButton(
             master=self,
             text=text,
-            width=100,
+            width=300,
             height=24,
             fg_color="transparent",
-            hover=False,
             compound="left",
-            anchor="W"
+            anchor="w"
         )
 
     def add_item(self: object, item) -> None:
@@ -450,7 +459,8 @@ class BottomInterfaceFrame(CTkFrame): # pylint: disable=too-many-ancestors
         self.interface_option = CTkOptionMenu(
             master=self,
             fg_color="#181A1B",
-            values=['eth0'],
+            values=get_ifas(),
+            command=option_change_ifa
         )
 
     def _position_widgets(self: object) -> None:

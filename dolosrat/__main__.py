@@ -21,7 +21,6 @@ from pathlib import Path
 # Configuration classes.
 from config.config import Config # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
-from config.network import get_network_conf # pylint: disable=import-error
 from config.ctkinter import get_ctkinter_conf # pylint: disable=import-error
 # Other utilities.
 from utils.net.interface import IfaWrapper, get_ifa_wrapper # pylint: disable=import-error
@@ -136,7 +135,7 @@ class DolosRAT:
         # Create log to inform that the UI in
         # CTkinter is being set-up.
         self._logger.write_log(
-            f"Generating and rendering DolosRAT UI.", 
+            "Generating and rendering DolosRAT UI.", 
             LoggerLevel.INFO
         )
 
@@ -151,9 +150,7 @@ class DolosRAT:
         network interfaces.
         """
 
-        self._net_wrapper = get_ifa_wrapper(
-            self._config['network_conf']
-        )
+        self._net_wrapper = get_ifa_wrapper()
 
     def _run(self: object) -> None:
         """Officially starts the internal modules.
@@ -181,8 +178,6 @@ class DolosRAT:
         # CustomTkinter.
         self._init_tkinter()
 
-        # from utils.net.server import TCPServerWrapper
-
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
 
@@ -201,7 +196,6 @@ if __name__ == '__main__':
     # Populate 'dolos_config' with configurations.
     dolos_config = {
        'logger_conf': get_logger_conf(__name__),
-       'network_conf': get_network_conf(),
        'ctk_conf': get_ctkinter_conf(
            __version__,
            Path.joinpath(
