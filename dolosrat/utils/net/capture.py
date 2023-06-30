@@ -12,7 +12,7 @@
 # Built-in/Generic Imports.
 import time
 from threading import Thread
-from typing import Set, Union
+from typing import List, Set, Union
 
 # Modules.
 from config.network import network_conf # pylint: disable=import-error
@@ -101,7 +101,8 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
             # to hashable IPv4Address.
             IPv4Host(
                 validate_ipv4_addr(packet.ip.src),
-                packet.tcp.dstport
+                packet.tcp.dstport,
+                False
             )
         )
 
@@ -162,10 +163,6 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
 
         for ipv4_addr in self._ipv4_addrs:
             network_conf.conf['hosts_list'].add(ipv4_addr)
-
-        # Returns set of IPv4 unique,
-        # captured addresses.
-        return
 
 def get_ipv4_capture() -> IPv4CaptureWrapper:
     """Returns an instantiated IPv4Capture.

@@ -38,6 +38,7 @@ class IPv4Host:
 
     ipv4_addr: IPv4Address
     port: int
+    connected: bool = False
 
 @dataclass
 class Ifa:
@@ -209,6 +210,41 @@ class IfaWrapper(BaseWrapper):
             network_conf.conf['selected_ifa'] = Ifa(
                ifa_filtered[0].ifa_name,
                ifa_filtered[0].ifa_addrs
+            )
+
+    @staticmethod
+    def set_host(host: str) -> None:
+        """_summary_
+        """
+
+        # Host that which is filtered from the list.
+        host_filtered: List[IPv4Host] = []
+
+        # Extract IPv4 address and port from host string.
+        (ipv4_addr, port) = host.split(' ')[0].split(':')
+
+        # Check if interfaces are available.
+        if network_conf.conf['hosts_list']:
+            # Filter interfaces by 'ipv4_addr'.
+            host_filtered = list(
+                filter(
+                    # Utilise lambda for terseness.
+                    lambda IPv4Host: (
+                        IPv4Host.ipv4_addr == validate_ipv4_addr(ipv4_addr)
+                        and IPv4Host.port == port
+                    ),
+                    network_conf.conf['hosts_list']
+                )
+            )
+
+        if host_filtered:
+            # Validate IPv4 address within interface
+            # information and place within 'Ifa'
+            # dataclass accordingly.
+            network_conf.conf['selected_host'] = IPv4Host(
+               host_filtered[0].ipv4_addr,
+               host_filtered[0].port,
+               host_filtered[0].connected
             )
 
 def get_ifa_wrapper() -> IfaWrapper:

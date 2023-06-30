@@ -72,3 +72,32 @@ class DefaultButton(CTkButton): # pylint: disable=too-many-ancestors
             state='disabled',
             fg_color='#181A1B'
         )
+
+class ListButton(CTkButton): # pylint: disable=too-many-ancestors
+    """_summary_
+
+    Args:
+        CTkButton (_type_): _description_
+    """
+
+    def __init__(
+        self: object,
+        master: Any,
+        **kwargs: Dict[Any, Any]
+    ) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            master (Any): _description_
+        """
+
+        super().__init__(
+            master,
+            width=300,
+            height=24,
+            fg_color="transparent",
+            compound="left",
+            anchor="w",
+            **kwargs
+        )

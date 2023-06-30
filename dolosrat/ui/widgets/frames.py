@@ -10,7 +10,7 @@
 """
 
 # Built-in/Generic Imports.
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 from pathlib import Path
 from functools import partial
 
@@ -26,11 +26,12 @@ from customtkinter import (
 from PIL import Image # pylint: disable=import-error
 
 # Modules.
-from .buttons import DefaultButton # pylint: disable=relative-beyond-top-level
+from .buttons import DefaultButton, ListButton # pylint: disable=relative-beyond-top-level
 from ..commands.network import ( # pylint: disable=relative-beyond-top-level
     get_ifas,
     option_change_ifa,
-    btn_collect_ipv4s
+    btn_collect_ipv4s,
+    btn_select_host
 )
 
 class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
@@ -334,7 +335,7 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
         self.radiobutton_variable = StringVar()
         self.button_list: List[Union[None, CTkButton]] = []
 
-    def _create_btn_widget(self: object, text: str) -> CTkButton:
+    def _create_btn_widget(self: object, text: str, state: str) -> CTkButton:
         """_summary_
 
         Args:
@@ -344,17 +345,25 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
             CTkButton: _description_
         """
 
-        return CTkButton(
+        return ListButton(
             master=self,
             text=text,
-            width=300,
-            height=24,
-            fg_color="transparent",
-            compound="left",
-            anchor="w"
+            state=state
         )
 
-    def add_item(self: object, item) -> None:
+    def get_items(self: object) -> List[Union[None,CTkButton]]:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Union[None, List[CTkButton]]: _description_
+        """
+
+        return self.button_list
+
+    def add_item(self: object, item, state: Optional[str] = 'normal') -> None:
         """_summary_
 
         Args:
@@ -362,13 +371,20 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
             item (_type_): _description_
         """
 
-        btn: CTkButton = self._create_btn_widget(item)
+        btn: CTkButton = self._create_btn_widget(item, state)
 
-        if self.command is not None:
-            btn.configure(command=lambda: self.command(item))
+        btn.configure(command=partial(
+            btn_select_host,
+            btn=btn,
+            top_level=self.winfo_toplevel()
+        ))
 
         btn.grid(row=len(self.button_list), column=0, pady=(0, 10), sticky="w")
-        self.button_list.append(btn)
+
+        if state == 'disabled':
+            self.button_list.insert(0, btn)
+        else:
+            self.button_list.append(btn)
 
     def remove_item(self: object, item) -> None:
         """_summary_
