@@ -19,9 +19,9 @@ from socket import gaierror
 # Modules.
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
+from utils.misc.threading import threadpooled # pylint: disable=import-error
 from config.network import network_conf # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
-# from .interface import Ifa, IPv4Host
 from .connection import Socket
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
@@ -57,6 +57,9 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
             # Increment request counter
             # for timeout threshold.
             self.server.inc_req()
+
+            # Set connected status of host.
+            network_conf.conf['selected_host'].connected = True
 
             # Extract message from 'socket' object.
             with Socket(self.request) as test:
@@ -167,7 +170,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         try:
             self._register_handle(
                 SingleThreadedTCPServer(
-                    (self._host, self._port),
+                    (self._host, int(self._port)),
                     # Handler to which requests
                     # are dispatched.
                     SingleThreadedTCPHandler,
@@ -198,6 +201,10 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         self._get_handle( # pylint: disable=protected-access
             'SingleThreadedTCPServer' # pylint: disable=protected-access
         )._BaseServer__shutdown_request = True # pylint: disable=protected-access
+
+        # Set connected status of selected host to
+        # disconnected.
+        network_conf.conf['selected_host'].connected = False
 
     def listen(self: object) -> None:
         """Listens for incoming connections, and times out
@@ -235,6 +242,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         # Shutdown server, NOT connection.
         self.close()
 
+    @threadpooled
     def run(self: object) -> None:
         """_summary_
         """

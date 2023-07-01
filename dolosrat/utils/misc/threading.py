@@ -31,11 +31,11 @@ def threadpooled(func: Callable[..., Any]):
             Any: _description_
         """
 
-        # # ...
+        # ...
         thread = Thread(
             target=func,
             args=args,
-            kwargs=kwargs,
+            kwargs=kwargs
         )
         thread.start()
 

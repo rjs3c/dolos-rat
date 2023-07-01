@@ -15,13 +15,15 @@ from typing import Union
 # Modules.
 from config.ctkinter import CTkinterConfig # pylint: disable=import-error
 from .widgets.frames import (
-    TopLeftFrame, TopRightFrame, LeftMiddleFrame, BottomFrame, BottomInterfaceFrame
+    TopLeftFrame,
+    TopRightFrame,
+    LeftMiddleFrame,
+    BottomFrame,
+    BottomInterfaceFrame
 )
 
 # External Imports.
 import customtkinter # pylint: disable=wrong-import-order
-
-from utils.misc.threading import threadpooled
 
 # Global configurations for CTK application
 # appearance.

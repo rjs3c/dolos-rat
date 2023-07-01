@@ -25,6 +25,7 @@ from utils.misc.validator import validate_ipv4_addr # pylint: disable=import-err
 
 # External Imports.
 from pyshark import LiveCapture
+from pyshark.capture.live_capture import UnknownInterfaceException
 from pyshark.packet.packet import Packet
 
 class IPv4CaptureWrapper(BaseWrapper, Thread):
@@ -73,15 +74,17 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
         # Checks if 'Ifa' is set; otherwise
         # ifa_name cannot be read.
         if network_conf.conf['selected_ifa']:
-            # Creates LiveCapture instance.
-            self._register_handle(LiveCapture(
-                # Interface name.
-                interface=network_conf.conf['selected_ifa'].ifa_name,
-                # Filter to reduce processing
-                # overhead of unneccessary frames.
-                # i.e., UDP (for now), etc.
-                bpf_filter=network_conf.conf['capture_filter']
-            ))
+            try:
+                # Creates LiveCapture instance.
+                self._register_handle(LiveCapture(
+                    # Interface name.
+                    interface=network_conf.conf['selected_ifa'].ifa_name,
+                    # Filter to reduce processing
+                    # overhead of unneccessary frames.
+                    # i.e., UDP (for now), etc.
+                    bpf_filter=network_conf.conf['capture_filter']
+                ))
+            except UnknownInterfaceException: pass
 
     def _extract_ipv4_addr(self: object, packet: Packet) -> None:
         """In each packet captured by PyShark,

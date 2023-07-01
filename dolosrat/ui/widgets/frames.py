@@ -11,6 +11,7 @@
 
 # Built-in/Generic Imports.
 from typing import Any, Dict, List, Optional, Union
+from re import match
 from pathlib import Path
 from functools import partial
 
@@ -31,7 +32,8 @@ from ..commands.network import ( # pylint: disable=relative-beyond-top-level
     get_ifas,
     option_change_ifa,
     btn_collect_ipv4s,
-    btn_select_host
+    btn_select_host,
+    btn_listen
 )
 
 class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
@@ -241,6 +243,10 @@ class LeftMiddleFrame(CTkFrame): # pylint: disable=too-many-ancestors
             self,
             state='disabled',
             image=self._connect_img_path,
+            command=partial(
+                btn_listen,
+                self.winfo_toplevel()
+            )
         )
 
         # '' button.
@@ -363,7 +369,23 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
 
         return self.button_list
 
-    def add_item(self: object, item, state: Optional[str] = 'normal') -> None:
+    def get_item_text(self: object, item: str) -> str:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            str: _description_
+        """
+
+        for button in self.button_list:
+            if match(item, button.cget('text')):
+                return button.cget('text')
+
+        return ''
+
+    def add_item(self: object, item: str, state: Optional[str] = 'normal') -> None:
         """_summary_
 
         Args:
@@ -385,6 +407,27 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
             self.button_list.insert(0, btn)
         else:
             self.button_list.append(btn)
+
+    def edit_item(self: object, item: str, text: str) -> None:
+        """_summary_
+        """
+
+        for button in self.button_list:
+            if item == button.cget('text'):
+                button.configure(text=text)
+                return
+
+    def update_connection_status(self: object, item: str) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            item (str): _description_
+        """
+
+        for button in self.button_list:
+            if item == button.cget('text'):
+                ...
 
     def remove_item(self: object, item) -> None:
         """_summary_
