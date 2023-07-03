@@ -17,11 +17,11 @@ from typing import Any, Union
 from socket import gaierror
 
 # Modules.
+from config.logger import get_logger_conf # pylint: disable=import-error
+from config.network import network_conf # pylint: disable=import-error
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
 from utils.misc.threading import threadpooled # pylint: disable=import-error
-from config.network import network_conf # pylint: disable=import-error
-from config.logger import get_logger_conf # pylint: disable=import-error
 from .connection import Socket
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
@@ -177,13 +177,13 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
                     self._client
                 )
             )
-        except gaierror:
+        except (gaierror, PermissionError) as socket_err:
             # Write log to inform of binding error.
             self._get_handle('LoggerWrapper').write_log(
                 'Failed to create server on ' \
-                    f'\'{self._host}:{self._port}\'.',
+                    f'\'{self._host}:{self._port}\': { socket_err }',
                 LoggerLevel.ERROR
-        )
+            )
 
     def close(self: object) -> None:
         """Stops TCPServer from listening
@@ -206,6 +206,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         # disconnected.
         network_conf.conf['selected_host'].connected = False
 
+    @threadpooled
     def listen(self: object) -> None:
         """Listens for incoming connections, and times out
         if no request is received within 30s."""

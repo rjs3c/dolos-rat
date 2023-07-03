@@ -12,8 +12,7 @@ https://superfastpython.com/thread-share-variables/
 # Built-in/Generic Imports.
 from typing import Any, Callable
 from threading import Thread
-from concurrent.futures import ThreadPoolExecutor, Future
-from multiprocessing import Process
+from concurrent.futures import Future
 from functools import wraps
 
 def threadpooled(func: Callable[..., Any]):
@@ -32,14 +31,12 @@ def threadpooled(func: Callable[..., Any]):
         """
 
         # ...
-        thread = Thread(
+        return Thread(
             target=func,
             args=args,
             kwargs=kwargs
-        )
-        thread.start()
-
-        return thread
+        ).start()
+            
         # return ThreadPoolExecutor().submit(
         #     func, *args, **kwargs
         # ).result()

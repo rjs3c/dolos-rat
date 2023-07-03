@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional
 # Modules.
 from config import Config # pylint: disable=import-error
 
-@dataclass
+@dataclass(frozen=False)
 class NetworkConfig(Config):
     """Stores network-specific configurations.
     """
