@@ -467,6 +467,8 @@ class BottomFrame(CTkTabview): # pylint: disable=abstract-method
         self.add('Text View')
         self.add('Natural View')
 
+        self.set('Hex View')
+
         # Frame 1 'Hex View'
         self.frame_1: Union[None, CTkFrame] = None
         # Frame 2 'Text View'
@@ -483,7 +485,31 @@ class BottomFrame(CTkTabview): # pylint: disable=abstract-method
             self (object): _description_
         """
 
-        self.frame_1 = CTkFrame(master=self.tab('Hex View'))
+        self.frame_1 = HexViewerFrame(master=self.tab('Hex View'))
+
+class HexViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
+
+    """_summary_
+
+    Args:
+        CTkScrollableFrame (_type_): _description_
+    """
+
+    def __init__(
+        self: object,
+        master: Any,
+        **kwargs: Dict[Any, Any]
+    ) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            master (Any): _description_
+        """
+
+        super().__init__(master, **kwargs)
+
+        self.grid(row=0, column=0)
 
 class BottomInterfaceFrame(CTkFrame): # pylint: disable=too-many-ancestors
     """_summary_

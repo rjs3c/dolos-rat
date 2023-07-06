@@ -199,7 +199,7 @@ if __name__ == '__main__':
        'ctk_conf': get_ctkinter_conf(
            __version__,
            Path.joinpath(
-               Path(__file__).parent.parent, 'dolosrat', 'assets'
+               Path(__file__).parent.parent, 'dolos-server', 'assets'
             ),
            check_admin_privs()
         )
