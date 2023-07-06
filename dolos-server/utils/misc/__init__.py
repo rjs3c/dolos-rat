@@ -11,5 +11,7 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
+from .wrapper import BaseWrapper
+from .validator import validate_ipv4_addr
 from .logger import LoggerWrapper, LoggerLevel, get_logger
-from .network import IfaWrapper, Ifa
+from .os import check_admin_privs

@@ -31,29 +31,31 @@ class LoggerConfig(Config):
         """Initialises LoggerConfig class
         and configures initial _conf value.
         """
+
         self._conf = {
-            'version': 1,
-            'formatters': {
-                'standard': {
-                    'format': '%(asctime)s (%(module)s) [%(levelname)s] %(name)s: %(message)s',
-                    'date_fmt': '%d-%m-%Y %I:%M:%S'
-                }
-            },
-            'loggers': {
-                f'{logger_name}': {
-                    'handlers': ['file'],
-                    'level': 'INFO', 
-                    'propagate': True
-                }
-            },
-            'handlers': {
-                'file': {
-                    'class': 'logging.FileHandler',
-                    'level': 'INFO',
-                    'formatter': 'standard',
-                    'filename': f'dolosrat/logs/log-{int(time())}.log',
-                    'mode': 'a',
-                    'encoding': 'utf-8'
+            'logger_name': logger_name,
+            'logging_dictconf': {
+                'version': 1,
+                'formatters': {
+                    'standard': {
+                        'format': '%(asctime)s (%(module)s) [%(levelname)s] %(name)s: %(message)s',
+                        'date_fmt': '%d-%m-%Y %I:%M:%S'
+                    }
+                },
+                'loggers': {
+                    f'__main__': {
+                        'handlers': ['console.info'],
+                        'level': 'INFO', 
+                        'propagate': True
+                    }
+                },
+                'handlers': {
+                    'console.info': {
+                        'class': 'logging.StreamHandler',
+                        'level': 'INFO',
+                        'formatter': 'standard',
+                        'stream': 'ext://sys.stdout'
+                    }
                 }
             }
         }
@@ -70,4 +72,5 @@ def get_logger_conf(logger_name: str = __name__) -> LoggerConfig:
     Returns:
         LoggerConfig: A new instance of LoggerConfig.
     """
+
     return LoggerConfig(logger_name)

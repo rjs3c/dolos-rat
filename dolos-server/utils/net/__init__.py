@@ -11,5 +11,6 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from config import config, logger
-from utils import logger, network
+from .interface import IfaWrapper, Ifa, get_ifa_wrapper
+from .capture import IPv4CaptureWrapper, get_ipv4_capture
+# from .server import TCPServerWrapper, get_tcp_server_wrapper

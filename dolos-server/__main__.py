@@ -15,11 +15,18 @@ the use of this tool is for educational purposes only.
 import sys
 import time
 from typing import Any, Dict, Union
+from pathlib import Path
 
 # Modules.
-from config.config import Config
-from config.logger import get_logger_conf
-from utils.logger import LoggerWrapper, LoggerLevel, get_logger
+# Configuration classes.
+from config.config import Config # pylint: disable=import-error
+from config.logger import get_logger_conf # pylint: disable=import-error
+from config.ctkinter import get_ctkinter_conf # pylint: disable=import-error
+# Other utilities.
+from utils.net.interface import IfaWrapper, get_ifa_wrapper # pylint: disable=import-error
+from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger # pylint: disable=import-error
+from utils.misc.os import check_admin_privs # pylint: disable=import-error
+from ui.ctk import get_ctkinter_app # pylint: disable=import-error
 
 (__appname__,
  __author__,
@@ -66,15 +73,23 @@ class DolosRAT:
 
         Configures other, internal modules of DolosRAT.
         """
+
         self._config: Dict[str, Any] = config
+
+        # Logger handle.
         self._logger: Union[Any, LoggerWrapper] = None
+
+        # IfaWrapper handle.
+        self._net_wrapper: Union[Any, IfaWrapper]
+
+        # Used to calculate time taken to initialise.
         self._strt_time: float = time.time()
 
         # Set-up application logging.
         self._init_logger()
 
-        # Run DolosRAT.
-        self._run()
+        # Perform networking set-up.
+        self._init_net()
 
     def __del__(self: object) -> None:
         """Destructs DolosRAT class.
@@ -82,7 +97,16 @@ class DolosRAT:
         The purpose of this is to destroy existing handles
         to modules and release other resources.
         """
-        ...
+
+        # Write log to inform of shutting down.
+        self._logger.write_log(
+            "DolosRAT shutting down.", 
+            LoggerLevel.WARNING
+        )
+
+        # Releases handles to module objects.
+        self._net_wrapper = self._logger = None
+        del self
 
     def _init_logger(self: object) -> None:
         """Creates handle to logging wrapper class.
@@ -90,9 +114,15 @@ class DolosRAT:
         Creates a handle to the class exposing methods
         to write application logs, etc.
         """
+
         # Create handle to LoggerWrapper.
         self._logger = get_logger(
-            __name__, self._config['logger_conf']
+            self._config['logger_conf']
+        )
+
+        self._logger.write_log(
+            "DolosRAT initialisation started.", 
+            LoggerLevel.INFO
         )
 
     def _init_tkinter(self: object) -> None:
@@ -101,7 +131,26 @@ class DolosRAT:
         Creates a handle to the class providing a 
         wrapper to Tkinter and producing the UI.
         """
-        ...
+
+        # Create log to inform that the UI in
+        # CTkinter is being set-up.
+        self._logger.write_log(
+            "Generating and rendering DolosRAT UI.", 
+            LoggerLevel.INFO
+        )
+
+        # Create handle for and initialise
+        # App class for CTK.
+        get_ctkinter_app(
+            self._config['ctk_conf']
+        ).mainloop()
+
+    def _init_net(self: object) -> None:
+        """Initialises functionality for enumerating
+        network interfaces.
+        """
+
+        self._net_wrapper = get_ifa_wrapper()
 
     def _run(self: object) -> None:
         """Officially starts the internal modules.
@@ -109,15 +158,25 @@ class DolosRAT:
         With handles created for the classes pertinent
         to the application, use these to commence DolosRAT.
         """
+
+        # Time-based statistics.
         self._logger.write_log(
-            "DolosRAT initialisation started.", 
+            f"DolosRAT initialised in { time.time() - self._strt_time }.", 
             LoggerLevel.INFO
         )
 
-        self._logger.write_log(
-            f"DolosRAT initialised in {time.time() - self._strt_time}", 
-            LoggerLevel.INFO
-        )
+        # Checks if running as administrator/root, as
+        # capturing on interface (privileged) is
+        # neccessary.
+        if check_admin_privs() is False:
+            self._logger.write_log(
+                "DolosRAT running in unprivileged mode. Continuing.", 
+                LoggerLevel.WARNING
+            )
+
+        # Generate and render UI using
+        # CustomTkinter.
+        self._init_tkinter()
 
     def start(self: object) -> None:
         """Exposed method for 'starting' DolosRAT.
@@ -126,7 +185,8 @@ class DolosRAT:
         evaluate the method for responsible for 
         the primary logic (_run()).
         """
-        ...
+
+        self._run()
 
 if __name__ == '__main__':
 
@@ -135,7 +195,14 @@ if __name__ == '__main__':
 
     # Populate 'dolos_config' with configurations.
     dolos_config = {
-       'logger_conf': get_logger_conf(__name__)
+       'logger_conf': get_logger_conf(__name__),
+       'ctk_conf': get_ctkinter_conf(
+           __version__,
+           Path.joinpath(
+               Path(__file__).parent.parent, 'dolos-server', 'assets'
+            ),
+           check_admin_privs()
+        )
     }
 
     # Application entry-point.

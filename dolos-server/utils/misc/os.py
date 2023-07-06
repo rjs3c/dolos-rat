@@ -6,11 +6,13 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
+...
 """
 
 # Built-in/Generic Imports.
 import ctypes
 import os
+import sys
 
 def check_admin_privs() -> bool:
     """Checks if the privilege context in which 
@@ -39,9 +41,21 @@ def check_admin_privs() -> bool:
     try:
         # If NT, use Shell32 API to check current
         # privilege context.
+        # Can be used to suggest users to run as
+        # admin as to not be inundated with UAC
+        # windows.
         return ctypes.windll.shell32.IsUserAnAdmin() == 1
     # Should unintended issues arise, return False.
     except AttributeError:
         pass
 
+    # Defaults to False.
     return False
+
+def get_loc() -> int:
+    """_summary_
+
+    Returns:
+        int: _description_
+    """
+    return sys._getframe().f_back.f_lineno
