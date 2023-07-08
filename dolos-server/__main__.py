@@ -59,7 +59,7 @@ SOFTWARE.
 """
 
 # Initial class housing primary DolosRAT logic.
-class DolosRAT:
+class DolosServer:
     """Houses the logic pertinent to the running
     application. This is responsible for initialising
     the neccessary, internal modules of the application
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     }
 
     # Application entry-point.
-    DolosRAT(dolos_config).start()
+    DolosServer(dolos_config).start()
 
     # Gracefully exit.
     sys.exit(0)
