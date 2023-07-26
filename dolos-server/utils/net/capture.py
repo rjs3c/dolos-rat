@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -29,7 +31,7 @@ from pyshark.capture.live_capture import UnknownInterfaceException
 from pyshark.packet.packet import Packet
 
 class IPv4CaptureWrapper(BaseWrapper, Thread):
-    """_summary_
+    """Wrapper class exposing methods to collect potential hosts.
     """
 
     def __init__(

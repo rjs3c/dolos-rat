@@ -6,13 +6,13 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-Provides the functionalities neccessary for creating 
-and managing a TCP server.
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
 from socketserver import BaseRequestHandler, TCPServer, BaseServer
-# from ipaddress import IPv4Address
 from typing import Any, Union
 from socket import gaierror
 
@@ -104,18 +104,21 @@ class SingleThreadedTCPServer(TCPServer):
             comparison.
         """
 
+        # Checks if timeout threshold is met.
         return self._req_thres == self._req_ctr
 
     def inc_thres(self: object) -> None:
         """Increments threshold counter
         after 30s."""
 
+        # Increment timeout threshold by 1.
         self._req_thres += 1
 
     def inc_req(self: object) -> None:
         """Increments request counter when
         request is passed to handler."""
 
+        # Increment request counter by 1.
         self._req_ctr += 1
 
 class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
@@ -207,7 +210,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         network_conf.conf['selected_host'].connected = False
 
     @threadpooled
-    def listen(self: object) -> None:
+    def _listen(self: object) -> None:
         """Listens for incoming connections, and times out
         if no request is received within 30s."""
 
@@ -245,10 +248,12 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
     @threadpooled
     def run(self: object) -> None:
-        """_summary_
+        """Exposes method to listen for
+        TCP connections.
         """
 
-        self.listen()
+        # Start listening for TCP connections.
+        self._listen()
 
 def get_tcp_server_wrapper() -> TCPServerWrapper:
     """Returns an instance of TCPServerWrapper.
@@ -261,10 +266,3 @@ def get_tcp_server_wrapper() -> TCPServerWrapper:
     return TCPServerWrapper(
         get_logger(get_logger_conf(f'__main__.{__name__}'))
     )
-
-# _ = get_network_conf(
-#     Ifa('Wi-Fi', IPv4Address('192.168.1.231')),
-#     IPv4Host(IPv4Address('192.168.1.231'), 8080)
-# )
-
-# TCPServerWrapper(_, get_logger(get_logger_conf(f'__main__.{__name__}'))).listen()

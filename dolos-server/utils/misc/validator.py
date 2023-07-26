@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -14,13 +16,16 @@ from ipaddress import IPv4Address, ip_address
 from typing import Union
 
 def validate_ipv4_addr(ipv4_addr: str) -> Union[None, IPv4Address]:
-    """_summary_
+    """Identifies whether string matches
+    structure of IPv4 address.
 
     Args:
-        ipv4_addr (str): _description_
+        ipv4_addr (str): The string in which to
+        validate.
 
     Returns:
-        Union[None, IPv4Address]: _description_
+        Union[None, IPv4Address]: Returns either the IPv4
+        address or 'None'.
     """
 
     try:

@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -33,8 +35,7 @@ else:
 
 @dataclass(unsafe_hash=True)
 class IPv4Host:
-    """_summary_
-    """
+    """Dataclass comprising host-based information."""
 
     ipv4_addr: IPv4Address
     port: int
@@ -166,6 +167,7 @@ class IfaWrapper(BaseWrapper):
             of collected interfaces.
         """
 
+        # Return integer count of enumerated interfaces.
         return network_conf.conf['ifas_count']
 
     def get_selected_ifa(self: object) -> Union[None, Ifa]:
@@ -178,6 +180,8 @@ class IfaWrapper(BaseWrapper):
             shall be returned.
         """
 
+        # Returns Ifa object for the manually, or default,
+        # selected interface.
         return network_conf.conf['selected_ifa']
 
     @staticmethod
@@ -214,7 +218,12 @@ class IfaWrapper(BaseWrapper):
 
     @staticmethod
     def set_host(host: str) -> None:
-        """_summary_
+        """Sets the default host to listen to
+        by default.
+
+        Args:
+            host (str): String representing the IPv4 address
+            and dest port.
         """
 
         # Host that which is filtered from the list.

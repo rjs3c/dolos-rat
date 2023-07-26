@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -53,9 +55,10 @@ def check_admin_privs() -> bool:
     return False
 
 def get_loc() -> int:
-    """_summary_
+    """Returns LoC for callee, for trace-backs.
 
     Returns:
-        int: _description_
+        int: Integer representing the current
+        LoC.
     """
     return sys._getframe().f_back.f_lineno

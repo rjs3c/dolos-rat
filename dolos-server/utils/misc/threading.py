@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-https://superfastpython.com/thread-share-variables/
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -16,29 +18,28 @@ from concurrent.futures import Future
 from functools import wraps
 
 def threadpooled(func: Callable[..., Any]):
-    """_summary_
+    """Provides a wrapper for functions that need
+    to be threaded.
 
     Args:
-        f (Callable[..., Any]): _description_
+        f (Callable[..., Any]): A closure representing
+        the function to thread.
     """
 
     @wraps(func)
     def wrapper(*args, **kwargs) -> Future:
-        """_summary_
+        """Wraps the function.
 
         Returns:
-            Any: _description_
-        """
+            Any: Future representing the newly-
+            created thread."""
 
-        # ...
+        # Return new thread with the
+        # function and arguments.
         return Thread(
             target=func,
             args=args,
             kwargs=kwargs
         ).start()
-            
-        # return ThreadPoolExecutor().submit(
-        #     func, *args, **kwargs
-        # ).result()
 
     return wrapper

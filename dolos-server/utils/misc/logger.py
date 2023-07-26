@@ -6,8 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-Provides functionality to supplement application
-logging and auditing.
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -17,8 +18,6 @@ import logging.handlers
 from pprint import pformat
 from enum import Enum
 from typing import Any, Optional
-# from os import PathLike
-# from pathlib import Path
 
 # Modules.
 from config.logger import LoggerConfig # pylint: disable=import-error
@@ -38,16 +37,15 @@ class LoggerLevel(str, Enum):
 
     @classmethod
     def value_in(cls: object, val: Any) -> bool:
-        """_summary_
+        """Checks if log level exists.
 
         Args:
-            val (_type_): _description_
-
-        Raises:
-            get_logger_err: _description_
+            val (_type_): The value in which
+            to check.
 
         Returns:
-            _type_: _description_
+            _type_: Boolean representing
+            whether the log level exists.
         """
 
         return val in cls._value2member_map_
@@ -61,8 +59,7 @@ class LoggerWrapper(BaseWrapper):
     # _LOG_PATH: Union[str, PathLike] = Path("../logs")
 
     def __init__(self: object, logger_conf: Optional[LoggerConfig] = None) -> None:
-        """Initialises LoggerWrapper.
-        """
+        """Initialises LoggerWrapper."""
 
         super().__init__()
 
@@ -73,11 +70,7 @@ class LoggerWrapper(BaseWrapper):
         self._get_logger()
 
     def _get_logger(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Gets logger instance."""
 
         try:
             # Configure 'logging' library via dictConfig(),
@@ -97,11 +90,7 @@ class LoggerWrapper(BaseWrapper):
             raise get_logger_err
 
     def write_log(self: object, log_msg: str, log_level: LoggerLevel) -> None:
-        """Generates a log of a supplied level.
-
-        Args:
-            self (object): _description_
-        """
+        """Generates a log of a supplied level."""
 
         # Check if supplied log_level is
         # valid logging level.

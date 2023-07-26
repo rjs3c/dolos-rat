@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
 # Creator : Ryan I.
-# Created Date: 06/06/2023
+# Created Date: 17/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
@@ -11,5 +11,26 @@ techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
 
-from .interface import IfaWrapper, Ifa, get_ifa_wrapper
-from .capture import IPv4CaptureWrapper, get_ipv4_capture
+# Built-in/Generic Imports.
+from abc import ABC, abstractmethod
+from typing import Any
+
+class Command(ABC):
+    """_summary_
+
+    Args:
+        ABC (_type_): _description_
+    """
+
+    @abstractmethod
+    def execute(self: object) -> Any:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+
+        pass

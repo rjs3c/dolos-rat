@@ -6,20 +6,14 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-https://johndanielraines.medium.com/implement-a-socket-based-service-in-python-with-socketserver-1200d290c4e3
-https://stackoverflow.com/questions/47391774/send-and-receive-objects-through-sockets-in-python
-https://stackoverflow.com/questions/42415207/send-receive-data-with-python-socket
-https://stackoverflow.com/questions/53755390/python-socketserver-stuck-at-receiving-data
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
 from socket import socket, error, SHUT_RDWR
 from typing import Any, List, Union, Optional
-# from contextlib import contextmanager
-# from inspect import isclass
-
-# Modules.
-from ..misc.command import Command
 
 class Socket:
     """Provides a context manager for
@@ -69,6 +63,7 @@ class Socket:
         """Releases resources, etc. when outside
         of context."""
 
+        # Shuts down socket manually.
         self._sock.shutdown(SHUT_RDWR)
 
         del self
@@ -93,10 +88,14 @@ class Socket:
                 pass
 
     def recv_raw(self: object, raw_len: int) -> bytearray:
-        """_summary_
+        """Receives data from socket.
 
         Args:
-            self (object): _description_
+            raw_len (int): The bytes to receieve from the
+            socket.
+
+        Returns:
+            bytearray: Bytes retrieved from the socket.
         """
 
         # Raw data receieved from socket.
@@ -126,10 +125,11 @@ class Socket:
         return raw_rx
 
     def recv(self: object) -> bytearray:
-        """_summary_
+        """Retrieves bytes from the socket.
 
         Returns:
-            bytearray: _description_
+            bytearray: Bytes representing the data
+            retrieved from the socket.
         """
 
         # Raw length of payload; extracted

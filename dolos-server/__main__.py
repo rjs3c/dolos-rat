@@ -150,6 +150,7 @@ class DolosServer:
         network interfaces.
         """
 
+        # Creates wrapper for IfaWrapper.
         self._net_wrapper = get_ifa_wrapper()
 
     def _run(self: object) -> None:
@@ -186,6 +187,7 @@ class DolosServer:
         the primary logic (_run()).
         """
 
+        # Initialise.
         self._run()
 
 if __name__ == '__main__':

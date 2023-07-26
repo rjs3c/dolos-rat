@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -14,60 +16,60 @@ from pickle import dumps, loads
 from typing import Any
 
 class Encoder:
-    """_summary_
-
-    Returns:
-        _type_: _description_
-    """
+    """Class representing the methods to inherit
+    from."""
 
     @staticmethod
     def enc(data: Any) -> Any:
-        """_summary_
+        """Encodes input data, and outputs
+        encoded data.
 
         Args:
-            data (Any): _description_
+            data (Any): Original data.
 
         Returns:
-            Any: _description_
+            Any: Encoded data.
         """
 
         pass
 
     @staticmethod
     def dec(data: Any) -> Any:
-        """_summary_
+        """Decodes input, encoded data and returns.
 
         Args:
-            data (Any): _description_
+            data (Any): Encoded data.
 
         Returns:
-            Any: _description_
+            Any: Decoded data.
         """
 
         pass
 
 class Pickle(Encoder):
-    """_summary_
-    """
+    """Wrapper for Pickle functions."""
+    
     @staticmethod
     def enc(data: object) -> bytes:
-        """_summary_
+        """Serialises data.
 
         Args:
-            data (object): _description_
+            data (object): Object in which
+            to serialise.
         """
 
         return dumps(data)
 
     @staticmethod
     def dec(data: bytes) -> Any:
-        """_summary_
+        """Deserialises data.
 
         Args:
-            data (Any): _description_
+            data (Any): The serialised object
+            in bytes.
 
         Returns:
-            Any: _description_
+            Any: The deserialised object.
         """
 
         return loads(data)

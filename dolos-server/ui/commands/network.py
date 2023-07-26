@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -172,7 +174,7 @@ def btn_listen(top_level: object) -> None:
 
     # Initialise TCPServerWrapper and
     # commence listening for selected host.
-    get_tcp_server_wrapper().listen()
+    get_tcp_server_wrapper().run()
 
     if network_conf.conf['selected_host'].connected:
         _set_host_connected(top_level)

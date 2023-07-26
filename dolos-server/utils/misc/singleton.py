@@ -6,32 +6,26 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
 from typing import Any, Dict, List
 
 class Singleton(type):
-    """_summary_
+    """Singleton class.
     
-    Credit: https://github.com/alistair-broomhead
-
-    Args:
-        type (_type_): _description_
-    """
+    Credit: https://github.com/alistair-broomhead"""
 
     _instances = {}
 
     def __call__(cls: object, *args: List, **kwargs: Dict[Any]) -> object:
-        """_summary_
+        """Restricts class to single instance.
 
         Args:
-            cls (object): _description_
-
-        Returns:
-            object: _description_
-        """
+            cls (object): The class in which to instantiate."""
 
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
