@@ -106,7 +106,7 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
             # to hashable IPv4Address.
             IPv4Host(
                 validate_ipv4_addr(packet.ip.src),
-                packet.tcp.dstport,
+                packet.udp.dstport,
                 False
             )
         )

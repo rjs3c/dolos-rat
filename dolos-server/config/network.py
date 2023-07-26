@@ -46,7 +46,7 @@ class NetworkConfig(Config):
            'hosts_list': set(),
            'ifas_count': 0,
            'timeout': 15,
-           'capture_filter': 'ip and tcp'
+           'capture_filter': 'ip and udp'
         }
 
 def get_network_conf(

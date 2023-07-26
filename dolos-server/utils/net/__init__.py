@@ -10,6 +10,3 @@ DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
 """
-
-from .interface import IfaWrapper, Ifa, get_ifa_wrapper
-from .capture import IPv4CaptureWrapper, get_ipv4_capture
