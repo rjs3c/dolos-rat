@@ -34,7 +34,7 @@ class KeystrokeLogCommand(Command):
             Any: _description_
         """
 
-        ...
+        pass
 
     def execute(self: object) -> Any:
         """_summary_

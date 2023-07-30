@@ -13,7 +13,6 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 from dataclasses import dataclass
-from time import time
 from typing import Any, Dict
 
 # Modules.

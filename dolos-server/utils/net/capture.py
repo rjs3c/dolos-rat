@@ -154,7 +154,7 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
         on the interface generally again."""
 
         # Apply BPF filter for specific src IPv4 address.
-        network_conf.conf['capture_filter'] = 'ip and tcp and src host ' \
+        network_conf.conf['capture_filter'] = 'ip and udp and src host ' \
             f'{network_conf.conf["selected_host"].ipv4_addr}'
 
     @threadpooled
