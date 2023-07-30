@@ -12,17 +12,58 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-from abc import ABC, abstractmethod
-from typing import Any
+from importlib import import_module
+from typing import Any, List, Union
 
-class Command(ABC):
+class Command():
     """_summary_
 
     Args:
         ABC (_type_): _description_
     """
 
-    @abstractmethod
+    def __init__(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+
+        self._mods: List[Any] = []
+
+    def get_dep(self: object, mod_name: str) -> Union[Any, None]:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            mod_name (str): _description_
+
+        Returns:
+            bool: _description_
+        """
+
+        for idx, dep in enumerate(self._mods):
+            if dep.__name__ == mod_name:
+                return self._mods[idx]
+
+        return None
+
+    def create_deps(self: object, *mods: List[str]) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        try:
+            for mod in mods:
+                self._mods.append(import_module(mod))
+        except ModuleNotFoundError:
+            pass
+
     def execute(self: object) -> Any:
         """_summary_
 

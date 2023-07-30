@@ -13,10 +13,13 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 from operator import attrgetter
+from time import sleep
 from typing import List
 
 # Modules.
 from config.network import network_conf # pylint: disable=import-error
+from utils.misc.encoder import Pickle # pylint: disable=import-error
+from utils.misc.threading import threadpooled # pylint: disable=import-error
 from utils.net.capture import get_ipv4_capture # pylint: disable=import-error
 from utils.net.interface import IfaWrapper # pylint: disable=import-error
 from utils.net.server import get_tcp_server_wrapper # pylint: disable=import-error
@@ -75,13 +78,27 @@ def _set_host_connected(top_level: object) -> None:
 
     # Remove '[Disconnected]' string and
     # append '[Connected]'.
-    top_level.top_col_frame_3.edit_item(
-        host_btn_text,
-        host_btn_text.replace(
-            '[Disconnected]', 
-            ''
-        ) + '[Connected]'
-    )
+    if '[Connected]' not in host_btn_text:
+        top_level.top_col_frame_3.edit_item(
+            host_btn_text,
+            host_btn_text.replace(
+                '[Disconnected]', 
+                ''
+            ) + '[Connected]'
+        )
+
+@threadpooled
+def _check_host_connected(top_level: object) -> None:
+    """_summary_
+
+    Args:
+        top_level (object): _description_
+    """
+
+    while True:
+        if network_conf.conf['selected_host'].connected:
+            _set_host_connected(top_level)
+            sleep(10)
 
 def get_ifas() -> List[str]:
     """_summary_
@@ -176,5 +193,11 @@ def btn_listen(top_level: object) -> None:
     # commence listening for selected host.
     get_tcp_server_wrapper().run()
 
-    if network_conf.conf['selected_host'].connected:
-        _set_host_connected(top_level)
+    _check_host_connected(top_level)
+    # print(network_conf.conf['selected_host'].connected)
+
+def btn_send_command_screenshot(top_level: object) -> None:
+    """_summary_
+    """
+
+    ...

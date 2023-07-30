@@ -51,11 +51,6 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
 
         super().__init__()
 
-        # Amends filter to focus upon specific
-        # IPv4Host.
-        if network_conf.conf['selected_host']:
-            self._sel_ipv4_addr_filter()
-
         # List comprising the extracted, and parsed,
         # IPv4 addresses.
         self._ipv4_addrs: Set[Union[None, IPv4Host]] = set()

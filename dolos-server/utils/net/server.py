@@ -12,6 +12,7 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
+from builtins import hasattr
 from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from typing import Any, Union
 from socket import gaierror
@@ -62,8 +63,8 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
             network_conf.conf['selected_host'].connected = True
 
             # Extract message from 'socket' object.
-            with Socket(self.request) as test:
-                print(test.recv())
+            with Socket(self.request) as connection:
+                print("connected")
 
 class SingleThreadedTCPServer(TCPServer):
     """Provides the functionality for listening
@@ -180,7 +181,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
                     self._client
                 )
             )
-        except (gaierror, PermissionError) as socket_err:
+        except (gaierror, PermissionError, OSError) as socket_err:
             # Write log to inform of binding error.
             self._get_handle('LoggerWrapper').write_log(
                 'Failed to create server on ' \
@@ -193,17 +194,18 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         by forcing shutdown. Prevents resources
         from being unneccessarily consumed."""
 
-        # Write log to inform of shutdown.
-        self._get_handle('LoggerWrapper').write_log(
-                f'Server on \'{self._host}:{self._port}\' shutting down.',
-                LoggerLevel.INFO
-        )
+        if hasattr(self._get_handle('SingleThreadedTCPServer'), '_BaseServer__shutdown_request'):
+            # Write log to inform of shutdown.
+            self._get_handle('LoggerWrapper').write_log(
+                    f'Server on \'{self._host}:{self._port}\' shutting down.',
+                    LoggerLevel.INFO
+            )
 
-        # Forcefully shuts down server and
-        # releases resources.
-        self._get_handle( # pylint: disable=protected-access
-            'SingleThreadedTCPServer' # pylint: disable=protected-access
-        )._BaseServer__shutdown_request = True # pylint: disable=protected-access
+            # Forcefully shuts down server and
+            # releases resources.
+            self._get_handle( # pylint: disable=protected-access
+                'SingleThreadedTCPServer' # pylint: disable=protected-access
+            )._BaseServer__shutdown_request = True # pylint: disable=protected-access
 
         # Set connected status of selected host to
         # disconnected.
@@ -214,34 +216,37 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         """Listens for incoming connections, and times out
         if no request is received within 30s."""
 
-        # Generate status log that listening has started.
-        self._get_handle('LoggerWrapper').write_log(
-                f'Server listening on \'{self._host}:{self._port}\'...',
-                LoggerLevel.INFO
-        )
+        # Sanity check to prevent socket forbidden errors.
+        if hasattr(self._get_handle('SingleThreadedTCPServer'), 'timeout_check'):
+            # Generate status log that listening has started.
+            self._get_handle('LoggerWrapper').write_log(
+                    f'Server listening on \'{self._host}:{self._port}\'...',
+                    LoggerLevel.INFO
+            )
 
-        # Processing one request at a time
-        # within a controlled loop.
-        # Timeout: 30s.
-        while self._get_handle('SingleThreadedTCPServer').timeout_check():
-            # Increment threshold counter for timeout.
-            self._get_handle('SingleThreadedTCPServer').inc_thres()
+            # Processing one request at a time
+            # within a controlled loop.
+            # Timeout: 30s.
+            while self._get_handle('SingleThreadedTCPServer').timeout_check():
+                # Increment threshold counter for timeout.
+                self._get_handle('SingleThreadedTCPServer').inc_thres()
 
-            # handle_request() used instead of serve_forever()
-            # as to avoid single-thread deadlocking issues.
-            # This is the case as we want to timeout listening
-            # after period of inactivity.
-            try:
-                self._get_handle('SingleThreadedTCPServer').handle_request()
-            except KeyboardInterrupt:
-                self.close()
+                # handle_request() used instead of serve_forever()
+                # as to avoid single-thread deadlocking issues.
+                # This is the case as we want to timeout listening
+                # after period of inactivity.
+                try:
+                    self._get_handle('SingleThreadedTCPServer').handle_request()
+                except KeyboardInterrupt:
+                    self.close()
 
         # Write log to warn of timing out.
-        if not self._get_handle('SingleThreadedTCPServer').timeout_check():
-            self._get_handle('LoggerWrapper').write_log(
-                    f'Idle server on \'{self._host}:{self._port}\' timing out after 30s.',
-                    LoggerLevel.WARNING
-            )
+        if hasattr(self._get_handle('SingleThreadedTCPServer'), 'timeout_check'):
+            if not self._get_handle('SingleThreadedTCPServer').timeout_check():
+                self._get_handle('LoggerWrapper').write_log(
+                        f'Idle server on \'{self._host}:{self._port}\' timing out after 30s.',
+                        LoggerLevel.WARNING
+                )
 
         # Shutdown server, NOT connection.
         self.close()

