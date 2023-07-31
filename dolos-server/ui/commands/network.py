@@ -12,17 +12,32 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
+from enum import Enum, auto
 from operator import attrgetter
 from time import sleep
 from typing import List
 
 # Modules.
 from config.network import network_conf # pylint: disable=import-error
+from commands.command import Command # pylint: disable=import-error
 from utils.misc.encoder import Pickle # pylint: disable=import-error
 from utils.misc.threading import threadpooled # pylint: disable=import-error
 from utils.net.capture import get_ipv4_capture # pylint: disable=import-error
-from utils.net.interface import IfaWrapper # pylint: disable=import-error
+from utils.net.interface import IfaWrapper, IPv4Host # pylint: disable=import-error
 from utils.net.server import get_tcp_server_wrapper # pylint: disable=import-error
+
+host_status_poll_started: bool = False
+
+class HostStatus(Enum):
+    """_summary_
+
+    Args:
+        Enum (_type_): _description_
+    """
+
+    Listening = 0
+    Connected = auto()
+    Disconnected = auto()
 
 def _update_btns_host_connected(top_level: object) -> None:
     """_summary_
@@ -56,19 +71,25 @@ def _update_btns_host_connected(top_level: object) -> None:
         top_level.top_col_frame_2.btn_4.disable_btn()
         top_level.top_col_frame_2.btn_2.enable_btn()
         top_level.top_col_frame_2.btn_3.enable_btn()
-
-def _set_host_connected(top_level: object) -> None:
+        
+def _set_host_status(top_level: object, host: IPv4Host, status: HostStatus = 1) -> None:
     """_summary_
 
     Args:
         top_level (object): _description_
+        host (IPv4Host): _description_
+        status (HostStatus, optional): _description_. Defaults to 1.
     """
+
+    # Houses the text in which to replace the older
+    # status texts with.
+    replacement_str = ''
 
     # Extract IPv4 address and port
     # from selected host.
     ipv4_addr, port = attrgetter(
         'ipv4_addr', 'port'
-    )(network_conf.conf['selected_host'])
+    )(host)
 
     # Get text of relevant host listbox item.
     host_btn_text = \
@@ -76,29 +97,86 @@ def _set_host_connected(top_level: object) -> None:
             f'{ ipv4_addr }:{ port } '
         )
 
+    # Check status value and set replacement
+    # string accordingly.
+    match status:
+        # 'Listening'
+        case 0:
+            # Set string to '[Listening]'
+            replacement_str = '[Listening]'
+        case 1:
+            # Set string to '[Connected]'
+            replacement_str = '[Connected]'
+        case _:
+            # Defaults to '[Disconnected]'
+            replacement_str = '[Disconnected]'
+                
     # Remove '[Disconnected]' string and
     # append '[Connected]'.
-    if '[Connected]' not in host_btn_text:
-        top_level.top_col_frame_3.edit_item(
-            host_btn_text,
-            host_btn_text.replace(
-                '[Disconnected]', 
-                ''
-            ) + '[Connected]'
-        )
+    top_level.top_col_frame_3.edit_item(
+        host_btn_text,
+        host_btn_text.replace(
+            '[Disconnected]', ''
+        ).replace(
+            '[Connected]', ''
+        ).replace(
+            '[Listening]', ''
+         ) + replacement_str
+    )
 
 @threadpooled
-def _check_host_connected(top_level: object) -> None:
+def _check_all_hosts_connected(top_level: object) -> None:
     """_summary_
 
     Args:
         top_level (object): _description_
     """
-
+    
+    # Indicates that this should not be repeated.
+    host_status_poll_started = True
+    
+    # Run continously in the background.
     while True:
-        if network_conf.conf['selected_host'].connected:
-            _set_host_connected(top_level)
-            sleep(10)
+        
+        try:
+
+            # Iterate through each enumerated host.
+            # for host in network_conf.conf['hosts_list']:
+            for host in network_conf.conf['hosts_list'].union({network_conf.conf['selected_host']}):
+                
+                # Check if listening for host.
+                if host.listening:
+                    # Amend to '[Listening]'.
+                    _set_host_status(top_level, host, 0)
+                    continue
+
+                # Check if selected host is connected to - set
+                # when TCP connection is initiated.
+                elif host.connected:
+                    # Amend to '[Connected]'.
+                    _set_host_status(top_level, host, 1)
+                    continue
+
+                # Edge-cases or if disconnected.
+                else:
+                    # Amend to '[Disconnected]'.
+                    _set_host_status(top_level, host, 2)
+                    continue
+                
+        except (KeyboardInterrupt, RuntimeError):
+            break
+        
+        # Check every 10s.
+        sleep(5)
+        
+def _send_command(command: Command) -> None:
+    """_summary_
+
+    Args:
+        command (Command): _description_
+    """
+    
+    ...
 
 def get_ifas() -> List[str]:
     """_summary_
@@ -108,7 +186,7 @@ def get_ifas() -> List[str]:
     """
 
     # Returh list of interface names for
-    # drop-dowm list.
+    # drop-down list.
     return [
         str(ifa.ifa_name)
         for ifa in network_conf.conf['ifas_list']
@@ -193,11 +271,11 @@ def btn_listen(top_level: object) -> None:
     # commence listening for selected host.
     get_tcp_server_wrapper().run()
 
-    _check_host_connected(top_level)
-    # print(network_conf.conf['selected_host'].connected)
+    if not host_status_poll_started:
+        _check_all_hosts_connected(top_level) 
 
 def btn_send_command_screenshot(top_level: object) -> None:
     """_summary_
     """
 
-    ...
+    # network_conf.conf['selected_host'].connection.send('test')

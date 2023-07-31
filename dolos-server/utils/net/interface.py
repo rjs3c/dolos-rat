@@ -13,6 +13,7 @@ the use of this tool is for educational purposes only.
 
 # Built-in/Generic Imports.
 import os
+from builtins import setattr
 from dataclasses import dataclass
 from ipaddress import IPv4Address
 from typing import Any, List, Union
@@ -23,6 +24,7 @@ from config.logger import get_logger_conf # pylint: disable=import-error
 from ..misc.validator import validate_ipv4_addr
 from ..misc.wrapper import BaseWrapper
 from ..misc.logger import LoggerWrapper, LoggerLevel, get_logger
+from ..net.connection import Socket
 
 # External Imports.
 if os.name == 'nt':
@@ -40,6 +42,8 @@ class IPv4Host:
     ipv4_addr: IPv4Address
     port: int
     connected: bool = False
+    listening: bool = False
+    connection: Union[Socket, None] = None
 
 @dataclass
 class Ifa:
@@ -215,6 +219,68 @@ class IfaWrapper(BaseWrapper):
                ifa_filtered[0].ifa_name,
                ifa_filtered[0].ifa_addrs
             )
+    
+    @staticmethod
+    def filter_host(host_addr: str, host_port: int) -> List[Any]:
+        """_summary_
+
+        Args:
+            host_addr (str): _description_
+            host_port (int): _description_
+
+        Returns:
+            List[Any]: _description_
+        """
+        
+        # Comprises filtered host.
+        host_filtered: Union[Any, None] = None
+
+        # Check if interfaces are available.
+        if network_conf.conf['hosts_list']:
+            # Filter interfaces by 'ipv4_addr'.
+            host_filtered = list(
+                filter(
+                    # Utilise lambda for terseness.
+                    lambda IPv4Host: (
+                        IPv4Host.ipv4_addr == validate_ipv4_addr(host_addr)
+                        and IPv4Host.port == host_port
+                    ),
+                    network_conf.conf['hosts_list']
+                )
+            )
+
+            network_conf.conf['hosts_list'] = network_conf.conf['hosts_list'] - set(host_filtered)
+            
+            return host_filtered
+
+    @staticmethod
+    def edit_host(host_addr: str, host_port: int, attr: str, val: Any) -> None:
+        """_summary_
+
+        Args:
+            host (str): _description_
+        """
+
+        if host_filtered:=IfaWrapper.filter_host(host_addr, host_port):
+            setattr(host_filtered[0], attr, val)
+            network_conf.conf['hosts_list'].add(host_filtered[0])
+
+    @staticmethod
+    def get_host_connected(host_addr: str, host_port: int) -> bool:
+        """_summary_
+
+        Args:
+            host_addr (str): _description_
+            host_port (int): _description_
+        """
+        
+        host_connected: bool = False
+
+        if host_filtered:=IfaWrapper.filter_host(host_addr, host_port):
+            print(host_filtered)
+            host_filtered[0].connected
+            
+        return host_connected
 
     @staticmethod
     def set_host(host: str) -> None:
@@ -226,27 +292,17 @@ class IfaWrapper(BaseWrapper):
             and dest port.
         """
 
+        if network_conf.conf['selected_host']:
+            # Replace 'selected_host'.
+            network_conf.conf['hosts_list'].add(network_conf.conf['selected_host'])
+
         # Host that which is filtered from the list.
         host_filtered: List[IPv4Host] = []
 
         # Extract IPv4 address and port from host string.
         (ipv4_addr, port) = host.split(' ')[0].split(':')
 
-        # Check if interfaces are available.
-        if network_conf.conf['hosts_list']:
-            # Filter interfaces by 'ipv4_addr'.
-            host_filtered = list(
-                filter(
-                    # Utilise lambda for terseness.
-                    lambda IPv4Host: (
-                        IPv4Host.ipv4_addr == validate_ipv4_addr(ipv4_addr)
-                        and IPv4Host.port == port
-                    ),
-                    network_conf.conf['hosts_list']
-                )
-            )
-
-        if host_filtered:
+        if host_filtered:=IfaWrapper.filter_host(ipv4_addr, port):
             # Validate IPv4 address within interface
             # information and place within 'Ifa'
             # dataclass accordingly.

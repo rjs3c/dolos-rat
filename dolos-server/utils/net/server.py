@@ -23,6 +23,7 @@ from config.network import network_conf # pylint: disable=import-error
 from utils.misc.wrapper import BaseWrapper # pylint: disable=import-error
 from utils.misc.logger import get_logger, LoggerWrapper, LoggerLevel # pylint: disable=import-error
 from utils.misc.threading import threadpooled # pylint: disable=import-error
+from utils.net.interface import IfaWrapper # pylint: disable=import-error
 from .connection import Socket
 
 class SingleThreadedTCPHandler(BaseRequestHandler):
@@ -51,20 +52,32 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
     def handle(self: BaseRequestHandler) -> None:
         """The method that is evaluated for
         each request. This is where the processing occurs."""
+        
+        # Extract port number of service to modify connection statuses
+        # of host.
+        (_, port) = self.server.server_address
 
         # Only process if client address is that we
         # desire.
-        if self.client_address[0] == self.server.client_addr:
+        # if self.client_address[0] == self.server.client_addr:
             # Increment request counter
             # for timeout threshold.
-            self.server.inc_req()
+        self.server.inc_req()
+
+            # Set listening status of host.
+        IfaWrapper.edit_host(self.server.client_addr, port, 'listening', False)
+        # network_conf.conf['selected_host'].listening = False
 
             # Set connected status of host.
-            network_conf.conf['selected_host'].connected = True
+        IfaWrapper.edit_host(self.server.client_addr, port, 'connected', True)
+        # network_conf.conf['selected_host'].connected = True
+        
+        print(IfaWrapper.get_host_connected(self.server.client_addr, port))
 
             # Extract message from 'socket' object.
-            with Socket(self.request) as connection:
-                print("connected")
+        with Socket(self.request) as connection:
+            # while True:
+                ...
 
 class SingleThreadedTCPServer(TCPServer):
     """Provides the functionality for listening
@@ -107,6 +120,15 @@ class SingleThreadedTCPServer(TCPServer):
 
         # Checks if timeout threshold is met.
         return self._req_thres == self._req_ctr
+
+    def res_ctrs(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self._req_thres = self._req_ctr = 0
 
     def inc_thres(self: object) -> None:
         """Increments threshold counter
@@ -174,7 +196,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         try:
             self._register_handle(
                 SingleThreadedTCPServer(
-                    (self._host, int(self._port)),
+                    ('0.0.0.0', int(self._port)),
                     # Handler to which requests
                     # are dispatched.
                     SingleThreadedTCPHandler,
@@ -211,6 +233,9 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         # disconnected.
         network_conf.conf['selected_host'].connected = False
 
+        # Set listening status of host.
+        network_conf.conf['selected_host'].listening = False
+
     @threadpooled
     def _listen(self: object) -> None:
         """Listens for incoming connections, and times out
@@ -228,6 +253,10 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
             # within a controlled loop.
             # Timeout: 30s.
             while self._get_handle('SingleThreadedTCPServer').timeout_check():
+
+                # Set listening status to True.
+                network_conf.conf['selected_host'].listening = True
+
                 # Increment threshold counter for timeout.
                 self._get_handle('SingleThreadedTCPServer').inc_thres()
 

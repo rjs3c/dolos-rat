@@ -33,7 +33,8 @@ from ..commands.network import ( # pylint: disable=relative-beyond-top-level
     option_change_ifa,
     btn_collect_ipv4s,
     btn_select_host,
-    btn_listen
+    btn_listen,
+    btn_send_command_screenshot
 )
 
 class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
@@ -98,6 +99,10 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
             self,
             state='disabled',
             image=self._desktop_img_path,
+            command=partial(
+                btn_send_command_screenshot,
+                self.winfo_toplevel()
+            )
         )
 
         # '' button.
@@ -463,18 +468,16 @@ class BottomFrame(CTkTabview): # pylint: disable=abstract-method
         super().__init__(master, **kwargs)
 
         # Tab configuration.
-        self.add('Hex View')
         self.add('Text View')
         self.add('Natural View')
 
-        self.set('Hex View')
+        # Default selected 'Text View'.
+        self.set('Text View')
 
-        # Frame 1 'Hex View'
+        # Frame 1 'Text View'
         self.frame_1: Union[None, CTkFrame] = None
-        # Frame 2 'Text View'
+        # Frame 2 'Natural View'
         self.frame_2: Union[None, CTkFrame] = None
-        # Frame 3 'Natural View'
-        self.frame_3: Union[None, CTkFrame] = None
 
         self._create_tab_frames()
 
@@ -485,10 +488,9 @@ class BottomFrame(CTkTabview): # pylint: disable=abstract-method
             self (object): _description_
         """
 
-        self.frame_1 = HexViewerFrame(master=self.tab('Hex View'))
+        self.frame_1 = TextViewerFrame(master=self.tab('Text View'))
 
-class HexViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
-
+class TextViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
     """_summary_
 
     Args:
@@ -509,7 +511,7 @@ class HexViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
 
         super().__init__(master, **kwargs)
 
-        self.grid(row=0, column=0)
+        self.grid(row=0, column=0, padx=0, pady=0)
 
 class BottomInterfaceFrame(CTkFrame): # pylint: disable=too-many-ancestors
     """_summary_

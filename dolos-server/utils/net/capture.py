@@ -81,7 +81,9 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
                     # i.e., UDP (for now), etc.
                     bpf_filter=network_conf.conf['capture_filter']
                 ))
-            except UnknownInterfaceException: pass
+            except UnknownInterfaceException:
+                # Frequently caused by insufficient permissions.
+                pass
 
     def _extract_ipv4_addr(self: object, packet: Packet) -> None:
         """In each packet captured by PyShark,
@@ -128,7 +130,7 @@ class IPv4CaptureWrapper(BaseWrapper, Thread):
             )
         # Raised by PyShark - therefore
         # caught and returned.
-        except TimeoutError:
+        except (TimeoutError, UnknownInterfaceException):
             pass
         finally:
             # Save collected IPv4 addresses in global

