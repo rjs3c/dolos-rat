@@ -24,7 +24,7 @@ from config.logger import get_logger_conf # pylint: disable=import-error
 from ..misc.validator import validate_ipv4_addr
 from ..misc.wrapper import BaseWrapper
 from ..misc.logger import LoggerWrapper, LoggerLevel, get_logger
-from ..net.connection import Socket
+# from ..net.connection import Socket
 
 # External Imports.
 if os.name == 'nt':
@@ -43,7 +43,7 @@ class IPv4Host:
     port: int
     connected: bool = False
     listening: bool = False
-    connection: Union[Socket, None] = None
+    command: Union[bytes, None] = None
 
 @dataclass
 class Ifa:
@@ -219,7 +219,7 @@ class IfaWrapper(BaseWrapper):
                ifa_filtered[0].ifa_name,
                ifa_filtered[0].ifa_addrs
             )
-    
+
     @staticmethod
     def filter_host(host_addr: str, host_port: int) -> List[Any]:
         """_summary_
@@ -231,7 +231,7 @@ class IfaWrapper(BaseWrapper):
         Returns:
             List[Any]: _description_
         """
-        
+
         # Comprises filtered host.
         host_filtered: Union[Any, None] = None
 
@@ -249,8 +249,6 @@ class IfaWrapper(BaseWrapper):
                 )
             )
 
-            network_conf.conf['hosts_list'] = network_conf.conf['hosts_list'] - set(host_filtered)
-            
             return host_filtered
 
     @staticmethod
@@ -262,25 +260,26 @@ class IfaWrapper(BaseWrapper):
         """
 
         if host_filtered:=IfaWrapper.filter_host(host_addr, host_port):
+            network_conf.conf['hosts_list'] = network_conf.conf['hosts_list'] - set(host_filtered)
             setattr(host_filtered[0], attr, val)
             network_conf.conf['hosts_list'].add(host_filtered[0])
 
     @staticmethod
-    def get_host_connected(host_addr: str, host_port: int) -> bool:
+    def get_host_attribute(host_addr: str, host_port: int, attr: str) -> Any:
         """_summary_
 
         Args:
             host_addr (str): _description_
             host_port (int): _description_
         """
-        
-        host_connected: bool = False
+
+        host_attr: Any = None
 
         if host_filtered:=IfaWrapper.filter_host(host_addr, host_port):
-            print(host_filtered)
-            host_filtered[0].connected
-            
-        return host_connected
+            host_attr = getattr(host_filtered[0], attr)
+            network_conf.conf['hosts_list'].add(host_filtered[0])
+
+        return host_attr
 
     @staticmethod
     def set_host(host: str) -> None:
@@ -292,9 +291,9 @@ class IfaWrapper(BaseWrapper):
             and dest port.
         """
 
-        if network_conf.conf['selected_host']:
-            # Replace 'selected_host'.
-            network_conf.conf['hosts_list'].add(network_conf.conf['selected_host'])
+        # if network_conf.conf['selected_host']:
+        #     # Replace 'selected_host'.
+        #     network_conf.conf['hosts_list'].add(network_conf.conf['selected_host'])
 
         # Host that which is filtered from the list.
         host_filtered: List[IPv4Host] = []
@@ -311,6 +310,8 @@ class IfaWrapper(BaseWrapper):
                host_filtered[0].port,
                host_filtered[0].connected
             )
+
+            # network_conf.conf['hosts_list'].add(host_filtered[0])
 
 def get_ifa_wrapper() -> IfaWrapper:
     """Returns an instantiated IfaWrapper.

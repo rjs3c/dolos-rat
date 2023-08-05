@@ -44,9 +44,6 @@ class Socket:
         # object.
         self._sock = sock
 
-        # Comprises data in which to transmit.
-        self._data = data
-
     def __enter__(self: object) -> object:
         """Defines the value returned when
         first entering the context.
@@ -66,14 +63,16 @@ class Socket:
         # Shuts down socket manually.
         self._sock.shutdown(SHUT_RDWR)
 
+        self._sock.close()
+
         del self
 
-    def send(self: object) -> None:
+    def send(self: object, data: Any) -> None:
         """Sends data over socket.socket."""
 
-        if self._data:
+        if data:
             # Get length of data.
-            data_len = len(self._data).to_bytes(
+            data_len = len(data).to_bytes(
                 self.head_bytes,
                 byteorder='big'
             )
@@ -82,7 +81,7 @@ class Socket:
                 # Transmit data, with length of
                 # data prepended as header.
                 self._sock.sendall(
-                    data_len + self._data
+                    data_len + data
                 )
             except error:
                 pass

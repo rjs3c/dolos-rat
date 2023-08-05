@@ -97,7 +97,7 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
         # '' button.
         self.btn_1 = DefaultButton(
             self,
-            state='disabled',
+            # state='disabled',
             image=self._desktop_img_path,
             command=partial(
                 btn_send_command_screenshot,

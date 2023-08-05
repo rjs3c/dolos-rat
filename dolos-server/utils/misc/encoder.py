@@ -12,7 +12,7 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-from pickle import dumps, loads
+from dill import dumps, loads
 from typing import Any
 
 class Encoder:
@@ -48,7 +48,7 @@ class Encoder:
 
 class Pickle(Encoder):
     """Wrapper for Pickle functions."""
-    
+
     @staticmethod
     def enc(data: object) -> bytes:
         """Serialises data.

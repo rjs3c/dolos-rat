@@ -17,6 +17,9 @@ from socketserver import BaseRequestHandler, TCPServer, BaseServer
 from typing import Any, Union
 from socket import gaierror
 
+# External Imports.
+from pyshark.packet.fields import LayerFieldsContainer, LayerField
+
 # Modules.
 from config.logger import get_logger_conf # pylint: disable=import-error
 from config.network import network_conf # pylint: disable=import-error
@@ -52,10 +55,11 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
     def handle(self: BaseRequestHandler) -> None:
         """The method that is evaluated for
         each request. This is where the processing occurs."""
-        
+
         # Extract port number of service to modify connection statuses
         # of host.
         (_, port) = self.server.server_address
+        port = LayerFieldsContainer(LayerField(name='udp.dstport', value=port))
 
         # Only process if client address is that we
         # desire.
@@ -66,18 +70,20 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
 
             # Set listening status of host.
         IfaWrapper.edit_host(self.server.client_addr, port, 'listening', False)
-        # network_conf.conf['selected_host'].listening = False
 
-            # Set connected status of host.
+        # Set connected status of host.
         IfaWrapper.edit_host(self.server.client_addr, port, 'connected', True)
-        # network_conf.conf['selected_host'].connected = True
-        
-        print(IfaWrapper.get_host_connected(self.server.client_addr, port))
 
             # Extract message from 'socket' object.
         with Socket(self.request) as connection:
-            # while True:
-                ...
+
+            # Send command over channel with client.
+            if command:=IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command'):
+                connection.send(command)
+                IfaWrapper.edit_host(self.server.client_addr, port, 'command', None)
+
+            # while IfaWrapper.get_host_attribute(self.server.client_addr, port, 'connected'):
+            #     if command:=IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command'):
 
 class SingleThreadedTCPServer(TCPServer):
     """Provides the functionality for listening
@@ -178,6 +184,7 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
         # The port to listen on to receive correspondance
         # from selected host.
         self._port = network_conf.conf['selected_host'].port
+        self._port = LayerFieldsContainer(LayerField(name='udp.dstport', value=self._port))
 
         # Registers handle for logger.
         self._register_handle(logger)
@@ -231,10 +238,10 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
 
         # Set connected status of selected host to
         # disconnected.
-        network_conf.conf['selected_host'].connected = False
+        IfaWrapper.edit_host(self._client, self._port, 'connected', False)
 
         # Set listening status of host.
-        network_conf.conf['selected_host'].listening = False
+        IfaWrapper.edit_host(self._client, self._port, 'listening', False)
 
     @threadpooled
     def _listen(self: object) -> None:
@@ -255,7 +262,8 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
             while self._get_handle('SingleThreadedTCPServer').timeout_check():
 
                 # Set listening status to True.
-                network_conf.conf['selected_host'].listening = True
+                # network_conf.conf['selected_host'].listening = True
+                IfaWrapper.edit_host(self._client, self._port, 'listening', True)
 
                 # Increment threshold counter for timeout.
                 self._get_handle('SingleThreadedTCPServer').inc_thres()

@@ -14,11 +14,17 @@ the use of this tool is for educational purposes only.
 # Built-in/Generic Imports.
 from builtins import getattr
 from io import BytesIO
+from importlib import import_module
+
+from typing import Any, Union, List
+# from os import getcwd, path as os_path
+# from sys import path as sys_path
 
 # Modules.
-from .command import Command
+# from .command import Command
+# sys.path.append('/commands/')
 
-class ScreenshotCommand(Command):
+class ScreenshotCommand():
     """_summary_
 
     Args:
@@ -36,10 +42,42 @@ class ScreenshotCommand(Command):
         """
 
         # Initialise from Command parent.
-        super().__init__()
+        # super().__init__()
+        
+        self._mods: List[Any] = []
 
         # Create list of imported dependencies.
         self.create_deps('PIL.ImageGrab')
+        
+    def get_dep(self: object, mod_name: str) -> Union[Any, None]:
+        """_summary_
+
+        Args:
+            self (object): _description_
+            mod_name (str): _description_
+
+        Returns:
+            bool: _description_
+        """
+
+        for idx, dep in enumerate(self._mods):
+            if dep.__name__ == mod_name:
+                return self._mods[idx]
+
+        return None
+
+    def create_deps(self: object, *mods: List[str]) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        try:
+            for mod in mods:
+                self._mods.append(import_module(mod))
+        except ModuleNotFoundError:
+            pass
 
     def execute(self: object) -> bytes:
         """_summary_

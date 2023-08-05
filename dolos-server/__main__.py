@@ -14,7 +14,7 @@ the use of this tool is for educational purposes only.
 # Built-in/Generic Imports.
 import sys
 import time
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Union
 from pathlib import Path
 
 # Modules.

