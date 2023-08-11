@@ -6,7 +6,9 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -43,5 +45,8 @@ class TabView(CTkTabview):
         self.set('Tab 1')
 
         # Add labelling widget to tabs.
-        self.label = CTkLabel(master=self.tab('Tab 1'))
-        self.label.grid(row=0, column=0, padx=20, pady=10)
+        self.label_1 = CTkLabel(master=self.tab('Tab 1'))
+        self.label_1.grid(row=0, column=0, padx=20, pady=10)
+        
+        self.label_2 = CTkLabel(master=self.tab('Tab 2'))
+        self.label_2.grid(row=0, column=0, padx=20, pady=10)

@@ -5,8 +5,11 @@
 # Created Date: 24/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
+# pylint: disable=too-many-ancestors
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
@@ -15,7 +18,7 @@ from typing import Any, Dict
 # External Imports.
 from customtkinter import CTkButton
 
-class DefaultButton(CTkButton): # pylint: disable=too-many-ancestors
+class DefaultButton(CTkButton):
     """_summary_
     """
 
@@ -34,7 +37,6 @@ class DefaultButton(CTkButton): # pylint: disable=too-many-ancestors
             master,
             text='',
             corner_radius=10,
-            # fg_color='#181A1B',
             border_width=1,
             border_color='#3d3f40',
             width=60,
@@ -73,7 +75,7 @@ class DefaultButton(CTkButton): # pylint: disable=too-many-ancestors
             fg_color='#181A1B'
         )
 
-class ListButton(CTkButton): # pylint: disable=too-many-ancestors
+class ListButton(CTkButton):
     """_summary_
 
     Args:

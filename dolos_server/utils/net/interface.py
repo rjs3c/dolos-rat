@@ -42,10 +42,12 @@ class IPv4Host:
     ipv4_addr: IPv4Address
     port: int
     connected: bool = False
+    disconnected: bool = True
     listening: bool = False
     command: Union[bytes, None] = None
     command_name: str = ''
     command_out: Any = None
+    ping: Union[int, None] = None
 
 @dataclass
 class Ifa:

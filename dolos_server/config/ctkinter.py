@@ -48,7 +48,7 @@ class CTkinterConfig(Config):
 
         self._conf = {
             'app_geometry': '700x560',
-            'app_title': f'DolosRAT { self.version }',
+            'app_title': f'DolosRAT (v{ self.version })',
             'app_assets_dir': assets_path,
             'app_admin': admin_privs
         }

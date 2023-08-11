@@ -9,9 +9,12 @@
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
 the use of this tool is for educational purposes only.
+
+Attribution: Rat icons created by Smashicons - Flaticon
 """
 
 # Built-in/Generic Imports.
+from ipaddress import IPv4Address
 from typing import Union
 
 # Modules.
@@ -60,6 +63,11 @@ class App(customtkinter.CTk):
         # Sets the title of the window.
         self.title(self.conf.conf['app_title'])
 
+        # Set .ico icon.
+        self.iconbitmap(
+            str(self.conf.conf['app_assets_dir']) + '/rat.ico'
+        )
+
         # Grid layout.
         self.grid_columnconfigure((0, 1), weight=1)
         self.grid_rowconfigure((0, 1), weight=0)
@@ -100,7 +108,7 @@ class App(customtkinter.CTk):
             height=20,
             border_width=1,
             border_color='black',
-            assets_dir=self.conf._conf['app_assets_dir'],
+            assets_dir=self.conf.conf['app_assets_dir'],
             corner_radius=10,
         )
         self.top_col_frame_1.grid(
@@ -117,7 +125,7 @@ class App(customtkinter.CTk):
             height=20,
             border_width=1,
             border_color='black',
-            assets_dir=self.conf._conf['app_assets_dir'],
+            assets_dir=self.conf.conf['app_assets_dir'],
             corner_radius=10
         )
         self.top_col_frame_2.grid(
@@ -174,6 +182,20 @@ class App(customtkinter.CTk):
             row=3, column=0, columnspan=2, padx=20, pady=(0, 20), sticky="nsew"
         )
         self.bottom_int_frame.grid_rowconfigure(0, weight=0)
+
+    def add_command_dialog(self: object, host_addr: IPv4Address, host_port: int) -> str:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        command_dialog = customtkinter.CTkInputDialog(
+            text='Command:',
+            title=f'\'{host_addr}:{host_port}\' Command'
+        )
+
+        return command_dialog.get_input()
 
 def get_ctkinter_app(ctkinter_conf: CTkinterConfig) -> None:
     """_summary_
