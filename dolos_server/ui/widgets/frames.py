@@ -31,6 +31,7 @@ from customtkinter import (
     CTkTextbox,
     StringVar,
     END)
+from CTkToolTip import CTkToolTip
 from PIL import Image
 # Modules.
 from .buttons import DefaultButton, ListButton
@@ -118,6 +119,12 @@ class TopLeftFrame(CTkFrame):
             )
         )
 
+        # '' button tooltip.
+        self.btn_1_tooltip = CTkToolTip(
+            self.btn_1,
+            message="Capture Screenshot"
+        )
+
         # '' button.
         self.btn_2 = DefaultButton(
             self,
@@ -127,6 +134,12 @@ class TopLeftFrame(CTkFrame):
                 btn_send_clipboard_keylog,
                 self.winfo_toplevel()
             )
+        )
+        
+        # '' button tooltip.
+        self.btn_2_tooltip = CTkToolTip(
+            self.btn_2,
+            message="Clipboard Capture"
         )
 
         # '' button.
@@ -139,6 +152,12 @@ class TopLeftFrame(CTkFrame):
                 self.winfo_toplevel()
             )
         )
+        
+        # '' button tooltip.
+        self.btn_3_tooltip = CTkToolTip(
+            self.btn_3,
+            message="Keystroke Capture (30s)"
+        )
 
         # '' button.
         self.btn_4 = DefaultButton(
@@ -149,6 +168,12 @@ class TopLeftFrame(CTkFrame):
                 btn_send_command_exec,
                 self.winfo_toplevel()
             )
+        )
+    
+        # '' button tooltip.
+        self.btn_4_tooltip = CTkToolTip(
+            self.btn_4,
+            message="Command Execution"
         )
 
     def _position_widgets(self: object) -> None:
@@ -267,6 +292,12 @@ class LeftMiddleFrame(CTkFrame):
                 self.winfo_toplevel()
             )
         )
+        
+        # '' button tooltip.
+        self.btn_1_tooltip = CTkToolTip(
+            self.btn_1,
+            message="IPv4 Address Collection (15s)"
+        )
 
         # '' button.
         self.btn_2 = DefaultButton(
@@ -277,6 +308,12 @@ class LeftMiddleFrame(CTkFrame):
                 btn_listen,
                 self.winfo_toplevel()
             )
+        )
+        
+        # '' button tooltip.
+        self.btn_2_tooltip = CTkToolTip(
+            self.btn_2,
+            message="Listen for Connection (30s)"
         )
 
         # '' button.
@@ -289,6 +326,12 @@ class LeftMiddleFrame(CTkFrame):
                 self.winfo_toplevel()
             )
         )
+        
+        # '' button tooltip.
+        self.btn_3_tooltip = CTkToolTip(
+            self.btn_3,
+            message="Ping Host (5s)"
+        )
 
         # '' button.
         self.btn_4 = DefaultButton(
@@ -299,6 +342,12 @@ class LeftMiddleFrame(CTkFrame):
                 btn_disconnect,
                 self.winfo_toplevel()
             )
+        )
+        
+        # '' button tooltip.
+        self.btn_4_tooltip = CTkToolTip(
+            self.btn_4,
+            message="Disconnect"
         )
 
     def _position_widgets(self: object) -> None:
@@ -678,6 +727,11 @@ class BottomInterfaceFrame(CTkFrame):
             fg_color="#181A1B",
             values=get_ifas(),
             command=option_change_ifa
+        )
+
+        self.option_tooltip = CTkToolTip(
+            self.interface_option,
+            message="Select Network Interface"
         )
 
     def _position_widgets(self: object) -> None:
