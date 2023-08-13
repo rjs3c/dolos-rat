@@ -12,9 +12,10 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-import ctypes
-import os
 import sys
+import os
+from subprocess import Popen
+from ctypes import windll
 
 def check_admin_privs() -> bool:
     """Checks if the privilege context in which 
@@ -46,13 +47,27 @@ def check_admin_privs() -> bool:
         # Can be used to suggest users to run as
         # admin as to not be inundated with UAC
         # windows.
-        return ctypes.windll.shell32.IsUserAnAdmin() == 1
+        return windll.shell32.IsUserAnAdmin() == 1
     # Should unintended issues arise, return False.
     except AttributeError:
         pass
 
     # Defaults to False.
     return False
+
+def open_file_explorer(file_path: str) -> None:
+    """
+    
+    Credit: https://stackoverflow.com/questions/17317219/is-there-an-platform-independent-equivalent-of-os-startfile
+    """
+
+    try:
+        # Exposed solely for NT-based systems.
+        os.startfile(file_path)
+    except AttributeError:
+        # Will be thrown if system is non-NT.
+        file_opener = 'open' if sys.platform == "darwin" else "xdg-open"
+        Popen([file_opener, file_path])
 
 def get_loc() -> int:
     """Returns LoC for callee, for trace-backs.
@@ -61,4 +76,5 @@ def get_loc() -> int:
         int: Integer representing the current
         LoC.
     """
+
     return sys._getframe().f_back.f_lineno

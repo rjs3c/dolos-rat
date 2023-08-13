@@ -21,11 +21,7 @@ from config import Config # pylint: disable=import-error
 
 @dataclass
 class CTkinterConfig(Config):
-    """_summary_
-
-    Args:
-        Config (_type_): _description_
-    """
+    """Houses CTK configuration."""
 
     # Dict comprising CTK-specific
     # configuration.
@@ -37,15 +33,12 @@ class CTkinterConfig(Config):
         assets_path: Path,
         admin_privs: bool
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Initialises CTkinterConfig"""
 
         # Version no. of DolosRAT.
         self.version = version
 
+        # Dictionary of configuration names/values.
         self._conf = {
             'app_geometry': '700x560',
             'app_title': f'DolosRAT (v{ self.version })',
@@ -54,10 +47,16 @@ class CTkinterConfig(Config):
         }
 
 def get_ctkinter_conf(version: str, assets_path: Path, admin_privs: bool) -> CTkinterConfig:
-    """_summary_
+    """Returns instance of CTkinterConfig.
+
+    Args:
+        version (str): Version number of DolosRAT.
+        assets_path (Path): Absolute path of assets/ directory.
+        admin_privs (bool): Boolean indicating whether DolosRAT
+        was executed in privileged context.
 
     Returns:
-        CTkinterConfig: _description_
+        CTkinterConfig: Instance of CTkinterConfig.
     """
 
     return CTkinterConfig(version, assets_path, admin_privs)

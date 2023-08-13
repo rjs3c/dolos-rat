@@ -20,8 +20,7 @@ from config import Config
 
 @dataclass
 class LoggerConfig(Config):
-    """Stores logging-specific configuration.
-    """
+    """Stores logging-specific configuration."""
 
     # Dict comprising dictConfig() configuration.
     _conf: Dict[str, Any]

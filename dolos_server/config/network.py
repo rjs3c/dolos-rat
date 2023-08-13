@@ -20,8 +20,7 @@ from config import Config # pylint: disable=import-error
 
 @dataclass(frozen=False)
 class NetworkConfig(Config):
-    """Stores network-specific configurations.
-    """
+    """Stores network-specific configurations."""
 
     # Dict comprising network configuration.
     _conf: Dict[str, Any]

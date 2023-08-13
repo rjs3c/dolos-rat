@@ -6,6 +6,7 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 # pylint: disable=too-many-ancestors
+# ---------------------------------------------------------------------------
 """
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
@@ -42,6 +43,63 @@ class DefaultButton(CTkButton):
             width=60,
             height=60,
             anchor='center',
+            **kwargs,
+        )
+
+        if self.cget('state') == 'disabled':
+            self.disable_btn()
+        else:
+            self.enable_btn()
+
+    def enable_btn(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.configure(
+            state='normal',
+            fg_color='#106A43',
+            hover_color='#17472E'
+        )
+
+    def disable_btn(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self.configure(
+            state='disabled',
+            fg_color='#181A1B'
+        )
+
+class DefaultButtonThin(CTkButton):
+    """_summary_
+    """
+
+    def __init__(
+        self: object,
+        master: Any,
+        **kwargs: Dict[Any, Any]
+    ) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        super().__init__(
+            master,
+            text='',
+            corner_radius=10,
+            border_width=1,
+            border_color='#3d3f40',
+            width=30,
+            height=30,
+            # anchor='center',
             **kwargs,
         )
 

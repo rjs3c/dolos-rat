@@ -15,7 +15,7 @@ the use of this tool is for educational purposes only.
 import logging
 import logging.config
 import logging.handlers
-from pprint import pformat
+# from pprint import pformat
 from enum import Enum
 from typing import Any, Optional
 

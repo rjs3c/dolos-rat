@@ -6,6 +6,7 @@
 # version ='1.0'
 # ---------------------------------------------------------------------------
 # pylint: disable=import-error, syntax-error
+# ---------------------------------------------------------------------------
 """
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
@@ -13,7 +14,6 @@ the use of this tool is for educational purposes only.
 """
 
 # Built-in/Generic Imports.
-from io import BytesIO
 from enum import Enum, auto
 from operator import attrgetter
 from time import sleep
@@ -31,20 +31,16 @@ from utils.net.server import get_tcp_server_wrapper
 host_status_poll_started: bool = False
 
 class HostStatus(Enum):
-    """_summary_
-
-    Args:
-        Enum (_type_): _description_
-    """
+    """Houses connected status of host."""
 
     Listening = 0
     Connected = auto()
     Disconnected = auto()
     
 def _update_btns_host_connected(top_level: object) -> None:
-    """_summary_
-    """
+    """Enables specific buttons depending on status of host."""
     
+    # Extract host IPv4 address and port.
     host_addr, host_port = attrgetter(
         'ipv4_addr', 'port'
     )(network_conf.conf['selected_host'])
@@ -82,9 +78,8 @@ def _set_host_status(top_level: object, host: IPv4Host, status: HostStatus = 1) 
     """_summary_
 
     Args:
-        top_level (object): _description_
-        host (IPv4Host): _description_
-        status (HostStatus, optional): _description_. Defaults to 1.
+        host (IPv4Host): Host IPv4 address.
+        status (HostStatus, optional): Host status. Defaults to 1.
     """
 
     # Houses the text in which to replace the older
@@ -130,21 +125,22 @@ def _set_host_ping(
     host_port: int,
     time_delta: int
 ) -> None:
-    """_summary_
+    """Sets latency of host when ping
+    functionality actuated.
 
     Args:
-        top_level (object): _description_
+        host_addr (IPv4Address): Host IPv4 address.
+        host_port (int): Host destination port.
+        time_delta (int): Time delta extracted from
+        ICMP response.
     """
-    
-    # Replacement time delta.
-    # replacement_str = ' '
-    
+
     # Get text of relevant host listbox item.
     host_btn_text = \
         top_level.top_col_frame_3.get_item_text(
             f'{ host_addr }:{ host_port } '
         )
-        
+
     # Remove [<time-delta>ms] and replace with
     # [<new-time-delta>ms]
     top_level.top_col_frame_3.edit_item_ping(
@@ -154,26 +150,21 @@ def _set_host_ping(
 
 @threadpooled
 def _check_all_hosts_connected(top_level: object) -> None:
-    """_summary_
-
-    Args:
-        top_level (object): _description_
-    """
+    """Continually update statuses of hosts in CTK."""
     
     # Indicates that this should not be repeated.
     host_status_poll_started = True
     
     # Run continously in the background.
     while True:
-        
         try:
-            
+            # Enable/disable buttons accordingly.
             _update_btns_host_connected(top_level)
 
             # Iterate through each enumerated host.
             # for host in network_conf.conf['hosts_list']:
             for host in network_conf.conf['hosts_list'].union({network_conf.conf['selected_host']}):
-                
+
                 # Check if listening for host.
                 if host.listening:
                     # Amend to '[Listening]'.
@@ -192,19 +183,15 @@ def _check_all_hosts_connected(top_level: object) -> None:
                     # Amend to '[Disconnected]'.
                     _set_host_status(top_level, host, 2)
                     continue
-                
+
         except (KeyboardInterrupt, RuntimeError):
             break
-        
+
         # Check every 10s.
         sleep(5)
 
 def get_ifas() -> List[str]:
-    """_summary_
-
-    Returns:
-        List[Ifa]: _description_
-    """
+    """Get list of interfaces for option list."""
 
     # Returh list of interface names for
     # drop-down list.
@@ -214,20 +201,18 @@ def get_ifas() -> List[str]:
     ]
 
 def option_change_ifa(ifa_name: str) -> None:
-    """_summary_
-    """
+    """Change selected interface."""
 
     # Sets new interface in global
     # networking configuration.
     IfaWrapper.set_ifa(ifa_name)
 
 def btn_collect_ipv4s(top_level: object) -> None:
-    """_summary_
-    """
+    """Collect IPv4 addresses."""
 
     def update_host_list() -> None:
-        """_summary_
-        """
+        """Refresh list of hosts, and their
+        statuses."""
 
         # Remove 'Please wait...' button.
         top_level.top_col_frame_3.remove_item(
@@ -263,11 +248,8 @@ def btn_collect_ipv4s(top_level: object) -> None:
     top_level.after(17000, update_host_list)
 
 def btn_select_host(btn: object, top_level: object) -> None:
-    """_summary_
-
-    Args:
-        top_level (object): _description_
-    """
+    """Selects host with given IPv4 address and
+    destination port."""
 
     # Selects the host.
     IfaWrapper.set_host(btn.cget('text'))
@@ -285,9 +267,9 @@ def btn_select_host(btn: object, top_level: object) -> None:
     _update_btns_host_connected(top_level)
 
 def btn_listen(top_level: object) -> None:
-    """_summary_
-    """
+    """Creates TCP server and listens on the fly."""
 
+    # Extract host IPv4 address and port.
     host_addr, host_port = attrgetter(
         'ipv4_addr', 'port'
     )(network_conf.conf['selected_host'])
@@ -302,12 +284,10 @@ def btn_listen(top_level: object) -> None:
         _check_all_hosts_connected(top_level) 
         
 def btn_disconnect(top_level: object) -> None:
-    """_summary_
-
-    Args:
-        top_level (object): _description_
-    """
+    """Stops TCP server from listening and consuming
+    resources unneccessarily."""
     
+    # Extract host IPv4 address and port.
     host_addr, host_port = attrgetter(
         'ipv4_addr', 'port'
     )(network_conf.conf['selected_host'])
@@ -315,16 +295,15 @@ def btn_disconnect(top_level: object) -> None:
     IfaWrapper.edit_host(host_addr, host_port, 'disconnected', True)
     
     if not host_status_poll_started:
+        # Reflect statuses in CTK.
         _check_all_hosts_connected(top_level)
     
 @threadpooled
 def btn_ping(top_level: object) -> None:
-    """_summary_
-
-    Args:
-        top_level (object): _description_
-    """
+    """Send ICMP requests to hosts, and
+    extract time delta."""
     
+    # Extract host IPv4 address and port.
     host_addr, host_port = attrgetter(
         'ipv4_addr', 'port'
     )(network_conf.conf['selected_host'])

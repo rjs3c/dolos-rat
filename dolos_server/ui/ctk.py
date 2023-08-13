@@ -5,6 +5,8 @@
 # Created Date: 25/06/2023
 # version ='1.0'
 # ---------------------------------------------------------------------------
+# pylint: disable=wrong-import-order, import-error
+# ---------------------------------------------------------------------------
 """
 DolosRAT provides a GUI-based RAT client and server, purposed for demonstrating
 techniques frequently used within scammer take-down operations. Please note that
@@ -18,7 +20,7 @@ from ipaddress import IPv4Address
 from typing import Union
 
 # Modules.
-from config.ctkinter import CTkinterConfig # pylint: disable=import-error
+from config.ctkinter import CTkinterConfig
 from .widgets.frames import (
     TopLeftFrame,
     TopRightFrame,
@@ -28,7 +30,7 @@ from .widgets.frames import (
 )
 
 # External Imports.
-import customtkinter # pylint: disable=wrong-import-order
+import customtkinter
 
 # Global configurations for CTK application
 # appearance.
@@ -99,8 +101,7 @@ class App(customtkinter.CTk):
         self._add_frame5_widget()
 
     def _add_frame1_widget(self: object) -> None:
-        """_summary_
-        """
+        """Top-left Frame."""
 
         # Top-left frame.
         self.top_col_frame_1 = TopLeftFrame(
@@ -117,8 +118,7 @@ class App(customtkinter.CTk):
         self.top_col_frame_1.grid_rowconfigure(0, weight=0)
 
     def _add_frame2_widget(self: object) -> None:
-        """_summary_
-        """
+        """Left-middle Frame."""
 
         self.top_col_frame_2 = LeftMiddleFrame(
             master=self,
@@ -134,8 +134,7 @@ class App(customtkinter.CTk):
         self.top_col_frame_2.grid_rowconfigure(0, weight=1)
 
     def _add_frame3_widget(self: object) -> None:
-        """_summary_
-        """
+        """Top-Right Frame."""
 
         self.top_col_frame_3 = TopRightFrame(
             self,
@@ -149,8 +148,7 @@ class App(customtkinter.CTk):
         self.top_col_frame_3.grid_rowconfigure(0, weight=1)
 
     def _add_frame4_widget(self: object) -> None:
-        """_summary_
-        """
+        """Bottom Output Frame."""
 
         self.bottom_col_frame = BottomFrame(
             self,
@@ -167,43 +165,75 @@ class App(customtkinter.CTk):
         self.bottom_col_frame.grid_rowconfigure(0, weight=1)
 
     def _add_frame5_widget(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Bottom Toolbar Frame."""
 
         self.bottom_int_frame = BottomInterfaceFrame(
             self,
             height=30,
-            corner_radius=10
+            corner_radius=10,
+            assets_dir=self.conf.conf['app_assets_dir'],
         )
         self.bottom_int_frame.grid(
             row=3, column=0, columnspan=2, padx=20, pady=(0, 20), sticky="nsew"
         )
         self.bottom_int_frame.grid_rowconfigure(0, weight=0)
 
-    def add_command_dialog(self: object, host_addr: IPv4Address, host_port: int) -> str:
-        """_summary_
+    def add_save_menu(self: object) -> str:
+        """Opens file explorer to select output
+        directory."""
+
+        # Return selected directory.
+        return customtkinter.filedialog.askdirectory()
+
+    def _add_dialog(self: object, text: str, title: str) -> str:
+        """Renders dialog menu.
 
         Args:
-            self (object): _description_
+            text (str): Text displayed when prompting input.
+            title (str): Window title.
+
+        Returns:
+            str: Input provided by user.
         """
 
-        command_dialog = customtkinter.CTkInputDialog(
-            text='Command:',
-            title=f'\'{host_addr}:{host_port}\' Command'
+        return customtkinter.CTkInputDialog(
+            text=text,
+            title=title
         )
 
-        return command_dialog.get_input()
+    def add_command_dialog(self: object, host_addr: IPv4Address, host_port: int) -> str:
+        """Command dialog.
+
+        Args:
+            host_addr (IPv4Address): Host IPv4 address.
+            host_port (int): Host destination port.
+
+        Returns:
+            str: Input provided by user.
+        """
+
+        return self._add_dialog(
+            'Command:',
+            f'\'{host_addr}:{host_port}\' Command'
+        ).get_input()
+
+    def add_filesave_dialog(self: object) -> str:
+        """Filename dialog.
+
+        Returns:
+            str: Input provided by user.
+        """
+
+        return self._add_dialog(
+            'Payload Name (.exe):',
+            'Export DolosRAT Client Payload'
+        ).get_input()
 
 def get_ctkinter_app(ctkinter_conf: CTkinterConfig) -> None:
-    """_summary_
+    """Creates CTK instance.
 
     Args:
-        tkinter_conf (_type_): _description_
+        tkinter_conf (_type_): CTK configuration.
     """
 
-    return App(
-        ctkinter_conf
-    )
+    return App(ctkinter_conf)

