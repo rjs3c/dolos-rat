@@ -1,0 +1,8 @@
+CTkToolTip==0.8
+CTkToolTip==0.8
+customtkinter==5.2.0
+dill==0.3.7
+Pillow==9.5.0
+Pillow==10.0.0
+pyshark==0.6
+scapy==2.5.0
