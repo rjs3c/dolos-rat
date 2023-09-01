@@ -34,8 +34,14 @@ and social engineering attacks, including spoofing techniques by posing as someo
 Browning’s techniques and gain a deeper understanding of how they can be applied to enhance scammer takedown operations and overall VM security.
 
 ## Installation
-```
+Install requisite dependencies using **pip**.
+```bash
 pip -r requirements.txt
+```
+
+Run DolosRAT server.
+```bash
+python dolos_server
 ```
 
 ## Requirements
