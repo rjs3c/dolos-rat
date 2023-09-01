@@ -55,7 +55,7 @@ python dolos_server
 * **scapy** == 2.5.0
 
 ## Gallery
-<img src="https://github.com/rjs3c/dolos-rat/blob/main/screenshots/1.png">
+<img src="https://github.com/rjs3c/dolos-rat/blob/main/screenshots/1.PNG">
 <img src="https://github.com/rjs3c/dolos-rat/blob/main/screenshots/2.png">
 <img src="https://github.com/rjs3c/dolos-rat/blob/main/screenshots/3.png">
 
