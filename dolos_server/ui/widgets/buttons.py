@@ -20,19 +20,14 @@ from typing import Any, Dict
 from customtkinter import CTkButton
 
 class DefaultButton(CTkButton):
-    """_summary_
-    """
+    """Represents a custom-styled CTkButton."""
 
     def __init__(
         self: object,
         master: Any,
         **kwargs: Dict[Any, Any]
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Initialises 'DefaultButton'."""
 
         super().__init__(
             master,
@@ -52,11 +47,7 @@ class DefaultButton(CTkButton):
             self.enable_btn()
 
     def enable_btn(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Enables the button, making this interactive."""
 
         self.configure(
             state='normal',
@@ -65,11 +56,7 @@ class DefaultButton(CTkButton):
         )
 
     def disable_btn(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Renders the button inactive and greyed-out."""
 
         self.configure(
             state='disabled',
@@ -77,19 +64,14 @@ class DefaultButton(CTkButton):
         )
 
 class DefaultButtonThin(CTkButton):
-    """_summary_
-    """
+    """'DefaultButtonThin'"""
 
     def __init__(
         self: object,
         master: Any,
         **kwargs: Dict[Any, Any]
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Initialises 'DefaultButtonThin'."""
 
         super().__init__(
             master,
@@ -99,7 +81,6 @@ class DefaultButtonThin(CTkButton):
             border_color='#3d3f40',
             width=30,
             height=30,
-            # anchor='center',
             **kwargs,
         )
 
@@ -109,11 +90,7 @@ class DefaultButtonThin(CTkButton):
             self.enable_btn()
 
     def enable_btn(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Enables button."""
 
         self.configure(
             state='normal',
@@ -122,11 +99,7 @@ class DefaultButtonThin(CTkButton):
         )
 
     def disable_btn(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Disables button."""
 
         self.configure(
             state='disabled',
@@ -134,23 +107,14 @@ class DefaultButtonThin(CTkButton):
         )
 
 class ListButton(CTkButton):
-    """_summary_
-
-    Args:
-        CTkButton (_type_): _description_
-    """
+    """'ListButton'."""
 
     def __init__(
         self: object,
         master: Any,
         **kwargs: Dict[Any, Any]
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-            master (Any): _description_
-        """
+        """Initialises 'ListButton'."""
 
         super().__init__(
             master,

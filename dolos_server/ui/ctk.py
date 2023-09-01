@@ -45,10 +45,11 @@ class App(customtkinter.CTk):
         self: object,
         ctkinter_conf: CTkinterConfig
     ) -> None:
-        """_summary_
+        """Comprises logic for CustomTkinter GUI.
 
         Args:
-            self (object): _description_
+            ctkinter_conf (CTkinterConfig): Comprising
+            configurations including the assets path, etc.
         """
 
         super().__init__()
@@ -75,10 +76,6 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure((0, 1), weight=0)
         self.grid_rowconfigure(2, weight=0)
         self.grid_rowconfigure(3, weight=0)
-
-        # Tabbing.
-        # self.tab_view = TabView(master=self)
-        # self.tab_view.grid(row=0, column=0, padx=20, pady=20)
 
         # Top-left frame.
         self.top_col_frame_1: Union[None, TopLeftFrame] = None

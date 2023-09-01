@@ -138,11 +138,7 @@ class SingleThreadedTCPServer(TCPServer):
         return self._req_thres == self._req_ctr
 
     def res_ctrs(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Reset threshold counters."""
 
         self._req_thres = self._req_ctr = 0
 

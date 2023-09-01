@@ -27,21 +27,13 @@ from ..misc.logger import LoggerWrapper, LoggerLevel, get_logger
 from ..misc.threading import threadpooled
 
 class PingWrapper(BaseWrapper):
-    """_summary_
-
-    Args:
-        BaseWrapper (_type_): _description_
-    """
+    """Transmits ICMP messages to given host."""
 
     def __init__(
         self: object,
         logger: LoggerWrapper
     ) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Initialises 'PingWrapper'."""
 
         super().__init__()
 
@@ -50,11 +42,7 @@ class PingWrapper(BaseWrapper):
 
     @threadpooled
     def _ping(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """Internal function for pinging supplied host."""
 
         # Time delta (milliseconds).
         time_delta = None
@@ -102,11 +90,7 @@ class PingWrapper(BaseWrapper):
 
     @threadpooled
     def ping(self: object) -> None:
-        """_summary_
-
-        Args:
-            self (object): _description_
-        """
+        """External-facing function for pinging selected host."""
 
         self._ping()
 

@@ -17,19 +17,19 @@ from sys import executable
 from subprocess import Popen
 
 class PayloadInstaller:
-    """_summary_
-    """
+    """Installs DolosRAT client payload."""
 
     @staticmethod
     def compile(file_path: str, file_name: str) -> None:
-        """_summary_
-        """
+        """Compiles file into PE/COFF."""
 
+        # Stores path to client payload.
         payload_path = path.join(
             getcwd(),
             'dolos_client',
         )
 
+        # Use subprocess to invoke PyInstaller.
         Popen([
             executable, '-m', 'PyInstaller',
             path.join(payload_path, 'main.pyw'),
